@@ -1,0 +1,11 @@
+<?
+$MESS["CATALOG_TYPE_NAME"] = "Catalog";
+$MESS["CATALOG_ELEMENT_NAME"] = "Sections";
+$MESS["CATALOG_SECTION_NAME"] = "Products";
+/*$MESS["NEWS_TYPE_NAME"] = "News";
+$MESS["NEWS_ELEMENT_NAME"] = "Sections";
+$MESS["NEWS_SECTION_NAME"] = "News";*/
+$MESS["BANNERS_TYPE_NAME"] = "Banners";
+$MESS["BANNERS_ELEMENT_NAME"] = "Banners";
+$MESS["BANNERS_SECTION_NAME"] = "Banners";
+?>

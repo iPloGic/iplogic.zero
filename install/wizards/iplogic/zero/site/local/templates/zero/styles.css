@@ -1,0 +1,37 @@
+@import url('css/common.css');
+@import url('css/zero.css');
+@import url('css/solid.css');
+@import url('css/fontawesome.css');
+
+
+html, body { background-color:#fff; }
+
+/* buttons colors */
+input[type="button"], input[type="submit"], button, a.button { background-color: #D3016A; border-color: #D3016A; color:#ffffff; }
+input[type="button"].light, input[type="submit"].light, button.light, a.button.light { background-color: transparent; border-color:#D3016A; color:#D3016A; }
+input[type="button"]:hover, input[type="submit"]:hover, button:hover, a.button:hover { background-color:#fb3a9b; border-color:#fb3a9b; }
+input[type="button"].light:hover, input[type="submit"].light:hover, button.light:hover, a.button .light:hover{ background-color: transparent; border-color:#fb3a9b; color:#fb3a9b; }
+
+/* headers */
+h1, h2, h3, h4, h5, h6, h1 a, h2 a, 
+h3 a, h4 a, h5 a, h6 a, h1 a:hover, 
+h2 a:hover, h3 a:hover, h4 a:hover, 
+h5 a:hover, h6 a:hover { color: #930074 !important; text-decoration:none; font-weight:normal; width:100%; line-height:1.6em; }
+h1, h1 a, h1 a:hover { font-size:28px; padding-bottom:15px; }h2, h2 a, h2 a:hover { font-size:24px; }h3, h3 a, h3 a:hover { font-size:20px; }h4, h4 a, h4 a:hover { font-size:18px; }h5, h5 a, h5 a:hover { font-size:16px; }h6, h6 a, h6 a:hover { font-size:16px; }
+
+/* references */
+a { color: #930074; }
+a:hover { color: #6d91fa; }
+
+
+/* custom menu */
+ul.menu-h li a {  padding: 11px 15px 0px 15px; height:100%;  }
+ul.menu-h.dropdown ul {  width:250px;   }
+ul.menu-h.dropdown > li.drop > a { padding-right:30px; }
+
+ul.menu-v li a { padding: 8px 30px 8px 15px; }
+ul.menu-v li ul.menu-v li { /* font-size: 95%; decrease font size on every level in hierarchical menus if you want */ }
+
+ul.dropdown > .drop > a i.open-icon { position:absolute; right:15px; top:10px; font-size:28px; /*padding:10px 15px; right:0px; top:0px;*/ }
+ul.dropdown > li > ul { border-style:solid; border-width:1px; }
+ul.dropdown > li > ul > li:last-child { clear:both; }

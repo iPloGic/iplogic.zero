@@ -1,0 +1,4 @@
+/catalog/index.php   -   #CATALOG_IBLOCK_ID#
+/bitrix/templates/zero/header.php   -   #CATALOG_IBLOCK_ID# (поиск)
+/bitrix/templates/zero/header.php   -   #OFFERS_IBLOCK_ID# (поиск)
+/.catalog.menu_ext.php   -   #CATALOG_IBLOCK_ID#
