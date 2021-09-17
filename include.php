@@ -1,14 +1,19 @@
 <?
 
-use Bitrix\Main\Loader,
-	Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Loader;
+
+if (file_exists(__DIR__."/functions.php"))
+	require_once(__DIR__."/functions.php");
 
 Loader::registerAutoLoadClasses(
 	'iplogic.zero', 
-	array(
-		"Iplogic\Zero\CIplogicZero" =>  "lib/CIplogicZero.php",
-		"Iplogic\Zero\CIplogicLogger" =>  "lib/CIplogicLogger.php",
-	)
-);
+	[
+		"Iplogic\Zero\Agent"    => "lib/agent.php",
+		"Iplogic\Zero\Helper"   => "lib/helper.php",
+		"Iplogic\Zero\Catalog"  => "lib/catalog.php",
 
-?>
+		"Iplogic\Zero\Exchange\Base"                    => "lib/exchange/base.php",
+		"Iplogic\Zero\Exchange\ParseXML"                => "lib/exchange/parsexml.php",
+		"Iplogic\Zero\Exchange\PriceAndStockFromXML"    => "lib/exchange/prstfromxml.php",
+	]
+);

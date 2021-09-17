@@ -1,10 +1,13 @@
 <?
-$MESS["IPLOGIC_ZERO_MODULE_NAME"] = "Ñáîðêà Zero äëÿ ðàçðàáîò÷èêîâ";
-$MESS["IPLOGIC_ZERO_MODULE_DESC"] = "Äàííûé ìîäóëü ïðåäíàçíà÷åí äëÿ ïåðâîíà÷àëüíîé óñòàíîâêè Áèòðèêñ ðåäàêöèè Áèçíåñ äëÿ äàëüíåéøåé ðàçðàáîòêè ñàéòà.";
-$MESS["IPLOGIC_ZERO_PARTNER_NAME"] = "iPloGic";
-$MESS["IPLOGIC_ZERO_PARTNER_URI"] = "https://iplogic.ru";
-$MESS["IPLOGIC_ZERO_MODULE_INSTALLED"] = "Ìîäóëü Zero óñòàíîâëåí";
-$MESS["IPLOGIC_ZERO_MODULE_UNINSTALLED"] = "Ìîäóëü óñïåøíî óäàëåí èç ñèñòåìû";
-$MESS["IPLOGIC_ZERO_MODULE_INSTALLED_TITLE"] = "Óñòàíîâêà ìîäóëÿ Zero";
-$MESS["IPLOGIC_ZERO_MODULE_UNINSTALLED_TITLE"] = "Äåèíñòàëëÿöèÿ ìîäóëÿ Zero";
+$MESS["IPLOGIC_MODULE_NAME"] = "Ð¡Ð±Ð¾Ñ€ÐºÐ° Zero Ð´Ð»Ñ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚Ñ‡Ð¸ÐºÐ¾Ð²";
+$MESS["IPLOGIC_MODULE_DESC"] = "Ð”Ð°Ð½Ð½Ð¾Ðµ Ñ€ÐµÑˆÐµÐ½Ð¸Ðµ Ð¿Ñ€ÐµÐ´Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¾ Ð´Ð»Ñ Ð¿ÐµÑ€Ð²Ð¾Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ð¾Ð¹ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ Ð‘Ð¸Ñ‚Ñ€Ð¸ÐºÑ Ð´Ð»Ñ Ð´Ð°Ð»ÑŒÐ½ÐµÐ¹ÑˆÐµÐ¹ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚ÐºÐ¸ ÑÐ°Ð¹Ñ‚Ð°. Ð¡Ð¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ð´Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð±Ð¸Ð±Ð»Ð¸Ð¾Ñ‚ÐµÐºÐ¸ Ð´Ð»Ñ Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð¸Ñ Ð²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ÑÑ‚ÐµÐ¹ ÑˆÑ‚Ð°Ñ‚Ð½Ñ‹Ñ… Ð¼Ð¾Ð´ÑƒÐ»ÐµÐ¹.";
+$MESS["IPLOGIC_PARTNER_NAME"] = "iPloGic";
+$MESS["IPLOGIC_PARTNER_URI"] = "https://iplogic.ru";
+$MESS["IPLOGIC_MODULE_INSTALLED"] = "ÐœÐ¾Ð´ÑƒÐ»ÑŒ Zero ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½";
+$MESS["IPLOGIC_MODULE_UNINSTALLED"] = "ÐœÐ¾Ð´ÑƒÐ»ÑŒ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ ÑƒÐ´Ð°Ð»ÐµÐ½ Ð¸Ð· ÑÐ¸ÑÑ‚ÐµÐ¼Ñ‹";
+$MESS["IPLOGIC_MODULE_INSTALLED_TITLE"] = "Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð¼Ð¾Ð´ÑƒÐ»Ñ Zero";
+$MESS["IPLOGIC_MODULE_UNINSTALLED_TITLE"] = "Ð”ÐµÐ¸Ð½ÑÑ‚Ð°Ð»Ð»ÑÑ†Ð¸Ñ Ð¼Ð¾Ð´ÑƒÐ»Ñ Zero";
+$MESS["BACK"] = "ÐÐ°Ð·Ð°Ð´";
+$MESS["MOD_INSTALL_CU_AGENT"] = "Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð°Ð³ÐµÐ½Ñ‚ Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ¸ Ð¿Ð°Ð¿ÐºÐ¸ upload";
+$MESS["MOD_INSTALL_CR_AGENT"] = "Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð°Ð³ÐµÐ½Ñ‚ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÐºÑƒÑ€ÑÐ° Ð²Ð°Ð»ÑŽÑ‚ Ð¸Ð· Ð¦Ð‘";
 ?>

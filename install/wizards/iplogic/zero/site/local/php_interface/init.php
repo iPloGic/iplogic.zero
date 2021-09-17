@@ -7,6 +7,3 @@ use Bitrix\Main\Loader;
 //Loader::includeModule("iblock");
 
 $eventManager = \Bitrix\Main\EventManager::getInstance();
-
-if (file_exists(__DIR__."/functions.php"))
-	require_once(__DIR__."/functions.php");

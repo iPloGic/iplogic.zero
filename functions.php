@@ -1,72 +1,37 @@
 <?
+use \Bitrix\Main\Application;
 
 /**
- * Returns file size in human-understandable units
- *
- * @param $bites - size of file in bites
- * @param $rounding - rounding accuracy
- * @param $arDesignations - unit designations array
- * @return string
- */
-function humanFileSize($bites, $rounding = 2, $arDesignations = [" B"," Kb"," Mb"," Gb"]) {
-	if ($bites < 1024) {
-		return $bites.$arDesignations[0];
-	}
-	$size = $bites/1024;
-	if ($size < 1024) {
-		return round($size, $rounding).$arDesignations[1];
-	}
-	$size = $size/1024;
-	if ($size < 1024) {
-		return round($size, $rounding).$arDesignations[2];
-	}
-	$size = $size/1024;
-	return round($size, $rounding).$arDesignations[3];
-}
-
-
-/**
- * Формирует окончание для числительных
- *
- * Пример: $count . ' бутыл' . numberEnd($count, 'ка|ки|ок');
- *
- * @param $number - количественный показатель
- * @param $titles - склонение (один|два|пять)
- * @return mixed
- */
-if (!function_exists('numberEnd')) {
-	function numberEnd($number, $titles)
-	{
-		if (!is_array($titles))
-			$titles = explode("|", $titles);
-		$cases = array(2, 0, 1, 1, 1, 2);
-		return $titles[($number % 100 > 4 && $number % 100 < 20) ? 2 : $cases[min($number % 10, 5)]];
-	}
-}
-
-
-/**
- * Returns file size in human-understandable units
+ * Puts information in log file
  *
  * @param $sText - login information
- * @param $toFile - file name
- * @param $sModule - module ID
+ * @param $fileName - file name (doesnt use if constant ZERO_LOG_FILE defined)
+ * @param $sModule - module ID (doesnt use if constant ZERO_LOG_MODULE defined)
  * @param $traceDepth - trace depth
  * @param $bShowArgs - include arguments
  * @return mixed
  */
-function __log($sText, $toFile = "", $sModule = "", $traceDepth = 10, $bShowArgs = false)
+function _log_($sText, $fileName = "", $sModule = "", $traceDepth = 10, $bShowArgs = false)
 {
 	$ob = $sText;
 
+	if (defined('ZERO_LOG_FILE'))
+		$fileName = ZERO_LOG_FILE;
+
+	if (defined('ZERO_LOG_MODULE'))
+		$sModule = ZERO_LOG_MODULE;
+
 	$toPath = '';
-	if (substr($toFile, -1) == '/') {
-		$toPath = $toFile;
-		$toFile = '';
+	if (substr($fileName, -1) == '/') {
+		$toPath = $fileName;
+		$fileName = '';
+	}
+	else {
+		$toPath = "/.logs/";
 	}
 
-	if ($toFile == '') {
-		$toFile = '.default.log';
+	if ($fileName == '') {
+		$fileName = '.default.log';
 
 		$sPlace = '';
 		if (function_exists("debug_backtrace")) {
@@ -74,20 +39,22 @@ function __log($sText, $toFile = "", $sModule = "", $traceDepth = 10, $bShowArgs
 			$sPlace = $arBacktrace[0]['file'] . ', ' . $arBacktrace[0]['line'];
 
 			if (isset($arBacktrace[1]['function'])) {
-				$toFile = $arBacktrace[1]['function'] . '.log';
+				$fileName = $arBacktrace[1]['function'] . '.log';
 				if (count(func_get_args()) == 0)
 					$sText = $arBacktrace[1]['args'];
 			}
 
 			if (isset($arBacktrace[1]['class']))
-				$toFile = str_replace('\\', '-', $arBacktrace[1]['class']) . '@' . $toFile;
+				$fileName = str_replace('\\', '-', $arBacktrace[1]['class']) . '@' . $fileName;
 		}
 	}
 
-	if (substr($toFile, 0, 2) == './' || substr($toFile, 0, 1) == '/')
-		$LOG_FILENAME = $toFile;
+	if (substr($fileName, 0, 2) == './' || substr($fileName, 0, 3) == '../')
+		$LOG_FILENAME = $fileName;
+	elseif (substr($fileName, 0, 1) == '/')
+		$LOG_FILENAME = Application::getDocumentRoot() . $fileName;
 	else
-		$LOG_FILENAME = $_SERVER["DOCUMENT_ROOT"] . "/.logs/" . $toPath . $toFile;
+		$LOG_FILENAME = Application::getDocumentRoot() . $toPath . $fileName;
 
 	$dir = dirname($LOG_FILENAME);
 	if (!file_exists($dir)) mkdir($dir, 0777, true);

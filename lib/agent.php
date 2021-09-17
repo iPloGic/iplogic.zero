@@ -4,17 +4,7 @@ namespace Iplogic\Zero;
 use Bitrix\Main\Loader;
 
 
-class CIplogicZero {
-
-	public static function exclLocationsDeliveryRestrictions()
-	{
-		return new \Bitrix\Main\EventResult(
-			\Bitrix\Main\EventResult::SUCCESS,
-			array(
-				'\ExclLocationsDeliveryRestriction' => '/bitrix/modules/iplogic.zero/lib/ExclLocationsDeliveryRestriction.php',
-			)
-		);
-	}
+class Agent {
 
 	public static function GetCurrencyRateAgent()
 	{
@@ -64,7 +54,7 @@ class CIplogicZero {
 			}
 		}
 
-		return "Iplogic\Zero\CIplogicZero::GetCurrencyRateAgent();";
+		return "\Iplogic\Zero\Agent::GetCurrencyRateAgent();";
 	}
 
 	private static function GetCurrencyXML() {
@@ -77,8 +67,8 @@ class CIplogicZero {
 			//AddMessage2Log("Empty answer from CBRF");
 			return false;
 		}
-		// данная строка нужна только если у вас сайт в кодировке utf8
-		$strQueryText = iconv('windows-1251', 'utf-8', $strQueryText); 
+		if (LANG_CHARSET == "UTF-8")
+			$strQueryText = \Iplogic\Zero\Exchange\Base::($strQueryText);
 		return $strQueryText;
 	}
 
@@ -162,7 +152,7 @@ class CIplogicZero {
 			$contDir++;
 		}
 		closedir($hRootDir);
-		return "Iplogic\Zero\CIplogicZero::CleanUpUploadAgent();";
+		return "\Iplogic\Zero\Agent::CleanUpUploadAgent();";
 	}
 
 }
