@@ -23,6 +23,9 @@ class ParseXML extends Base
 	{
 		if ($this->config["SOURCE"] == "ftp") {
 			if(!$this->getFTP()) {
+				if (ZERO_EXCHANGE_DEBUG) {
+					echo "Cant load file from FTP<br><br>";
+				}
 				return false;
 			}
 		}

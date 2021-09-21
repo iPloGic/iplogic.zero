@@ -32,10 +32,8 @@ class Catalog
 
 	public function getAllIdsByProp($field)
 	{
-		return array_merge(
-			$this->getIdsByProp($this->product_iblock_id, $field),
-			$this->getIdsByProp($this->offer_iblock_id, $field)
-		);
+		return $this->getIdsByProp($this->product_iblock_id, $field) +
+			$this->getIdsByProp($this->offer_iblock_id, $field);
 	}
 
 	public function getIdsByProp($iblock, $field)
@@ -54,6 +52,28 @@ class Catalog
 		return $arIds;
 	}
 
+	public function getPropByAllIds($field)
+	{
+		return $this->getPropByIds($this->product_iblock_id, $field) +
+			$this->getPropByIds($this->offer_iblock_id, $field);
+	}
+
+	public function getPropByIds($iblock, $field)
+	{
+		$arIds = [];
+		$notField = "!".$field;
+		$arFilter = ['IBLOCK_ID' => $iblock, $notField => false];
+		$arSelect = ['ID', 'IBLOCK_ID', $field];
+		$_prd = \CIBlockElement::GetList([],$arFilter,false,false,$arSelect);
+		$key = $field;
+		if(substr($field,0, 9) == "PROPERTY_")
+			$key .= "_VALUE";
+		while ($prd = $_prd->GetNext()) {
+			$arIds[(string)$prd['ID']] = $prd[$key];
+		}
+		return $arIds;
+	}
+
 	public function setStock($ID, $stock = 0, $store = false)
 	{
 		if(!is_array($ID))
@@ -65,7 +85,7 @@ class Catalog
 					"STORE_ID" => $store,
 					"AMOUNT" => $stock,
 				);
-				if (array_key_exists($priductID, $this->arStoreStocks[$store])) {
+				if (array_key_exists($priductID, $this->getStoreStocks($store))) {
 					\CCatalogStoreProduct::Update($this->arStoreStocks[$store][$priductID]["ID"], $arFields);
 				}
 				else {

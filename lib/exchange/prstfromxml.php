@@ -62,7 +62,7 @@ class PriceAndStockFromXML extends ParseXML
 							$this->catalog->setStock($productID, $value, $store);
 						}
 						if (substr($key,0,6) == "PRICE_") {
-							$group = self::getNumberFromKey($key);         echo $productID." group ".$group." price ".$value."<br>";
+							$group = self::getNumberFromKey($key);
 							$this->catalog->setPrice($productID, $value, $group);
 						}
 					}
