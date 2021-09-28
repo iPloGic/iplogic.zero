@@ -7,6 +7,7 @@ class Catalog
 {
 	public $product_iblock_id;
 	public $offer_iblock_id;
+	public $brand_iblock_id;
 	public $currency;
 	protected $obIblockElement;
 	protected $obProduct;
@@ -126,6 +127,23 @@ class Catalog
 		}else{
 			\CPrice::Add($arFields);
 		}
+	}
+
+	public function getBrands($fields = []) {
+		$arBrands = [];
+		if (!in_array("ID", $fields))
+			$fields[] = "ID";
+		if (!in_array("IBLOCK_ID", $fields))
+			$fields[] = "IBLOCK_ID";
+		$_mfs = \CIBlockElement::GetList([],['IBLOCK_ID'=>$this->brand_iblock_id,'ACTIVE'=>'Y'],false,false,$fields);
+		while ($mfs = $_mfs->GetNext()) {
+			$brand = [];
+			foreach($fields as $field) {
+				$brand[$field] = $mfs[$field];
+			}
+			$arBrands[$mfs['ID']] = $brand;
+		}
+		return $arBrands;
 	}
 
 }

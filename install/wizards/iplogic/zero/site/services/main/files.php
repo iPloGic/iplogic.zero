@@ -27,7 +27,6 @@ CopyDirFiles(
 	$delete_after_copy = false
 );
 
-//file_put_contents($_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/".time().".php", '---'.serialize($arReplacements));
 
 CWizardUtil::ReplaceMacros($_SERVER["DOCUMENT_ROOT"]."/bitrix/php_interface/dbconn.php", $arReplacements);
 CWizardUtil::ReplaceMacros($_SERVER["DOCUMENT_ROOT"]."/bitrix/.settings.php", $arReplacements);

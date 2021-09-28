@@ -30,14 +30,7 @@ class Base
 
 	public static function getXML( $file, $clean_ns = true )
 	{
-		if (
-			substr($file, 0, 2) == './' ||
-			substr($file, 0, 3) == '../' ||
-			substr($file, 0, 4) == 'http'
-		)
-			$name = $file;
-		else
-			$name = Application::getDocumentRoot() . $file;
+		$name = self::processingFilePath($file);
 		$strQueryText = file_get_contents($name);
 		if (!$strQueryText) {
 			if (ZERO_EXCHANGE_DEBUG) {
@@ -201,7 +194,7 @@ class Base
 		if (!$this->connectFTP()) {
 			return false;
 		}else{
-			$res = ftp_put($this->ftp, $remote, $local, FTP_ASCII);
+			$res = ftp_put($this->ftp, $remote, self::processingFilePath($local), FTP_ASCII);
 			ftp_close($this->ftp);
 			return $res;
 		}
@@ -224,7 +217,7 @@ class Base
 		if (!$this->connectFTP()) {
 			return false;
 		}else{
-			$res = ftp_put($this->ftp, $local, $remote, FTP_ASCII);
+			$res = ftp_put($this->ftp, self::processingFilePath($local), $remote, FTP_ASCII);
 			ftp_close($this->ftp);
 			return $res;
 		}
@@ -233,6 +226,18 @@ class Base
 	protected static function getNumberFromKey($key) {
 		$ar = explode("_", $key);
 		return $ar[count($ar)-1];
+	}
+
+	protected static function processingFilePath($file) {
+		if (
+			substr($file, 0, 2) == './' ||
+			substr($file, 0, 3) == '../' ||
+			substr($file, 0, 4) == 'http'
+		)
+			$name = $file;
+		else
+			$name = Application::getDocumentRoot() . $file;
+		return $name;
 	}
 
 }
