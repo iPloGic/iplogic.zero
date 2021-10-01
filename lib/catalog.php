@@ -135,7 +135,7 @@ class Catalog
 			$fields[] = "ID";
 		if (!in_array("IBLOCK_ID", $fields))
 			$fields[] = "IBLOCK_ID";
-		$_mfs = \CIBlockElement::GetList([],['IBLOCK_ID'=>$this->brand_iblock_id,'ACTIVE'=>'Y'],false,false,$fields);
+		$_mfs = \CIBlockElement::GetList([],['IBLOCK_ID'=>$this->brand_iblock_id],false,false,$fields);
 		while ($mfs = $_mfs->GetNext()) {
 			$brand = [];
 			foreach($fields as $field) {

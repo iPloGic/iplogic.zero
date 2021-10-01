@@ -51,10 +51,6 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 							"NAME" => "description",
 							"TEXT" => $this->config["DESCRIPTION"]
 						],
-						"items" => [
-							"NAME" => "items",
-							"CHILDREN" => [],
-						]
 					],
 				],
 			]
@@ -120,6 +116,7 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 		}
 		unset($_prd);
 
+		$this->modifyResult();
 
 		foreach($this->arProducts as $key => $arProduct)
 		{
@@ -143,17 +140,26 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 						"TEXT" => self::prepareXmlText($arProduct[$key])
 					];
 			}
-			$this->config["NODES"]["CHILDREN"][0]["CHILDREN"]["items"]["CHILDREN"][] = $item;
+			$this->config["NODES"]["CHILDREN"][0]["CHILDREN"][] = $item;
 			unset($this->arProducts[$key]);
 		}
 		$this->startXML();
 		$this->saveXML();
 	}
 
+	protected function modifyResult() {
+		return;
+	}
+
 	protected function getValArray($prd)
 	{
 		$arProduct = [];
+		$parent = $this->arProducts[$prd["PROPERTY_".$this->config["SKU_LINK"]."_VALUE"]];
 		foreach($this->config["COMPARISON"] as $key => $c) {
+			if($parent && $c["USE_PARENT"] == "H") {
+				$arProduct[$key] = $parent[$key];
+				continue;
+			}
 			if($c["TYPE"] == "FIELD")
 				$arProduct[$key] = $prd[$c["VALUE"]];
 			if($c["TYPE"] == "PROP")
@@ -177,8 +183,8 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 				$method = $c["VALUE"];
 				$arProduct[$key] = $this->$method($params);
 			}
-			if($arProduct[$key] == "" && $c["USE_PARENT"] == "Y") {
-				$arProduct[$key] = $this->arProducts[$prd["PROPERTY_".$this->config["SKU_LINK"]."_VALUE"]][$key];
+			if(!$arProduct[$key] && $c["USE_PARENT"] == "Y") {
+				$arProduct[$key] = $parent[$key];
 			}
 		}
 		return $arProduct;
@@ -204,7 +210,8 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 			$ID = $p2;
 		else
 			return "";
-		return \CFile::getPath($ID);
+		$path = \CFile::getPath($ID);
+		return $this->config["LINK"].$path;
 	}
 
 }
