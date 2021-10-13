@@ -4,13 +4,33 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 use Bitrix\Main\Config\Option,
 	Bitrix\Main\Localization\Loc;
 
+$siteID = getSite($wizard)["ID"];
+
 CModule::IncludeModule('fileman');
-$arMenuTypes = GetMenuTypes(WIZARD_SITE_ID);
+$arMenuTypes = GetMenuTypes($siteID);
 
-$arMenuTypes['catalog'] = Loc::getMessage("MENU_CATALOG");
-$arMenuTypes['personal'] = Loc::getMessage("MENU_PRIVATE");
+if ($wizard->GetVar("menuTop") == "Y") {
+	$arMenuTypes['TOP'] = Loc::getMessage("MENU_TOP");
+}
 
-SetMenuTypes($arMenuTypes, WIZARD_SITE_ID);
-Option::set("fileman", "num_menu_param", 2, false ,WIZARD_SITE_ID);
+if ($wizard->GetVar("menuBottom") == "Y") {
+	$arMenuTypes['bottom'] = Loc::getMessage("MENU_BOTTOM");
+}
+
+if ($wizard->GetVar("menuSide") == "Y") {
+	$arMenuTypes['side'] = Loc::getMessage("SIDE_BOTTOM");
+}
+
+if ($wizard->GetVar("menuCatalog") == "Y") {
+	$arMenuTypes['catalog'] = Loc::getMessage("MENU_CATALOG");
+}
+
+if ($wizard->GetVar("pubPrivate") == "Y") {
+	$arMenuTypes['personal'] = Loc::getMessage("MENU_PRIVATE");
+}
+
+
+SetMenuTypes($arMenuTypes, $siteID);
+Option::set("fileman", "num_menu_param", count($arMenuTypes), $siteID);
 
 ?>

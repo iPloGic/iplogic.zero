@@ -43,10 +43,13 @@ class Cli
 		if(!isset($_SERVER["DOCUMENT_ROOT"]) || $_SERVER["DOCUMENT_ROOT"] == "") {
 			$_SERVER["DOCUMENT_ROOT"] = realpath(__DIR__."/../../../..");
 		}
+		$a = explode("/", $_SERVER['SCRIPT_NAME']);
+		$a[count($a)-1] = "";
+		$_SERVER['SCRIPT_DIR_NAME'] = implode("/",$a);
 		return;
 	}
 
-	public static function runInBackground($script, $die = false)
+	public static function runInBackground($script, $die = false, $argv=[])
 	{
 		if(!defined("ZERO_CLI_EXEC_METHOD"))
 			define("ZERO_CLI_EXEC_METHOD", "WGET");
@@ -63,7 +66,10 @@ class Cli
 			$comm .= "-b -q -O - ".$script;
 		}
 		if(ZERO_CLI_EXEC_METHOD == "PHP") {
-			$comm = ZERO_CLI_PHP." ".$script;
+			$comm = ZERO_CLI_PHP." -f ".$script;
+			foreach($argv as $a) {
+				$comm .= " ".$a;
+			}
 		}
 		$result = [];
 		$state = -1;

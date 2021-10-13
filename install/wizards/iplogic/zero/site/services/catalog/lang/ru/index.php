@@ -1,9 +1,9 @@
 <?
-$MESS["STORE_DESCR_1"] = "Îñíîâíîé ñêëàä";
-$MESS["STORE_ADR_1"] = "Àäðåñ ñêëàäà";
-$MESS["CAT_STORE_NAME"] = "Îñíîâíîé";
-$MESS["BASE_PRICE_NAME"] = "Ðîçíè÷íàÿ";
-$MESS["WIZ_VAT_1"] = "Áåç ÍÄÑ";
-$MESS["WIZ_VAT_2"] = "ÍÄÑ 18%";
-$MESS["WIZ_VAT_2_VALUE"] = "18";
+$MESS["STORE_DESCR_1"] = "ÐžÑÐ½Ð¾Ð²Ð½Ð¾Ð¹ ÑÐºÐ»Ð°Ð´";
+$MESS["STORE_ADR_1"] = "ÐÐ´Ñ€ÐµÑ ÑÐºÐ»Ð°Ð´Ð°";
+$MESS["CAT_STORE_NAME"] = "ÐžÑÐ½Ð¾Ð²Ð½Ð¾Ð¹";
+$MESS["BASE_PRICE_NAME"] = "Ð Ð¾Ð·Ð½Ð¸Ñ‡Ð½Ð°Ñ";
+$MESS["WIZ_VAT_0"] = "Ð‘ÐµÐ· ÐÐ”Ð¡";
+$MESS["WIZ_VAT_10"] = "ÐÐ”Ð¡ 10%";
+$MESS["WIZ_VAT_20"] = "ÐÐ”Ð¡ 20%";
 ?>

@@ -6,9 +6,14 @@ use Bitrix\Main\Config\Option,
 if( !Loader::includeModule("iblock") ) {
 	return;
 }
-$iblockXMLFile = WIZARD_SERVICE_RELATIVE_PATH . "/xml/" . LANGUAGE_ID . "/brands.xml";
-$iblockCode = "brands_" . WIZARD_SITE_ID;
-$iblockType = "catalog";
+
+if( $wizard->GetVar("iblockNews") != "Y" ) {
+	return;
+}
+
+$iblockXMLFile = WIZARD_SERVICE_RELATIVE_PATH . "/xml/" . LANGUAGE_ID . "/news.xml";
+$iblockCode = "news_" . WIZARD_SITE_ID;
+$iblockType = "content";
 $iblockID = false;
 
 $rsIBlock = CIBlock::GetList([], ["CODE" => $iblockCode, "TYPE" => $iblockType]);
@@ -41,9 +46,6 @@ if( $iblockID == false ) {
 	if( $iblockID < 1 ) {
 		return;
 	}
-
 }
 
-Option::set("iplogic.zero", "brands_iblock_id", $iblockID, WIZARD_SITE_ID);
-
-?>
+CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/news/index.php", ["NEWS_IBLOCK_ID" => $iblockID]);

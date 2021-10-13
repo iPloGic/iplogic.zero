@@ -3,53 +3,55 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 use Bitrix\Main\Localization\Loc;
 
-$arServices = Array(
-	"main" => Array(
+$arServices = [
+	"main" => [
 		"NAME" => Loc::getMessage("SERVICE_MAIN_SETTINGS"),
-		"STAGES" => Array(
-			"files.php", // Copy bitrix files
-			"template.php", // Install template
-			//"theme.php", // Install theme
+		"STAGES" => [
+			"files.php",
+			"template.php",
+			//"theme.php",
 			"menu.php",
 			"settings.php",
 			"site_settings.php",
-			"mail.php",
-		),
-	),
+			"agents.php"
+		],
+	],
 
-	"catalog" => Array(
+	"catalog" => [
 		"NAME" => Loc::getMessage("SERVICE_CATALOG"),
-		"STAGES" => Array(
+		"STAGES" => [
 			"index.php",
-		),
-	),
+		],
+	],
 
-	"iblock" => Array(
+	"iblock" => [
 		"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
-		"STAGES" => Array(
+		"STAGES" => [
 			"types.php", //IBlock types
 			"brands.php",
 			"catalog.php",
 			"offers.php",
-		),
-	),
+			"news.php",
+			"banners.php",
+		],
+	],
 
-	"sale" => Array(
+	"sale" => [
 		"NAME" => Loc::getMessage("SERVICE_SALE"),
-		"STAGES" => Array(
+		"STAGES" => [
 			"locations.php",
 			"step1.php",
 			"step2.php",
 			"step3.php"
-		),
-	),
+		],
+	],
 
-	"mail" => Array(
+	"mail" => [
 		"NAME" => Loc::getMessage("SERVICE_MAIL"),
-		"STAGES" => Array(
+		"STAGES" => [
 			"mail.php",
-		),
-	),
+		],
+	],
 
-);
+];
 ?>

@@ -38,12 +38,12 @@ if (($db_res && $res = $db_res->Fetch()))
 	$arFields = array(
 		"ACTIVE" => "Y",
 		"SORT" => 100,
-		"NAME" => Option::get("zero", "site_zero_name"),
-		"DIR" => Option::get("zero", "site_zero_folder"),
-		"SITE_NAME" => Option::get("zero", "site_zero_name"),
-		"SERVER_NAME" => Option::get("zero", "site_zero_server_name"),
-		"DOMAINS" => Option::get("zero", "site_zero_domains"),
-		"EMAIL" => Option::get("zero", "site_zero_email_from"),
+		"NAME" => $wizard->GetVar("siteName"),
+		"DIR" => $wizard->GetVar("siteFolder"),
+		"SITE_NAME" => $wizard->GetVar("siteName"),
+		"SERVER_NAME" => $wizard->GetVar("serverName"),
+		"DOMAINS" => $wizard->GetVar("domains"),
+		"EMAIL" => $wizard->GetVar("siteEmail"),
 		"LANGUAGE_ID" => LANGUAGE_ID,
 		"DOC_ROOT" => "",
 		"CULTURE_ID" => $cultureId,
@@ -51,7 +51,7 @@ if (($db_res && $res = $db_res->Fetch()))
 			array(
 				'CONDITION' => "",
 				'SORT' => 1,
-				'TEMPLATE' => "zero"
+				'TEMPLATE' => $wizard->GetVar("templateDir")
 			),
 		)
 	);
