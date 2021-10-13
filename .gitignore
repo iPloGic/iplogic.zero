@@ -6,18 +6,9 @@
 Thumbs.db
 .DS_Store
 
-*.log
-*.txt
-*.csv
 *.gz
 *.zip
 *.rar
 *.tar
 *.tar.gz.*
 *.tgz
-*.sql
-*.xml
-*.doc
-*.docx
-*.xls
-*.xlsx
