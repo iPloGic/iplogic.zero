@@ -100,7 +100,12 @@ while( $sites_f = $sites->Fetch() )
 
 if( $s_count < 2 ) {
 	/* OPTIONS */
-	Option::set("catalog", "allow_negative_amount", "N");
-	Option::set("catalog", "default_can_buy_zero", "N");
+	Option::set("catalog", "allow_negative_amount", "Y");
 	Option::set("catalog", "default_quantity_trace", "Y");
+	Option::set("catalog", "default_can_buy_zero", "N");
+	Option::set("catalog", "show_catalog_tab_with_offers", "N");
+	Option::set("catalog", "save_product_without_price", "N");
+	Option::set("catalog", "default_subscribe", "Y");
+	Option::set("catalog", "use_store_control", "N");
+	Option::set("catalog", "enable_reservation", "N");
 }

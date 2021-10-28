@@ -24,35 +24,36 @@ class ShopSettingsStep extends CWizardStep
 
 		$wizard->SetDefaultVars(
 			[
-				"shopLocalization" => Option::get("zero", "shopLocalization", "ru", $siteID),
-				"shopEmail" => Option::get("zero", "shopEmail", "sale@".$_SERVER["SERVER_NAME"], $siteID),
-				"shopOfName" => Option::get("zero", "shopOfName", Loc::getMessage("WIZ_SHOP_OF_NAME_DEF"), $siteID),
-				"shopLocation" => Option::get("zero", "shopLocation", Loc::getMessage("WIZ_SHOP_LOCATION_DEF"), $siteID),
-				//"shopZip" => 101000,
-				"shopAdr" => Option::get("zero", "shopAdr", Loc::getMessage("WIZ_SHOP_ADR_DEF"), $siteID),
-				"shopINN" => Option::get("zero", "shopINN", "1234567890", $siteID),
-				"shopKPP" => Option::get("zero", "shopKPP", "123456789", $siteID),
-				"shopNS" => Option::get("zero", "shopNS", "0000 0000 0000 0000 0000", $siteID),
-				"shopBANK" => Option::get("zero", "shopBANK", Loc::getMessage("WIZ_SHOP_BANK_DEF"), $siteID),
-				"shopBANKREKV" => Option::get("zero", "shopBANKREKV", Loc::getMessage("WIZ_SHOP_BANKREKV_DEF"), $siteID),
-				"shopKS" => Option::get("zero", "shopKS", "30101 810 4 0000 0000225", $siteID),
-				"siteStamp" => Option::get("zero", "siteStamp", $siteStamp, $siteID),
+				"shopLocalization" => Option::get("iplogic.zero", "shopLocalization", "ru", $siteID),
+				"shopEmail" => Option::get("iplogic.zero", "shopEmail", "sale@".$_SERVER["SERVER_NAME"], $siteID),
+				"shopOfName" => Option::get("iplogic.zero", "shopOfName", Loc::getMessage("WIZ_SHOP_OF_NAME_DEF"), $siteID),
+				"shopLocation" => Option::get("iplogic.zero", "shopLocation", Loc::getMessage("WIZ_SHOP_LOCATION_DEF"), $siteID),
+				"shopZip" => Option::get("iplogic.zero", "shopZip", "101000", $siteID),
+				"shopAdr" => Option::get("iplogic.zero", "shopAdr", Loc::getMessage("WIZ_SHOP_ADR_DEF"), $siteID),
+				"shopINN" => Option::get("iplogic.zero", "shopINN", "1234567890", $siteID),
+				"shopKPP" => Option::get("iplogic.zero", "shopKPP", "123456789", $siteID),
+				"shopNS" => Option::get("iplogic.zero", "shopNS", "0000 0000 0000 0000 0000", $siteID),
+				"shopBANK" => Option::get("iplogic.zero", "shopBANK", Loc::getMessage("WIZ_SHOP_BANK_DEF"), $siteID),
+				"shopBANKREKV" => Option::get("iplogic.zero", "shopBANKREKV", Loc::getMessage("WIZ_SHOP_BANKREKV_DEF"), $siteID),
+				"shopKS" => Option::get("iplogic.zero", "shopKS", "30101 810 4 0000 0000225", $siteID),
+				"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
 
-				//"shopCompany_ua" => Option::get("zero", "shopCompany_ua", "", $siteID),
-				"shopOfName_ua" => Option::get("zero", "shopOfName_ua", Loc::getMessage("WIZ_SHOP_OF_NAME_DEF_UA"), $siteID),
-				"shopLocation_ua" => Option::get("zero", "shopLocation_ua", Loc::getMessage("WIZ_SHOP_LOCATION_DEF_UA"), $siteID),
-				"shopAdr_ua" => Option::get("zero", "shopAdr_ua", Loc::getMessage("WIZ_SHOP_ADR_DEF_UA"), $siteID),
-				"shopEGRPU_ua" =>  Option::get("zero", "shopEGRPU_ua", "", $siteID),
-				"shopINN_ua" =>  Option::get("zero", "shopINN_ua", "", $siteID),
-				"shopNDS_ua" =>  Option::get("zero", "shopNDS_ua", "", $siteID),
-				"shopNS_ua" =>  Option::get("zero", "shopNS_ua", "", $siteID),
-				"shopBank_ua" =>  Option::get("zero", "shopBank_ua", "", $siteID),
-				"shopMFO_ua" =>  Option::get("zero", "shopMFO_ua", "", $siteID),
-				"shopPlace_ua" =>  Option::get("zero", "shopPlace_ua", "", $siteID),
-				"shopFIO_ua" =>  Option::get("zero", "shopFIO_ua", "", $siteID),
-				"shopTax_ua" =>  Option::get("zero", "shopTax_ua", "", $siteID),
+				//"shopCompany_ua" => Option::get("iplogic.zero", "shopCompany_ua", "", $siteID),
+				"shopOfName_ua" => Option::get("iplogic.zero", "shopOfName_ua", Loc::getMessage("WIZ_SHOP_OF_NAME_DEF_UA"), $siteID),
+				"shopLocation_ua" => Option::get("iplogic.zero", "shopLocation_ua", Loc::getMessage("WIZ_SHOP_LOCATION_DEF_UA"), $siteID),
+				"shopZip_ua" => Option::get("iplogic.zero", "shopZip_ua", "10100", $siteID),
+				"shopAdr_ua" => Option::get("iplogic.zero", "shopAdr_ua", Loc::getMessage("WIZ_SHOP_ADR_DEF_UA"), $siteID),
+				"shopEGRPU_ua" =>  Option::get("iplogic.zero", "shopEGRPU_ua", "", $siteID),
+				"shopINN_ua" =>  Option::get("iplogic.zero", "shopINN_ua", "", $siteID),
+				"shopNDS_ua" =>  Option::get("iplogic.zero", "shopNDS_ua", "", $siteID),
+				"shopNS_ua" =>  Option::get("iplogic.zero", "shopNS_ua", "", $siteID),
+				"shopBank_ua" =>  Option::get("iplogic.zero", "shopBank_ua", "", $siteID),
+				"shopMFO_ua" =>  Option::get("iplogic.zero", "shopMFO_ua", "", $siteID),
+				"shopPlace_ua" =>  Option::get("iplogic.zero", "shopPlace_ua", "", $siteID),
+				"shopFIO_ua" =>  Option::get("iplogic.zero", "shopFIO_ua", "", $siteID),
+				"shopTax_ua" =>  Option::get("iplogic.zero", "shopTax_ua", "", $siteID),
 
-				"installPriceBASE" => Option::get("zero", "installPriceBASE", "Y", $siteID),
+				"installPriceBASE" => Option::get("iplogic.zero", "installPriceBASE", "Y", $siteID),
 			]
 		);
 	}
@@ -105,6 +106,12 @@ class ShopSettingsStep extends CWizardStep
 				<div class="wizard-input-form-block">
 					<label class="wizard-input-title" for="shopLocation">'.Loc::getMessage("WIZ_SHOP_LOCATION").'</label>'
 				.$this->ShowInputField('text', 'shopLocation', array("id" => "shopLocation", "class" => "wizard-field")).'
+				</div>';
+
+			$this->content .= '
+				<div class="wizard-input-form-block">
+					<label class="wizard-input-title" for="shopZip">'.Loc::getMessage("WIZ_SHOP_ZIP").'</label>'
+				.$this->ShowInputField('text', 'shopZip', array("id" => "shopZip", "class" => "wizard-field")).'
 				</div>';
 
 			$this->content .= '
@@ -163,6 +170,11 @@ class ShopSettingsStep extends CWizardStep
 					<p style="color:grey; margin: 3px 0 7px;">'.Loc::getMessage("WIZ_SHOP_LOCATION_DESCR_UA").'</p>
 				</div>';
 
+			$this->content .= '
+				<div class="wizard-input-form-block">
+					<label class="wizard-input-title" for="shopZip_ua">'.Loc::getMessage("WIZ_SHOP_ZIP").'</label>'
+				.$this->ShowInputField('text', 'shopZip_ua', array("id" => "shopZip_ua", "class" => "wizard-field")).'
+				</div>';
 
 			$this->content .= '
 				<div class="wizard-input-form-block">

@@ -1,16 +1,15 @@
 <?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
+if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) die();
 
 use Bitrix\Main\Config\Option,
 	Bitrix\Main\Localization\Loc;
 
 $s_count = 0;
-
 $sites = \CSite::GetList($by = "sort", $order = "desc");
-while($sites_f = $sites->Fetch())
+while( $sites_f = $sites->Fetch() )
 	$s_count++;
 
-if($s_count < 2) {
+if( $s_count < 2 ) {
 	/* deny public access */
 	Option::set("main", "site_stopped", "Y");
 
@@ -24,8 +23,7 @@ if($s_count < 2) {
 	Option::set("main", "move_js_to_body", "Y");
 	Option::set("main", "session_show_message", "N");
 
-	if(strlen(Option::get('main', 'CAPTCHA_presets', '')) <= 0)
-	{
+	if( strlen(Option::get('main', 'CAPTCHA_presets', '')) <= 0 ) {
 		Option::set('main', 'CAPTCHA_transparentTextPercent', '0');
 		Option::set('main', 'CAPTCHA_arBGColor_1', 'FFFFFF');
 		Option::set('main', 'CAPTCHA_arBGColor_2', 'FFFFFF');
@@ -51,7 +49,12 @@ if($s_count < 2) {
 		Option::set('main', 'CAPTCHA_presets', '2');
 	}
 
-	Option::set("fileman", "propstypes", serialize(array("description"=>Loc::getMessage("MAIN_OPT_DESCRIPTION"), "keywords"=>Loc::getMessage("MAIN_OPT_KEYWORDS"), "title"=>Loc::getMessage("MAIN_OPT_TITLE"), "keywords_inner"=>Loc::getMessage("MAIN_OPT_KEYWORDS_INNER"))));
+	Option::set("fileman", "propstypes", serialize([
+		"description"    => Loc::getMessage("MAIN_OPT_DESCRIPTION"),
+		"keywords"       => Loc::getMessage("MAIN_OPT_KEYWORDS"),
+		"title"          => Loc::getMessage("MAIN_OPT_TITLE"),
+		"keywords_inner" => Loc::getMessage("MAIN_OPT_KEYWORDS_INNER"),
+	]));
 
 	Option::set("search", "suggest_save_days", 250);
 	Option::set("search", "use_tf_cache", "Y");
@@ -63,25 +66,28 @@ if($s_count < 2) {
 	Option::set("iblock", "show_xml_id", "Y");
 
 	// social auth services
-	if (Option::get("socialservices", "auth_services") == ""){
+	if( Option::get("socialservices", "auth_services") == "" ) {
 		$bRu = (LANGUAGE_ID == 'ru');
-		$arServices = array(
-			"VKontakte" => "Y",
-			"MyMailRu" => "Y",
-			"Twitter" => "Y",
-			"Facebook" => "Y",
-			"Livejournal" => "Y",
-			"YandexOpenID" => ($bRu? "Y":"N"),
-			"Rambler" => ($bRu? "Y":"N"),
-			"MailRuOpenID" => ($bRu? "Y":"N"),
-			"Liveinternet" => ($bRu? "Y":"N"),
-			"Blogger" => "N",
-			"OpenID" => "Y",
-			"LiveID" => "N",
-		);
+		$arServices = [
+			"VKontakte"    => "Y",
+			"MyMailRu"     => "Y",
+			"Twitter"      => "Y",
+			"Facebook"     => "Y",
+			"Livejournal"  => "Y",
+			"YandexOpenID" => ($bRu ? "Y" : "N"),
+			"Rambler"      => ($bRu ? "Y" : "N"),
+			"MailRuOpenID" => ($bRu ? "Y" : "N"),
+			"Liveinternet" => ($bRu ? "Y" : "N"),
+			"Blogger"      => "N",
+			"OpenID"       => "Y",
+			"LiveID"       => "N",
+		];
 		Option::set("socialservices", "auth_services", serialize($arServices));
 	}
-	Option::set('socialnetwork', 'allow_tooltip', 'N', false, WIZARD_SITE_ID);
+	Option::set('socialnetwork', 'allow_tooltip', 'N', WIZARD_SITE_ID);
+
 }
+
+
 
 ?>

@@ -17,7 +17,7 @@ $MESS["wiz_install"] = "Установить";
 $MESS["NEXT_BUTTON"] = "Далее";
 $MESS["PREVIOUS_BUTTON"] = "Назад";
 $MESS["WIZ_STEP_SS"] = "Информация о магазине";
-$MESS["WIZ_STEP_PL"] = "Типы плательщиков и местоположения";
+$MESS["WIZ_STEP_PL"] = "Платежи и доставка";
 $MESS["WIZ_SHOP_OF_NAME_DEF"] = "ООО \"Интернет-магазин\"";
 $MESS["WIZ_SHOP_OF_NAME_DEF_UA"] = "ТОВ \"Інтернет-магазин\"";
 $MESS["WIZ_SHOP_LOCATION_DEF"] = "Москва";
@@ -35,6 +35,7 @@ $MESS["WIZ_SHOP_LOCALIZATION_UKRAINE"] = "Украина";
 $MESS["WIZ_SHOP_LOCALIZATION_KAZAKHSTAN"] = "Казахстан";
 $MESS["WIZ_SHOP_LOCALIZATION_BELORUSSIA"] = "Белоруссия";
 $MESS["WIZ_SHOP_EMAIL"] = "Email для получения информации о заказах";
+$MESS["WIZ_SHOP_ZIP"] = "Почтовый индекс";
 $MESS["WIZ_SHOP_ADR"] = "Адрес компании";
 $MESS["WIZ_SHOP_OF_NAME"] = "Название компании";
 $MESS["WIZ_SHOP_INN"] = "ИНН";
@@ -44,7 +45,7 @@ $MESS["WIZ_SHOP_KS"] = "Корреспондентский счет";
 $MESS["WIZ_SHOP_BANKREKV"] = "Банковские реквизиты";
 $MESS["WIZ_SHOP_STAMP"] = "Печать фирмы";
 $MESS["WIZ_SHOP_OF_NAME_DESCR_UA"] = "Название юридического лица или субъекта предпринимательской деятельности";
-$MESS["WIZ_SHOP_LOCATION"] = "Местоположение компании";
+$MESS["WIZ_SHOP_LOCATION"] = "Местоположение компании (город)";
 $MESS["WIZ_SHOP_ADR_DESCR_UA"] = "Юридический адрес юридического лица или субъекта предпринимательской деятельности";
 $MESS["WIZ_SHOP_EGRPU_UA"] = "ЕГРПОУ";
 $MESS["WIZ_SHOP_INN_UA"] = "ИНН";
@@ -103,4 +104,30 @@ $MESS["WIZ_IBLOCKS_OFFER"] = "Торговые предложения";
 $MESS["WIZ_IBLOCKS_BRANDS"] = "Бренды";
 $MESS["WIZ_UNCHECK_ALL"] = "Снять все выделения";
 $MESS["WIZ_IBLOCKS_BANNER"] = "Баннеры";
+
+$MESS["WIZ_PAYMENT_TITLE"] = "Добавить платежные системы";
+$MESS["WIZ_PAYSYSTEM_COLLECT"] = "Наложенный платеж";
+$MESS["WIZ_PAYSYSTEM_BILL"] = "Счет на оплату";
+$MESS["WIZ_PAYSYSTEM_SBER"] = "Сбербанк (квитанция)";
+$MESS["WIZ_PAYSYSTEM_YMONEY"] = "Яндекс.Деньги";
+$MESS["WIZ_PAYSYSTEM_OSHAD"] = "Ощадбанк";
+$MESS["WIZ_PAYSYSTEM_YCARDS"] = "Пластиковые карты (Яндекс.Касса)";
+$MESS["WIZ_PAYSYSTEM_YTERMINALS"] = "Терминалы (Яндекс.Касса)";
+$MESS["WIZ_PAYSYSTEM_WEBMONEY"] = "Webmoney";
+
+$MESS["WIZ_DELIVERY_TITLE"] = "Добавить способы доставки";
+$MESS["WIZ_DELIVERY_PICKUP"] = "Самовывоз";
+$MESS["WIZ_DELIVERY_COURIER"] = "Доставка курьером";
+$MESS["WIZ_DELIVERY_RUS_POST"] = "Почта России";
+$MESS["WIZ_DELIVERY_UA_POST"] = "Новая почта";
+$MESS["WIZ_DELIVERY_KAZ_POST"] = "Казпочта";
+$MESS["WIZ_DELIVERY_UPS"] = "UPS";
+$MESS["WIZ_DELIVERY_DHLUSA"] = "DHL";
+
+$MESS[""] = "";
+$MESS[""] = "";
+$MESS[""] = "";
+$MESS[""] = "";
+$MESS[""] = "";
+
 ?>

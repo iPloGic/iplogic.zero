@@ -6,7 +6,7 @@ use Bitrix\Main\Config\Option;
 if (!defined("WIZARD_TEMPLATE_ID"))
 	return;
 
-$bitrixTemplateDir = $_SERVER["DOCUMENT_ROOT"]."/local/templates/".$wizard->GetVar("templateDir");
+$bitrixTemplateDir = $_SERVER["DOCUMENT_ROOT"]."/local/templates/"WIZARD_SITE_ID."/".$wizard->GetVar("templateDir");
 if(!is_dir($bitrixTemplateDir)) {
 	mkdir($bitrixTemplateDir, 0755, true);
 }

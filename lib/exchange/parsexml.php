@@ -32,12 +32,31 @@ class ParseXML extends Base
 		if (!$xml = self::getXML( $this->config["LOCAL_FILE"] )) {
 			return false;
 		}
-		$arList = [];
-		if ($node = $xml->SelectNodes($this->config["LIST_NODE"])) {
+		if (!$this->config["LIST_NODE"] || $this->config["LIST_NODE"] == "/") {
+			return $xml->children();
+		}
+		if ($node = $this->getNodeByPath($xml, $this->config["LIST_NODE"])) {
 			return $node->children();
 		}
 		if (ZERO_EXCHANGE_DEBUG) {
 			echo "Cant get node ".$this->config["LIST_NODE"]."<br><br>";
+		}
+		return false;
+	}
+
+	public function getNodeByPath(&$xml, $path) {
+		$arPath = explode("/", $path);
+		$node = $xml;
+		if (count($arPath) == 2 && $node->getName() == $arPath[1]) {
+			return $xml;
+		}
+		foreach($arPath as $key => $child) {
+			if($key > 1) {
+				$node = $node->$child;
+				if ($key == (count($arPath)-1)) {
+					return $node;
+				}
+			}
 		}
 		return false;
 	}
@@ -68,12 +87,11 @@ class ParseXML extends Base
 		foreach($list as $item) {
 			$val = [];
 			foreach ($this->config["COMPARISON"] as $field => $source) {
+				$name = $source["NAME"];
 				if ($source["TYPE"] == "ATTR")
-					$val[$field] = $item->getAttribute($source["NAME"]);
+					$val[$field] = $item->attributes()->$name->__toString();
 				if ($source["TYPE"] == "SUBNODE_TEXT") {
-					$subnodes = $item->elementsByName($source["NAME"]);
-					if(count($subnodes))
-						$val[$field] = $subnodes[0]->textContent();
+					$val[$field] = $item->$name->__toString();
 				}
 			}
 			$clearArray[] = $val;

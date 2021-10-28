@@ -10,10 +10,12 @@ $arServices = [
 			"files.php",
 			"template.php",
 			//"theme.php",
+			"site_settings.php",
 			"menu.php",
 			"settings.php",
-			"site_settings.php",
-			"agents.php"
+			"agents.php",
+			"groups.php",
+			"mail.php",
 		],
 	],
 
@@ -43,13 +45,6 @@ $arServices = [
 			"step1.php",
 			"step2.php",
 			"step3.php"
-		],
-	],
-
-	"mail" => [
-		"NAME" => Loc::getMessage("SERVICE_MAIL"),
-		"STAGES" => [
-			"mail.php",
 		],
 	],
 

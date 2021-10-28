@@ -58,7 +58,12 @@ class ExportXML extends Base
 			echo $this->xml->saveXML(null, LIBXML_NOEMPTYTAG );
 		}
 		else {
-			$this->xml->save(self::processingFilePath($this->config["LOCAL_FILE"]), LIBXML_NOEMPTYTAG );
+			if (!$this->xml->save(self::processingFilePath($this->config["LOCAL_FILE"]), LIBXML_NOEMPTYTAG )) {
+				if (ZERO_EXCHANGE_DEBUG) {
+					echo "Cant save local file ".self::processingFilePath($this->config["LOCAL_FILE"])."<br><br>";
+				}
+				return false;
+			}
 			if ($this->config["DESTINATION"] == "ftp") {
 				if(!$this->sendFTP()) {
 					if (ZERO_EXCHANGE_DEBUG) {

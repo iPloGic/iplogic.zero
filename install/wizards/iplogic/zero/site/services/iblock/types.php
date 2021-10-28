@@ -62,11 +62,11 @@ foreach( $arTypes as $arType ) {
 		WizardServices::IncludeServiceLang("type_names.php", $languageID);
 
 		$code = strtoupper($arType["ID"]);
-		$arType["LANG"][$languageID]["NAME"] = GetMessage($code . "_TYPE_NAME");
-		$arType["LANG"][$languageID]["ELEMENT_NAME"] = GetMessage($code . "_ELEMENT_NAME");
+		$arType["LANG"][$languageID]["NAME"] = Loc::getMessage($code . "_TYPE_NAME");
+		$arType["LANG"][$languageID]["ELEMENT_NAME"] = Loc::getMessage($code . "_ELEMENT_NAME");
 
 		if( $arType["SECTIONS"] == "Y" ) {
-			$arType["LANG"][$languageID]["SECTION_NAME"] = GetMessage($code . "_SECTION_NAME");
+			$arType["LANG"][$languageID]["SECTION_NAME"] = Loc::getMessage($code . "_SECTION_NAME");
 		}
 	}
 
