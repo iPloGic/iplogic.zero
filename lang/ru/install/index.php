@@ -1,5 +1,5 @@
 <?
-$MESS["IPLOGIC_MODULE_NAME"] = "Сборка Zero для разработчиков";
+$MESS["IPLOGIC_MODULE_NAME"] = "Zero для разработчиков";
 $MESS["IPLOGIC_MODULE_DESC"] = "Данное решение предназначено для первоначальной установки Битрикс и дальнейшей разработки сайта. Содержит дополнительные библиотеки для расширения возможностей штатных модулей.";
 $MESS["IPLOGIC_PARTNER_NAME"] = "iPloGic";
 $MESS["IPLOGIC_PARTNER_URI"] = "https://iplogic.ru";
