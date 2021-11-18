@@ -80,7 +80,7 @@ $arFields = [
 	"MESSAGE"    => Loc::getMessage("USER_PASS_REQUEST_TEXT"),
 	"BODY_TYPE"  => "text",
 ];
-exMessage("NEW_USER_CONFIRM", $arFields);
+exMessage("USER_PASS_REQUEST", $arFields);
 
 /* USER_INFO */
 $arFields = [

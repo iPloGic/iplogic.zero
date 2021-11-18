@@ -58,5 +58,6 @@ if( ($db_res && $res = $db_res->Fetch()) ) {
 	$result = $obSite->Update(WIZARD_SITE_ID, $arFields);
 }
 else {
-	$result = $obSite->Add(WIZARD_SITE_ID, $arFields);
+	$arFields["LID"] = WIZARD_SITE_ID;
+	$result = $obSite->Add($arFields);
 }

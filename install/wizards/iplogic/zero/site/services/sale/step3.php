@@ -15,7 +15,7 @@ if( strlen($lid) <= 0 ) {
 $dbEvent =
 	CEventMessage::GetList($b = "ID", $order = "ASC", ["EVENT_NAME" => "SALE_NEW_ORDER", "SITE_ID" => WIZARD_SITE_ID]);
 if( !($dbEvent->Fetch()) ) {
-	IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/sale/install/events.php", $lid);
+	Loc::loadMessages($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/sale/install/events.php", $lid);
 
 	$dbEvent = CEventType::GetList(["TYPE_ID" => "SALE_NEW_ORDER"]);
 	if( !($dbEvent->Fetch()) ) {

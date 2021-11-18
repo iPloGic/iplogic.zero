@@ -19,7 +19,7 @@ class ShopSettingsStep extends CWizardStep
 
 		// replace by real if it needed
 		//$siteStamp =$wizard->GetPath()."/site/templates/minimal/images/pechat.gif";
-		$siteStamp = "";
+		//$siteStamp = "";
 		$siteID = getSite($wizard)["ID"];
 
 		$wizard->SetDefaultVars(
@@ -36,7 +36,7 @@ class ShopSettingsStep extends CWizardStep
 				"shopBANK" => Option::get("iplogic.zero", "shopBANK", Loc::getMessage("WIZ_SHOP_BANK_DEF"), $siteID),
 				"shopBANKREKV" => Option::get("iplogic.zero", "shopBANKREKV", Loc::getMessage("WIZ_SHOP_BANKREKV_DEF"), $siteID),
 				"shopKS" => Option::get("iplogic.zero", "shopKS", "30101 810 4 0000 0000225", $siteID),
-				"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
+				//"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
 
 				//"shopCompany_ua" => Option::get("iplogic.zero", "shopCompany_ua", "", $siteID),
 				"shopOfName_ua" => Option::get("iplogic.zero", "shopOfName_ua", Loc::getMessage("WIZ_SHOP_OF_NAME_DEF_UA"), $siteID),
@@ -61,7 +61,7 @@ class ShopSettingsStep extends CWizardStep
 	function ShowStep()
 	{
 		$wizard =& $this->GetWizard();
-		$siteStamp = $wizard->GetVar("siteStamp", true);
+		//$siteStamp = $wizard->GetVar("siteStamp", true);
 		$firstStep = "N"; //COption::GetOptionString("main", "wizard_first" . substr($wizard->GetID(), 7)  . "_" . $wizard->GetVar("siteID"), false, $wizard->GetVar("siteID"));
 
 		if (!CModule::IncludeModule("catalog"))
@@ -149,10 +149,10 @@ class ShopSettingsStep extends CWizardStep
 							<td class="wizard-input-table-left">'.Loc::getMessage("WIZ_SHOP_KS").':</td>
 							<td class="wizard-input-table-right">'.$this->ShowInputField('text', 'shopKS', array("class" => "wizard-field")).'</td>
 						</tr>
-						<tr>
+						<!--<tr>
 							<td class="wizard-input-table-left">'.Loc::getMessage("WIZ_SHOP_STAMP").':</td>
 							<td class="wizard-input-table-right">'.$this->ShowFileField("siteStamp", Array("show_file_info" => "N", "id" => "siteStamp")).'<br />'.CFile::ShowImage($siteStamp, 75, 75, "border=0 vspace=5", false, false).'</td>
-						</tr>
+						</tr>-->
 					</table>
 				</div><!--ru-->
 				';
@@ -268,8 +268,8 @@ class ShopSettingsStep extends CWizardStep
 
 	function OnPostForm()
 	{
-		$wizard =& $this->GetWizard();
-		$res = $this->SaveFile("siteStamp", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 70, "max_width" => 190, "make_preview" => "Y"));
+		/*$wizard =& $this->GetWizard();
+		$res = $this->SaveFile("siteStamp", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 70, "max_width" => 190, "make_preview" => "Y"));*/
 	}
 
 }

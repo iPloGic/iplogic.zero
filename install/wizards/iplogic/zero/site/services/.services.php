@@ -1,5 +1,5 @@
 <?
-if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 use Bitrix\Main\Localization\Loc;
 
@@ -15,7 +15,7 @@ $arServices = [
 			"settings.php",
 			"agents.php",
 			"groups.php",
-			"mail.php",
+			//"mail.php",
 		],
 	],
 
@@ -26,15 +26,15 @@ $arServices = [
 		],
 	],
 
-	"iblock" => [
-		"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
-		"STAGES" => [
-			"types.php", //IBlock types
-			"brands.php",
-			"catalog.php",
-			"offers.php",
-			"news.php",
-			"banners.php",
+		"iblock" => [
+			"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
+			"STAGES" => [
+				"types.php", //IBlock types
+				"brands.php",
+				"catalog.php",
+				"offers.php",
+				"news.php",
+				"banners.php",
 		],
 	],
 

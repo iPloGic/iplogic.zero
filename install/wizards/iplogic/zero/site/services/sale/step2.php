@@ -149,7 +149,7 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 			"CURRENCY" => $defCurrency,
 			"SORT" => 100,
 			"ACTIVE" => $delivery["courier"] == "Y" ? "Y" : "N",
-			"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/courier_logo.png",
+			"LOGOTIP" => WIZARD_SERVICE_RELATIVE_PATH . "/images/delivery.png",
 			"CONFIG" => [
 				"MAIN" => [
 					"PRICE" => ($bRus ? "500" : "30"),
@@ -172,7 +172,7 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 			"CURRENCY" => $defCurrency,
 			"SORT" => 200,
 			"ACTIVE" => $delivery["self"] == "Y" ? "Y" : "N",
-			"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/self_logo.png",
+			"LOGOTIP" => WIZARD_SERVICE_RELATIVE_PATH . "/images/picup.png",
 			"CONFIG" => [
 				"MAIN" => [
 					"PRICE" => 0,
@@ -360,7 +360,7 @@ foreach( $deliveryItems as $code => $fields ) {
 					],
 				]);
 
-				\Bitrix\Sale\Location\Admin\LocationHelper::resetLocationsForEntity(
+				/*\Bitrix\Sale\Location\Admin\LocationHelper::resetLocationsForEntity(
 					$newId,
 					$arLocation4Delivery,
 					\Bitrix\Sale\Delivery\Services\Manager::getLocationConnectorEntityName(),
@@ -371,7 +371,7 @@ foreach( $deliveryItems as $code => $fields ) {
 					"SERVICE_ID" => $newId,
 					"SERVICE_TYPE" => \Bitrix\Sale\Services\Base\RestrictionManager::SERVICE_TYPE_SHIPMENT,
 					"CLASS_NAME" => '\Bitrix\Sale\Delivery\Restrictions\ByLocation',
-				]);
+				]);*/
 
 				//Link delivery "pickup" to store
 				if( $fields["NAME"] == Loc::getMessage("SALE_WIZARD_COUR1") ) {

@@ -7,7 +7,7 @@ if( !CModule::IncludeModule('sale') ) {
 	return;
 }
 
-$dbSite = CSite::GetByID(WIZARD_SITE_ID);
+/*$dbSite = CSite::GetByID(WIZARD_SITE_ID);
 if( $arSite = $dbSite->Fetch() ) {
 	$lang = $arSite["LANGUAGE_ID"];
 }
@@ -17,7 +17,7 @@ if( strlen($lang) <= 0 ) {
 $bRus = false;
 if( $lang == "ru" ) {
 	$bRus = true;
-}
+}*/
 
 $res = \Bitrix\Sale\Location\LocationTable::getList(['filter' => ['=NAME.LANGUAGE_ID' => LANGUAGE_ID]]);
 if( $item = $res->fetch() ) {

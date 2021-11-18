@@ -57,6 +57,7 @@ class SiteSettingsStep extends CSiteSettingsWizardStep
 
 	function ShowStep()
 	{
+
 		$wizard =& $this->GetWizard();
 
 		$this->content .= '<div class="wizard-input-form-block"><div class="wizard-catalog-title">'.Loc::getMessage("wiz_company_name").'</div>';
@@ -65,8 +66,12 @@ class SiteSettingsStep extends CSiteSettingsWizardStep
 		$this->content .= '<div class="wizard-input-form-block"><div class="wizard-catalog-title">'.Loc::getMessage("wiz_email_from").'</div>';
 		$this->content .= $this->ShowInputField("text", "siteEmail", ["id" => "email-from", "class" => "wizard-field"])."</div>";
 
+		$attr = ["id" => "site-folder", "class" => "wizard-field"];
+		if (getSite($wizard)["DIR"] != "") {
+			$attr["disabled"] = "disabled";
+		}
 		$this->content .= '<div class="wizard-input-form-block"><div class="wizard-catalog-title">'.Loc::getMessage("wiz_site_folder").'</div>';
-		$this->content .= $this->ShowInputField("text", "siteFolder", ["id" => "site-folder", "class" => "wizard-field"])."</div>";
+		$this->content .= $this->ShowInputField("text", "siteFolder", $attr)."</div>";
 
 		$this->content .= '<div class="wizard-input-form-block"><div class="wizard-catalog-title">'.Loc::getMessage("wiz_server_name").'</div>';
 		$this->content .= $this->ShowInputField("text", "serverName", ["id" => "server-name", "class" => "wizard-field"])."</div>";

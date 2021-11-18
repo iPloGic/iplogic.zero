@@ -35,11 +35,10 @@ if( $iblockID == false ) {
 		$permissions[$arGroup["ID"]] = 'W';
 	}
 
-	$iblockID = WizardServices::ImportIBlockFromXML(
+	$iblockID = ImportIBlockFromXMLEx(
 		$iblockXMLFile,
 		$iblockCode,
 		$iblockType,
-		WIZARD_SITE_ID,
 		$permissions
 	);
 

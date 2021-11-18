@@ -1,4 +1,6 @@
-<? if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) die();
+<? if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) {
+	die();
+}
 
 use Bitrix\Main\Config\Option,
 	Bitrix\Main\Loader;
@@ -17,8 +19,9 @@ $iblockType = "catalog";
 $iblockID = false;
 
 $rsIBlock = CIBlock::GetList([], ["CODE" => $iblockCode, "TYPE" => $iblockType]);
-if( $rsIBlock && $arIBlock = $rsIBlock->Fetch() )
+if( $rsIBlock && $arIBlock = $rsIBlock->Fetch() ) {
 	return;
+}
 
 if( $iblockID == false ) {
 	$permissions = [
@@ -34,11 +37,10 @@ if( $iblockID == false ) {
 		$permissions[$arGroup["ID"]] = 'W';
 	}
 
-	$iblockID = WizardServices::ImportIBlockFromXML(
+	$iblockID = ImportIBlockFromXMLEx(
 		$iblockXMLFile,
 		$iblockCode,
 		$iblockType,
-		WIZARD_SITE_ID,
 		$permissions
 	);
 
@@ -75,7 +77,9 @@ if( !$ibp->Update($prop_fields['ID'], $arFields) ) {
 }
 
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/catalog/index.php", ["CATALOG_IBLOCK_ID" => $iblockID]);
-CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/bitrix/templates/" . $wizard->GetVar("templateDir") . "/header.php",
-	["CATALOG_IBLOCK_ID" => $iblockID]);
+CWizardUtil::ReplaceMacros(
+	WIZARD_SITE_PATH . "/bitrix/templates/" . $wizard->GetVar("templateDir") . "/header.php",
+	["CATALOG_IBLOCK_ID" => $iblockID]
+);
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/.catalog.menu_ext.php", ["CATALOG_IBLOCK_ID" => $iblockID]);
 ?>

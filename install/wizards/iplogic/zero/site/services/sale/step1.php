@@ -86,7 +86,7 @@ elseif( $lang == "en" ) {
 if( !($ar_usd_cur = CCurrency::GetByID($defCurrency)) ) {
 	$arFields = [
 		"CURRENCY" => $defCurrency,
-		"LANG" => [],
+		"LANG"     => [],
 	];
 	foreach( $arLanguages as $languageID ) {
 		WizardServices::IncludeServiceLang("step1.php", $languageID);
@@ -101,23 +101,30 @@ if( !($ar_usd_cur = CCurrency::GetByID($defCurrency)) ) {
 	WizardServices::IncludeServiceLang("step1.php", $lang);
 	CCurrency::Add($arFields);
 }
-$dbCurrency = Bitrix\Sale\Internals\SiteCurrencyTable::getList([
-	"filter" => [
-		"LID" => WIZARD_SITE_ID,
-	],
-]);
+$dbCurrency = Bitrix\Sale\Internals\SiteCurrencyTable::getList(
+	[
+		"filter" => [
+			"LID" => WIZARD_SITE_ID,
+		],
+	]
+);
 if( $curCurrency = $dbCurrency->fetch() ) {
 	if( $curCurrency["CURRENCY"] != $defCurrency ) {
-		Bitrix\Sale\Internals\SiteCurrencyTable::update(WIZARD_SITE_ID, [
-			"CURRENCY" => $defCurrency,
-		]);
+		Bitrix\Sale\Internals\SiteCurrencyTable::update(
+			WIZARD_SITE_ID,
+			[
+				"CURRENCY" => $defCurrency,
+			]
+		);
 	}
 }
 else {
-	Bitrix\Sale\Internals\SiteCurrencyTable::add([
-		"LID" => WIZARD_SITE_ID,
-		"CURRENCY" => $defCurrency,
-	]);
+	Bitrix\Sale\Internals\SiteCurrencyTable::add(
+		[
+			"LID"      => WIZARD_SITE_ID,
+			"CURRENCY" => $defCurrency,
+		]
+	);
 }
 
 
@@ -146,10 +153,10 @@ if( $bRus ) {
 		Option::set("iplogic.zero", "shopBANKREKV", $shopBANKREKV, WIZARD_SITE_ID);
 		$shopKS = $wizard->GetVar("shopKS");
 		Option::set("iplogic.zero", "shopKS", $shopKS, WIZARD_SITE_ID);
-		$siteStamp = $wizard->GetVar("siteStamp");
+		/*$siteStamp = $wizard->GetVar("siteStamp");
 		if( $siteStamp == "" ) {
 			$siteStamp = Option::get("iplogic.zero", "siteStamp", "", WIZARD_SITE_ID);
-		}
+		}*/
 	}
 	elseif( $shopLocalization == "ua" ) {
 
@@ -184,7 +191,7 @@ if( $bRus ) {
 	$shopEmail = $wizard->GetVar("shopEmail");
 	Option::set("iplogic.zero", "shopEmail", $shopEmail, WIZARD_SITE_ID);
 
-	if( strlen($siteStamp) > 0 ) {
+	/*if( strlen($siteStamp) > 0 ) {
 		if( IntVal($siteStamp) > 0 ) {
 			$ff = CFile::GetByID($siteStamp);
 			if( $zr = $ff->Fetch() ) {
@@ -200,7 +207,7 @@ if( $bRus ) {
 	}
 	else {
 		$siteStamp = "";
-	}
+	}*/
 }
 
 
@@ -226,14 +233,17 @@ Option::set("iplogic.zero", "personTypeUr", $personTypeUr, WIZARD_SITE_ID);
 
 if( in_array(Loc::getMessage("SALE_WIZARD_PERSON_1"), $arPersonTypeNames) ) {
 	$arGeneralInfo["personType"]["fiz"] = array_search(Loc::getMessage("SALE_WIZARD_PERSON_1"), $arPersonTypeNames);
-	CSalePersonType::Update(array_search(Loc::getMessage("SALE_WIZARD_PERSON_1"), $arPersonTypeNames), [
+	CSalePersonType::Update(
+		array_search(Loc::getMessage("SALE_WIZARD_PERSON_1"), $arPersonTypeNames),
+		[
 			"ACTIVE" => $personTypeFiz,
 		]
 	);
 }
 elseif( $personTypeFiz == "Y" ) {
-	$arGeneralInfo["personType"]["fiz"] = CSalePersonType::Add([
-			"LID" => WIZARD_SITE_ID,
+	$arGeneralInfo["personType"]["fiz"] = CSalePersonType::Add(
+		[
+			"LID"  => WIZARD_SITE_ID,
 			"NAME" => Loc::getMessage("SALE_WIZARD_PERSON_1"),
 			"SORT" => "100",
 		]
@@ -242,14 +252,17 @@ elseif( $personTypeFiz == "Y" ) {
 
 if( in_array(Loc::getMessage("SALE_WIZARD_PERSON_2"), $arPersonTypeNames) ) {
 	$arGeneralInfo["personType"]["ur"] = array_search(Loc::getMessage("SALE_WIZARD_PERSON_2"), $arPersonTypeNames);
-	CSalePersonType::Update(array_search(Loc::getMessage("SALE_WIZARD_PERSON_2"), $arPersonTypeNames), [
+	CSalePersonType::Update(
+		array_search(Loc::getMessage("SALE_WIZARD_PERSON_2"), $arPersonTypeNames),
+		[
 			"ACTIVE" => $personTypeUr,
 		]
 	);
 }
 elseif( $personTypeUr == "Y" ) {
-	$arGeneralInfo["personType"]["ur"] = CSalePersonType::Add([
-			"LID" => WIZARD_SITE_ID,
+	$arGeneralInfo["personType"]["ur"] = CSalePersonType::Add(
+		[
+			"LID"  => WIZARD_SITE_ID,
 			"NAME" => Loc::getMessage("SALE_WIZARD_PERSON_2"),
 			"SORT" => "150",
 		]
@@ -263,14 +276,17 @@ if( $shopLocalization == "ua" ) {
 	if( in_array(Loc::getMessage("SALE_WIZARD_PERSON_3"), $arPersonTypeNames) ) {
 		$arGeneralInfo["personType"]["fiz_ua"] =
 			array_search(Loc::getMessage("SALE_WIZARD_PERSON_3"), $arPersonTypeNames);
-		CSalePersonType::Update(array_search(Loc::getMessage("SALE_WIZARD_PERSON_3"), $arPersonTypeNames), [
+		CSalePersonType::Update(
+			array_search(Loc::getMessage("SALE_WIZARD_PERSON_3"), $arPersonTypeNames),
+			[
 				"ACTIVE" => $personTypeFizUa,
 			]
 		);
 	}
 	elseif( $personTypeFizUa == "Y" ) {
-		$arGeneralInfo["personType"]["fiz_ua"] = CSalePersonType::Add([
-				"LID" => WIZARD_SITE_ID,
+		$arGeneralInfo["personType"]["fiz_ua"] = CSalePersonType::Add(
+			[
+				"LID"  => WIZARD_SITE_ID,
 				"NAME" => Loc::getMessage("SALE_WIZARD_PERSON_3"),
 				"SORT" => "100",
 			]
@@ -315,8 +331,11 @@ if( $s_count < 2 ) {
 	}
 
 }
+Option::set('sale', 'ADDRESS_different_set', "Y");
+Option::set('sale', 'WEIGHT_different_set', "Y");
+
 Option::set('sale', 'weight_unit', Loc::getMessage("SALE_WIZARD_WEIGHT_UNIT"), WIZARD_SITE_ID);
-Option::set('sale', 'WEIGHT_different_set', 'N', WIZARD_SITE_ID);
+//Option::set('sale', 'WEIGHT_different_set', 'Y', WIZARD_SITE_ID);
 Option::set('sale', 'weight_koef', '1000', WIZARD_SITE_ID);
 if( $bRus ) {
 	Option::set('sale', 'location_zip', $shopZip, WIZARD_SITE_ID);
@@ -331,16 +350,18 @@ if( \Bitrix\Main\Config\Option::get('sale', 'sale_locationpro_migrated', '') == 
 
 	if( strlen($shopLocation) ) {
 		// get city with name equal to $shopLocation
-		$item = \Bitrix\Sale\Location\LocationTable::getList([
-			'filter' => [
-				'=NAME.LANGUAGE_ID' => $lang,
-				'=NAME.NAME' => $shopLocation,
-				'=TYPE.CODE' => 'CITY',
-			],
-			'select' => [
-				'CODE',
-			],
-		])->fetch();
+		$item = \Bitrix\Sale\Location\LocationTable::getList(
+			[
+				'filter' => [
+					'=NAME.LANGUAGE_ID' => $lang,
+					'=NAME.NAME'        => $shopLocation,
+					'=TYPE.CODE'        => 'CITY',
+				],
+				'select' => [
+					'CODE',
+				],
+			]
+		)->fetch();
 
 		if( $item ) {
 			$location = $item['CODE'];
@@ -356,15 +377,17 @@ if( \Bitrix\Main\Config\Option::get('sale', 'sale_locationpro_migrated', '') == 
 			if( strlen($countryCode) ) {
 				// get country which matches the current localization
 				$countryId = 0;
-				$item = \Bitrix\Sale\Location\LocationTable::getList([
-					'filter' => [
-						'=CODE' => $countryCode,
-						'=TYPE.CODE' => 'COUNTRY',
-					],
-					'select' => [
-						'ID',
-					],
-				])->fetch();
+				$item = \Bitrix\Sale\Location\LocationTable::getList(
+					[
+						'filter' => [
+							'=CODE'      => $countryCode,
+							'=TYPE.CODE' => 'COUNTRY',
+						],
+						'select' => [
+							'ID',
+						],
+					]
+				)->fetch();
 
 				// country found
 				if( $item ) {
@@ -383,9 +406,9 @@ if( \Bitrix\Main\Config\Option::get('sale', 'sale_locationpro_migrated', '') == 
 					// such country were not found, create it
 
 					$data = [
-						'CODE' => 'demo_country_' . WIZARD_SITE_ID,
+						'CODE'    => 'demo_country_' . WIZARD_SITE_ID,
 						'TYPE_ID' => $types['COUNTRY'],
-						'NAME' => [],
+						'NAME'    => [],
 					];
 					foreach( $arLanguages as $langID ) {
 						$data["NAME"][$langID] = [
@@ -403,9 +426,9 @@ if( \Bitrix\Main\Config\Option::get('sale', 'sale_locationpro_migrated', '') == 
 					// ok, so country were created, now create demo-city
 
 					$data = [
-						'CODE' => 'shop_city_' . WIZARD_SITE_ID,
-						'TYPE_ID' => $types['CITY'],
-						'NAME' => [],
+						'CODE'      => 'shop_city_' . WIZARD_SITE_ID,
+						'TYPE_ID'   => $types['CITY'],
+						'NAME'      => [],
 						'PARENT_ID' => $countryId,
 					];
 					foreach( $arLanguages as $langID ) {
@@ -437,7 +460,7 @@ else {
 			[],
 			[
 				"COUNTRY_NAME" => Loc::getMessage("WIZ_COUNTRY_" . ToUpper($shopLocalization)),
-				"LID" => $lang,
+				"LID"          => $lang,
 			]
 		);
 		if( $arContList = $db_contList->Fetch() ) {
@@ -451,7 +474,7 @@ else {
 			foreach( $arLanguages as $langID ) {
 				WizardServices::IncludeServiceLang("step1.php", $langID);
 				$arArrayTmp[$langID] = [
-					"LID" => $langID,
+					"LID"  => $langID,
 					"NAME" => Loc::getMessage("WIZ_COUNTRY_" . ToUpper($shopLocalization)),
 				];
 			}
@@ -462,7 +485,7 @@ else {
 		$arArrayTmp["NAME"] = $shopLocation;
 		foreach( $arLanguages as $langID ) {
 			$arArrayTmp[$langID] = [
-				"LID" => $langID,
+				"LID"  => $langID,
 				"NAME" => $shopLocation,
 			];
 		}
@@ -471,8 +494,9 @@ else {
 		$location = CSaleLocation::AddLocation(
 			[
 				"COUNTRY_ID" => $CurCountryID,
-				"CITY_ID" => $city_id,
-			]);
+				"CITY_ID"    => $city_id,
+			]
+		);
 		if( $bRus ) {
 			CSaleLocation::AddLocationZIP($location, $shopZip);
 		}
@@ -486,14 +510,30 @@ Option::set('sale', 'location', $location, WIZARD_SITE_ID);
 
 //Order Prop Group
 if( $fizExist ) {
-	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([], ["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1")], false, false, ["ID"]);
+	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+		[],
+		[
+			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
+			"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"),
+		],
+		false,
+		false,
+		["ID"]
+	);
 	if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 		$arGeneralInfo["propGroup"]["user_fiz"] = $arSaleOrderPropsGroup["ID"];
 	}
 
-	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([], ["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2")], false, false, ["ID"]);
+	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+		[],
+		[
+			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
+			"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"),
+		],
+		false,
+		false,
+		["ID"]
+	);
 	if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 		$arGeneralInfo["propGroup"]["adres_fiz"] = $arSaleOrderPropsGroup["ID"];
 	}
@@ -501,66 +541,126 @@ if( $fizExist ) {
 }
 elseif( $personType["fiz"] == "Y" ) {
 	$arGeneralInfo["propGroup"]["user_fiz"] =
-		CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"), "SORT" => 100]);
+		CSaleOrderPropsGroup::Add(
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"),
+				"SORT"           => 100,
+			]
+		);
 	$arGeneralInfo["propGroup"]["adres_fiz"] =
-		CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"), "SORT" => 200]);
+		CSaleOrderPropsGroup::Add(
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"),
+				"SORT"           => 200,
+			]
+		);
 }
 
 if( $urExist ) {
-	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([], ["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR1")], false, false, ["ID"]);
+	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+		[],
+		[
+			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
+			"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR1"),
+		],
+		false,
+		false,
+		["ID"]
+	);
 	if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 		$arGeneralInfo["propGroup"]["user_ur"] = $arSaleOrderPropsGroup["ID"];
 	}
 
-	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([], ["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR2")], false, false, ["ID"]);
+	$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+		[],
+		[
+			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
+			"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR2"),
+		],
+		false,
+		false,
+		["ID"]
+	);
 	if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 		$arGeneralInfo["propGroup"]["adres_ur"] = $arSaleOrderPropsGroup["ID"];
 	}
 }
 elseif( $personType["ur"] == "Y" ) {
 	$arGeneralInfo["propGroup"]["user_ur"] =
-		CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR1"), "SORT" => 300]);
+		CSaleOrderPropsGroup::Add(
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR1"),
+				"SORT"           => 300,
+			]
+		);
 	$arGeneralInfo["propGroup"]["adres_ur"] =
-		CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR2"), "SORT" => 400]);
+		CSaleOrderPropsGroup::Add(
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_UR2"),
+				"SORT"           => 400,
+			]
+		);
 }
 
 if( $shopLocalization == "ua" ) {
 	if( $fizUaExist ) {
-		$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([],
-			["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-				"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1")], false, false, ["ID"]);
+		$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+			[],
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"),
+			],
+			false,
+			false,
+			["ID"]
+		);
 		if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 			$arGeneralInfo["propGroup"]["user_fiz_ua"] = $arSaleOrderPropsGroup["ID"];
 		}
 
-		$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList([],
-			["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-				"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2")], false, false, ["ID"]);
+		$dbSaleOrderPropsGroup = CSaleOrderPropsGroup::GetList(
+			[],
+			[
+				"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
+				"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"),
+			],
+			false,
+			false,
+			["ID"]
+		);
 		if( $arSaleOrderPropsGroup = $dbSaleOrderPropsGroup->GetNext() ) {
 			$arGeneralInfo["propGroup"]["adres_fiz_ua"] = $arSaleOrderPropsGroup["ID"];
 		}
 	}
 	elseif( $personType["fiz_ua"] == "Y" ) {
 		$arGeneralInfo["propGroup"]["user_fiz_ua"] =
-			CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-				"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"), "SORT" => 100]);
+			CSaleOrderPropsGroup::Add(
+				[
+					"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
+					"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ1"),
+					"SORT"           => 100,
+				]
+			);
 		$arGeneralInfo["propGroup"]["adres_fiz_ua"] =
-			CSaleOrderPropsGroup::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-				"NAME" => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"), "SORT" => 200]);
+			CSaleOrderPropsGroup::Add(
+				[
+					"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
+					"NAME"           => Loc::getMessage("SALE_WIZARD_PROP_GROUP_FIZ2"),
+					"SORT"           => 200,
+				]
+			);
 	}
 }
 
 $businessValuePersonDomain = [];
 
 $businessValueGroups = [
-	'COMPANY' => ['SORT' => 100],
-	'CLIENT' => ['SORT' => 200],
+	'COMPANY'        => ['SORT' => 100],
+	'CLIENT'         => ['SORT' => 200],
 	'CLIENT_COMPANY' => ['SORT' => 300],
 ];
 
@@ -573,161 +673,161 @@ if( $personType["fiz"] == "Y" ) {
 
 	$businessValueCodes['CLIENT_NAME'] = ['GROUP' => 'CLIENT', 'SORT' => 100, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_6"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 100,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_6"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 100,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "Y",
-		"IS_PAYER" => "Y",
+		"IS_PAYER"        => "Y",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "FIO",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "FIO",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_EMAIL'] = ['GROUP' => 'CLIENT', 'SORT' => 110, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => "E-Mail",
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 110,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "Y",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => "E-Mail",
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 110,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "Y",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "EMAIL",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "EMAIL",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_PHONE'] = ['GROUP' => 'CLIENT', 'SORT' => 120, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_9"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 120,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz"],
-		"SIZE1" => 0,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_9"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 120,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz"],
+		"SIZE1"           => 0,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "PHONE",
-		"IS_PHONE" => "Y",
-		"IS_FILTERED" => "N",
+		"CODE"            => "PHONE",
+		"IS_PHONE"        => "Y",
+		"IS_FILTERED"     => "N",
 	];
 
 	$businessValueCodes['CLIENT_ZIP'] = ['GROUP' => 'CLIENT', 'SORT' => 130, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_4"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "N",
-		"DEFAULT_VALUE" => "101000",
-		"SORT" => 130,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz"],
-		"SIZE1" => 8,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_4"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "N",
+		"DEFAULT_VALUE"   => "101000",
+		"SORT"            => 130,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz"],
+		"SIZE1"           => 8,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "ZIP",
-		"IS_FILTERED" => "N",
-		"IS_ZIP" => "Y",
+		"CODE"            => "ZIP",
+		"IS_FILTERED"     => "N",
+		"IS_ZIP"          => "Y",
 	];
 
 	$businessValueCodes['CLIENT_CITY'] = ['GROUP' => 'CLIENT', 'SORT' => 145, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_21"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "N",
-		"DEFAULT_VALUE" => $shopLocation,
-		"SORT" => 145,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_21"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "N",
+		"DEFAULT_VALUE"   => $shopLocation,
+		"SORT"            => 145,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "CITY",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "CITY",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_LOCATION'] =
 		['GROUP' => 'CLIENT', 'SORT' => 140, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_2"),
-		"TYPE" => "LOCATION",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => $location,
-		"SORT" => 140,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "Y",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
-		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
-		"IS_LOCATION4TAX" => "N",
-		"CODE" => "LOCATION",
-		"IS_FILTERED" => "N",
+		"PERSON_TYPE_ID"       => $arGeneralInfo["personType"]["fiz"],
+		"NAME"                 => Loc::getMessage("SALE_WIZARD_PROP_2"),
+		"TYPE"                 => "LOCATION",
+		"REQUIED"              => "Y",
+		"DEFAULT_VALUE"        => $location,
+		"SORT"                 => 140,
+		"USER_PROPS"           => "Y",
+		"IS_LOCATION"          => "Y",
+		"PROPS_GROUP_ID"       => $arGeneralInfo["propGroup"]["adres_fiz"],
+		"SIZE1"                => 40,
+		"SIZE2"                => 0,
+		"DESCRIPTION"          => "",
+		"IS_EMAIL"             => "N",
+		"IS_PROFILE_NAME"      => "N",
+		"IS_PAYER"             => "N",
+		"IS_LOCATION4TAX"      => "N",
+		"CODE"                 => "LOCATION",
+		"IS_FILTERED"          => "N",
 		"INPUT_FIELD_LOCATION" => "",
 	];
 
 	$businessValueCodes['CLIENT_ADDRESS'] = ['GROUP' => 'CLIENT', 'SORT' => 150, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_5"),
-		"TYPE" => "TEXTAREA",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 150,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz"],
-		"SIZE1" => 30,
-		"SIZE2" => 3,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_5"),
+		"TYPE"            => "TEXTAREA",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 150,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 3,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "ADDRESS",
-		"IS_FILTERED" => "N",
-		"IS_ADDRESS" => "Y",
+		"CODE"            => "ADDRESS",
+		"IS_FILTERED"     => "N",
+		"IS_ADDRESS"      => "Y",
 	];
 }
 
@@ -737,274 +837,252 @@ if( $personType["ur"] == "Y" ) {
 	if( $shopLocalization != "ua" ) {
 		$businessValueCodes['COMPANY_NAME'] = ['GROUP' => 'COMPANY', 'SORT' => 200, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_8"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 200,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_8"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 200,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "Y",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "COMPANY",
-			"IS_FILTERED" => "Y",
+			"CODE"            => "COMPANY",
+			"IS_FILTERED"     => "Y",
 		];
 
 		$businessValueCodes['COMPANY_ADDRESS'] =
 			['GROUP' => 'COMPANY', 'SORT' => 210, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_7"),
-			"TYPE" => "TEXTAREA",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 210,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_7"),
+			"TYPE"            => "TEXTAREA",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 210,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "COMPANY_ADR",
-			"IS_FILTERED" => "N",
-			"IS_ADDRESS" => "Y",
+			"CODE"            => "COMPANY_ADR",
+			"IS_FILTERED"     => "N",
+			"IS_ADDRESS"      => "Y",
 		];
 
 		$businessValueCodes['COMPANY_INN'] = ['GROUP' => 'COMPANY', 'SORT' => 220, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_13"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 220,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_ur"],
-			"SIZE1" => 0,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_13"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 220,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_ur"],
+			"SIZE1"           => 0,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "INN",
-			"IS_FILTERED" => "N",
+			"CODE"            => "INN",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_KPP'] = ['GROUP' => 'COMPANY', 'SORT' => 230, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_14"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 230,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_ur"],
-			"SIZE1" => 0,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_14"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 230,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_ur"],
+			"SIZE1"           => 0,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "KPP",
-			"IS_FILTERED" => "N",
+			"CODE"            => "KPP",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_CONTACT_NAME'] =
 			['GROUP' => 'COMPANY', 'SORT' => 240, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_10"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 240,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 0,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_10"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 240,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 0,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "Y",
+			"IS_PAYER"        => "Y",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "CONTACT_PERSON",
-			"IS_FILTERED" => "N",
+			"CODE"            => "CONTACT_PERSON",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_EMAIL'] = ['GROUP' => 'COMPANY', 'SORT' => 250, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => "E-Mail",
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 250,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "Y",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => "E-Mail",
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 250,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "Y",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "EMAIL",
-			"IS_FILTERED" => "N",
+			"CODE"            => "EMAIL",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_PHONE'] = ['GROUP' => 'COMPANY', 'SORT' => 260, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_9"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 260,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 0,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_9"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 260,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 0,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"IS_PHONE" => "Y",
-			"CODE" => "PHONE",
-			"IS_FILTERED" => "N",
-		];
-
-		$businessValueCodes['COMPANY_FAX'] = ['GROUP' => 'COMPANY', 'SORT' => 270, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
-		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_11"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 270,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 0,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
-			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
-			"IS_LOCATION4TAX" => "N",
-			"CODE" => "FAX",
-			"IS_FILTERED" => "N",
+			"IS_PHONE"        => "Y",
+			"CODE"            => "PHONE",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_ZIP'] = ['GROUP' => 'COMPANY', 'SORT' => 280, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_4"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "101000",
-			"SORT" => 280,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 8,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_4"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "101000",
+			"SORT"            => 280,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 8,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "ZIP",
-			"IS_FILTERED" => "N",
-			"IS_ZIP" => "Y",
+			"CODE"            => "ZIP",
+			"IS_FILTERED"     => "N",
+			"IS_ZIP"          => "Y",
 		];
 
 		$businessValueCodes['COMPANY_CITY'] = ['GROUP' => 'COMPANY', 'SORT' => 285, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_21"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => $shopLocation,
-			"SORT" => 285,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_21"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => $shopLocation,
+			"SORT"            => 285,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "CITY",
-			"IS_FILTERED" => "Y",
+			"CODE"            => "CITY",
+			"IS_FILTERED"     => "Y",
 		];
 
 		$businessValueCodes['COMPANY_LOCATION'] =
 			['GROUP' => 'COMPANY', 'SORT' => 290, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_2"),
-			"TYPE" => "LOCATION",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 290,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "Y",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_2"),
+			"TYPE"            => "LOCATION",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 290,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "Y",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "Y",
-			"CODE" => "LOCATION",
-			"IS_FILTERED" => "N",
+			"CODE"            => "LOCATION",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_OPERATION_ADDRESS'] =
 			['GROUP' => 'COMPANY', 'SORT' => 300, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_12"),
-			"TYPE" => "TEXTAREA",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 300,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 10,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_12"),
+			"TYPE"            => "TEXTAREA",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 300,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 10,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "ADDRESS",
-			"IS_FILTERED" => "N",
-			"IS_ADDRESS" => "Y",
+			"CODE"            => "ADDRESS",
+			"IS_FILTERED"     => "N",
+			"IS_ADDRESS"      => "Y",
 		];
 	}
 	else {
@@ -1033,227 +1111,227 @@ if( $personType["ur"] == "Y" ) {
 
 		$businessValueCodes['COMPANY_EMAIL'] = ['GROUP' => 'COMPANY', 'SORT' => 110, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => "E-Mail",
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 110,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "Y",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => "E-Mail",
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 110,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "Y",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "EMAIL",
-			"IS_FILTERED" => "Y",
+			"CODE"            => "EMAIL",
+			"IS_FILTERED"     => "Y",
 		];
 
 		$businessValueCodes['COMPANY_NAME'] = ['GROUP' => 'COMPANY', 'SORT' => 130, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_40"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 130,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_40"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 130,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "Y",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "COMPANY_NAME",
-			"IS_FILTERED" => "Y",
+			"CODE"            => "COMPANY_NAME",
+			"IS_FILTERED"     => "Y",
 		];
 
 		$businessValueCodes['COMPANY_ADDRESS'] =
 			['GROUP' => 'COMPANY', 'SORT' => 140, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_47"),
-			"TYPE" => "TEXTAREA",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 140,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 40,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_47"),
+			"TYPE"            => "TEXTAREA",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 140,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 40,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "COMPANY_ADR",
-			"IS_FILTERED" => "N",
-			"IS_ADDRESS" => "Y",
+			"CODE"            => "COMPANY_ADR",
+			"IS_FILTERED"     => "N",
+			"IS_ADDRESS"      => "Y",
 		];
 
 		$businessValueCodes['COMPANY_EGRPU'] = ['GROUP' => 'COMPANY', 'SORT' => 150, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_48"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 150,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_48"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 150,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "EGRPU",
-			"IS_FILTERED" => "N",
+			"CODE"            => "EGRPU",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_INN'] = ['GROUP' => 'COMPANY', 'SORT' => 160, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_49"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 160,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_49"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 160,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "INN",
-			"IS_FILTERED" => "N",
+			"CODE"            => "INN",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_NDS'] = ['GROUP' => 'COMPANY', 'SORT' => 170, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_46"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 170,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_46"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 170,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "NDS",
-			"IS_FILTERED" => "N",
+			"CODE"            => "NDS",
+			"IS_FILTERED"     => "N",
 		];
 
 		$businessValueCodes['COMPANY_ZIP'] = ['GROUP' => 'COMPANY', 'SORT' => 180, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_44"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "N",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 180,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 8,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_44"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "N",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 180,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 8,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "ZIP",
-			"IS_FILTERED" => "N",
-			"IS_ZIP" => "Y",
+			"CODE"            => "ZIP",
+			"IS_FILTERED"     => "N",
+			"IS_ZIP"          => "Y",
 		];
 
 		$businessValueCodes['COMPANY_CITY'] = ['GROUP' => 'COMPANY', 'SORT' => 190, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_43"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => $shopLocation,
-			"SORT" => 190,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_43"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => $shopLocation,
+			"SORT"            => 190,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "CITY",
-			"IS_FILTERED" => "Y",
+			"CODE"            => "CITY",
+			"IS_FILTERED"     => "Y",
 		];
 
 		$businessValueCodes['COMPANY_OPERATION_ADDRESS'] =
 			['GROUP' => 'COMPANY', 'SORT' => 200, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_42"),
-			"TYPE" => "TEXTAREA",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 200,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 3,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_42"),
+			"TYPE"            => "TEXTAREA",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 200,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 3,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "ADDRESS",
-			"IS_FILTERED" => "N",
-			"IS_ADDRESS" => "Y",
+			"CODE"            => "ADDRESS",
+			"IS_FILTERED"     => "N",
+			"IS_ADDRESS"      => "Y",
 		];
 
 		$businessValueCodes['COMPANY_PHONE'] = ['GROUP' => 'COMPANY', 'SORT' => 210, 'DOMAIN' => $BIZVAL_ENTITY_DOMAIN];
 		$arProps[] = [
-			"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"],
-			"NAME" => Loc::getMessage("SALE_WIZARD_PROP_45"),
-			"TYPE" => "TEXT",
-			"REQUIED" => "Y",
-			"DEFAULT_VALUE" => "",
-			"SORT" => 210,
-			"USER_PROPS" => "Y",
-			"IS_LOCATION" => "N",
-			"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_ur"],
-			"SIZE1" => 30,
-			"SIZE2" => 0,
-			"DESCRIPTION" => "",
-			"IS_EMAIL" => "N",
+			"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["ur"],
+			"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_45"),
+			"TYPE"            => "TEXT",
+			"REQUIED"         => "Y",
+			"DEFAULT_VALUE"   => "",
+			"SORT"            => 210,
+			"USER_PROPS"      => "Y",
+			"IS_LOCATION"     => "N",
+			"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_ur"],
+			"SIZE1"           => 30,
+			"SIZE2"           => 0,
+			"DESCRIPTION"     => "",
+			"IS_EMAIL"        => "N",
 			"IS_PROFILE_NAME" => "N",
-			"IS_PAYER" => "N",
+			"IS_PAYER"        => "N",
 			"IS_LOCATION4TAX" => "N",
-			"CODE" => "PHONE",
-			"IS_FILTERED" => "N",
+			"CODE"            => "PHONE",
+			"IS_FILTERED"     => "N",
 		];
 	}
 }
@@ -1287,91 +1365,91 @@ if( $shopLocalization == "ua" && $personType["fiz_ua"] == "Y" ) {
 
 	$businessValueCodes['CLIENT_EMAIL'] = ['GROUP' => 'CLIENT', 'SORT' => 110, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => "E-Mail",
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 110,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz_ua"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "Y",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => "E-Mail",
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 110,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz_ua"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "Y",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "EMAIL",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "EMAIL",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_NAME'] = ['GROUP' => 'CLIENT', 'SORT' => 130, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_30"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 130,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz_ua"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_30"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 130,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz_ua"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "Y",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "FIO",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "FIO",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_COMPANY_ADDRESS'] =
 		['GROUP' => 'CLIENT', 'SORT' => 140, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_37"),
-		"TYPE" => "TEXTAREA",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 140,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["user_fiz_ua"],
-		"SIZE1" => 40,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_37"),
+		"TYPE"            => "TEXTAREA",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 140,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["user_fiz_ua"],
+		"SIZE1"           => 40,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "COMPANY_ADR",
-		"IS_FILTERED" => "N",
+		"CODE"            => "COMPANY_ADR",
+		"IS_FILTERED"     => "N",
 	];
 
 	$businessValueCodes['CLIENT_EGRPU'] = ['GROUP' => 'CLIENT', 'SORT' => 150, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_38"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 150,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 30,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_38"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 150,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "EGRPU",
-		"IS_FILTERED" => "N",
+		"CODE"            => "EGRPU",
+		"IS_FILTERED"     => "N",
 	];
 
 	/*
@@ -1400,115 +1478,115 @@ if( $shopLocalization == "ua" && $personType["fiz_ua"] == "Y" ) {
 
 	$businessValueCodes['CLIENT_NDS'] = ['GROUP' => 'CLIENT', 'SORT' => 170, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_36"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "N",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 170,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 30,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_36"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "N",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 170,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "NDS",
-		"IS_FILTERED" => "N",
+		"CODE"            => "NDS",
+		"IS_FILTERED"     => "N",
 	];
 
 	$businessValueCodes['CLIENT_ZIP'] = ['GROUP' => 'CLIENT', 'SORT' => 180, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_34"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "N",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 180,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 8,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_34"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "N",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 180,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 8,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "ZIP",
-		"IS_FILTERED" => "N",
-		"IS_ZIP" => "Y",
+		"CODE"            => "ZIP",
+		"IS_FILTERED"     => "N",
+		"IS_ZIP"          => "Y",
 	];
 
 	$businessValueCodes['CLIENT_CITY'] = ['GROUP' => 'CLIENT', 'SORT' => 190, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_33"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => $shopLocation,
-		"SORT" => 190,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 30,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_33"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => $shopLocation,
+		"SORT"            => 190,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "CITY",
-		"IS_FILTERED" => "Y",
+		"CODE"            => "CITY",
+		"IS_FILTERED"     => "Y",
 	];
 
 	$businessValueCodes['CLIENT_ADDRESS'] = ['GROUP' => 'CLIENT', 'SORT' => 200, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_32"),
-		"TYPE" => "TEXTAREA",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 200,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 30,
-		"SIZE2" => 3,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_32"),
+		"TYPE"            => "TEXTAREA",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 200,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 3,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "ADDRESS",
-		"IS_FILTERED" => "N",
-		"IS_ADDRESS" => "Y",
+		"CODE"            => "ADDRESS",
+		"IS_FILTERED"     => "N",
+		"IS_ADDRESS"      => "Y",
 	];
 
 	$businessValueCodes['CLIENT_PHONE'] = ['GROUP' => 'CLIENT', 'SORT' => 210, 'DOMAIN' => $BIZVAL_INDIVIDUAL_DOMAIN];
 	$arProps[] = [
-		"PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz_ua"],
-		"NAME" => Loc::getMessage("SALE_WIZARD_PROP_35"),
-		"TYPE" => "TEXT",
-		"REQUIED" => "Y",
-		"DEFAULT_VALUE" => "",
-		"SORT" => 210,
-		"USER_PROPS" => "Y",
-		"IS_LOCATION" => "N",
-		"PROPS_GROUP_ID" => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
-		"SIZE1" => 30,
-		"SIZE2" => 0,
-		"DESCRIPTION" => "",
-		"IS_EMAIL" => "N",
+		"PERSON_TYPE_ID"  => $arGeneralInfo["personType"]["fiz_ua"],
+		"NAME"            => Loc::getMessage("SALE_WIZARD_PROP_35"),
+		"TYPE"            => "TEXT",
+		"REQUIED"         => "Y",
+		"DEFAULT_VALUE"   => "",
+		"SORT"            => 210,
+		"USER_PROPS"      => "Y",
+		"IS_LOCATION"     => "N",
+		"PROPS_GROUP_ID"  => $arGeneralInfo["propGroup"]["adres_fiz_ua"],
+		"SIZE1"           => 30,
+		"SIZE2"           => 0,
+		"DESCRIPTION"     => "",
+		"IS_EMAIL"        => "N",
 		"IS_PROFILE_NAME" => "N",
-		"IS_PAYER" => "N",
+		"IS_PAYER"        => "N",
 		"IS_LOCATION4TAX" => "N",
-		"CODE" => "PHONE",
-		"IS_PHONE" => "Y",
-		"IS_FILTERED" => "N",
+		"CODE"            => "PHONE",
+		"IS_PHONE"        => "Y",
+		"IS_FILTERED"     => "N",
 	];
 }
 
@@ -1571,39 +1649,62 @@ foreach( $arProps as $prop ) {
 
 //1C export
 if( $personType["fiz"] == "Y" && !$fizExist ) {
-	$val = serialize([
-		"AGENT_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["FIO"]["ID"]],
-		"FULL_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["FIO"]["ID"]],
-		"SURNAME" => ["TYPE" => "USER", "VALUE" => "LAST_NAME"],
-		"NAME" => ["TYPE" => "USER", "VALUE" => "NAME"],
-		"ADDRESS_FULL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ADDRESS"]["ID"]],
-		"INDEX" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ZIP"]["ID"]],
-		"COUNTRY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["LOCATION"]["ID"] . "_COUNTRY"],
-		"CITY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["LOCATION"]["ID"] . "_CITY"],
-		"STREET" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ADDRESS"]["ID"]],
-		"EMAIL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["EMAIL"]["ID"]],
-		"CONTACT_PERSON" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["CONTACT_PERSON"]["ID"]],
-		"IS_FIZ" => "Y",
-	]);
+	$val = serialize(
+		[
+			"AGENT_NAME"     => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["FIO"]["ID"],
+			],
+			"FULL_NAME"      => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["FIO"]["ID"],
+			],
+			"SURNAME"        => ["TYPE" => "USER", "VALUE" => "LAST_NAME"],
+			"NAME"           => ["TYPE" => "USER", "VALUE" => "NAME"],
+			"ADDRESS_FULL"   => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ADDRESS"]["ID"],
+			],
+			"INDEX"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ZIP"]["ID"],
+			],
+			"COUNTRY"        => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["LOCATION"]["ID"] .
+					"_COUNTRY",
+			],
+			"CITY"           => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["LOCATION"]["ID"] . "_CITY",
+			],
+			"STREET"         => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["ADDRESS"]["ID"],
+			],
+			"EMAIL"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["EMAIL"]["ID"],
+			],
+			"CONTACT_PERSON" => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz"]]["CONTACT_PERSON"]["ID"],
+			],
+			"IS_FIZ"         => "Y",
+		]
+	);
 
 	$allPersonTypes = BusinessValue::getPersonTypes(true);
 	$personTypeId = $arGeneralInfo["personType"]["fiz"];
 	$domain = BusinessValue::INDIVIDUAL_DOMAIN;
 
 	if( !isset($allPersonTypes[$personTypeId]['DOMAIN']) ) {
-		$r = Bitrix\Sale\Internals\BusinessValuePersonDomainTable::add([
-			'PERSON_TYPE_ID' => $personTypeId,
-			'DOMAIN' => $domain,
-		]);
+		$r = Bitrix\Sale\Internals\BusinessValuePersonDomainTable::add(
+			[
+				'PERSON_TYPE_ID' => $personTypeId,
+				'DOMAIN'         => $domain,
+			]
+		);
 		if( $r->isSuccess() ) {
 			$allPersonTypes[$personTypeId]['DOMAIN'] = $domain;
 			BusinessValue::getPersonTypes(true, $allPersonTypes);
@@ -1613,51 +1714,89 @@ if( $personType["fiz"] == "Y" && !$fizExist ) {
 	CSaleExport::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"], "VARS" => $val]);
 }
 if( $personType["ur"] == "Y" && !$urExist ) {
-	$val = serialize([
-		"AGENT_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY"]["ID"]],
-		"FULL_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY"]["ID"]],
-		"ADDRESS_FULL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY_ADR"]["ID"]],
-		"COUNTRY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_COUNTRY"],
-		"CITY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_CITY"],
-		"STREET" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY_ADR"]["ID"]],
-		"INN" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["INN"]["ID"]],
-		"KPP" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["KPP"]["ID"]],
-		"PHONE" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["PHONE"]["ID"]],
-		"EMAIL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["EMAIL"]["ID"]],
-		"CONTACT_PERSON" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["NAME"]["ID"]],
-		"F_ADDRESS_FULL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ADDRESS"]["ID"]],
-		"F_COUNTRY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_COUNTRY"],
-		"F_CITY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_CITY"],
-		"F_INDEX" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ZIP"]["ID"]],
-		"F_STREET" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ADDRESS"]["ID"]],
-		"IS_FIZ" => "N",
-	]);
+	$val = serialize(
+		[
+			"AGENT_NAME"     => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY"]["ID"],
+			],
+			"FULL_NAME"      => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY"]["ID"],
+			],
+			"ADDRESS_FULL"   => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY_ADR"]["ID"],
+			],
+			"COUNTRY"        => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] .
+					"_COUNTRY",
+			],
+			"CITY"           => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_CITY",
+			],
+			"STREET"         => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["COMPANY_ADR"]["ID"],
+			],
+			"INN"            => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["INN"]["ID"],
+			],
+			"KPP"            => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["KPP"]["ID"],
+			],
+			"PHONE"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["PHONE"]["ID"],
+			],
+			"EMAIL"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["EMAIL"]["ID"],
+			],
+			"CONTACT_PERSON" => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["NAME"]["ID"],
+			],
+			"F_ADDRESS_FULL" => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ADDRESS"]["ID"],
+			],
+			"F_COUNTRY"      => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] .
+					"_COUNTRY",
+			],
+			"F_CITY"         => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["LOCATION"]["ID"] . "_CITY",
+			],
+			"F_INDEX"        => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ZIP"]["ID"],
+			],
+			"F_STREET"       => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["ur"]]["ADDRESS"]["ID"],
+			],
+			"IS_FIZ"         => "N",
+		]
+	);
 
 	$allPersonTypes = BusinessValue::getPersonTypes(true);
 	$personTypeId = $arGeneralInfo["personType"]["ur"];
 	$domain = BusinessValue::ENTITY_DOMAIN;
 
 	if( !isset($allPersonTypes[$personTypeId]['DOMAIN']) ) {
-		$r = Bitrix\Sale\Internals\BusinessValuePersonDomainTable::add([
-			'PERSON_TYPE_ID' => $personTypeId,
-			'DOMAIN' => $domain,
-		]);
+		$r = Bitrix\Sale\Internals\BusinessValuePersonDomainTable::add(
+			[
+				'PERSON_TYPE_ID' => $personTypeId,
+				'DOMAIN'         => $domain,
+			]
+		);
 		if( $r->isSuccess() ) {
 			$allPersonTypes[$personTypeId]['DOMAIN'] = $domain;
 			BusinessValue::getPersonTypes(true, $allPersonTypes);
@@ -1667,30 +1806,51 @@ if( $personType["ur"] == "Y" && !$urExist ) {
 	CSaleExport::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["ur"], "VARS" => $val]);
 }
 if( $shopLocalization == "ua" && !$fizUaExist ) {
-	$val = serialize([
-		"AGENT_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["FIO"]["ID"]],
-		"FULL_NAME" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["FIO"]["ID"]],
-		"SURNAME" => ["TYPE" => "USER", "VALUE" => "LAST_NAME"],
-		"NAME" => ["TYPE" => "USER", "VALUE" => "NAME"],
-		"ADDRESS_FULL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ADDRESS"]["ID"]],
-		"INDEX" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ZIP"]["ID"]],
-		"COUNTRY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["LOCATION"]["ID"] .
-				"_COUNTRY"],
-		"CITY" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["LOCATION"]["ID"] . "_CITY"],
-		"STREET" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ADDRESS"]["ID"]],
-		"EMAIL" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["EMAIL"]["ID"]],
-		"CONTACT_PERSON" => ["TYPE" => "PROPERTY",
-			"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["CONTACT_PERSON"]["ID"]],
-		"IS_FIZ" => "Y",
-	]);
+	$val = serialize(
+		[
+			"AGENT_NAME"     => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["FIO"]["ID"],
+			],
+			"FULL_NAME"      => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["FIO"]["ID"],
+			],
+			"SURNAME"        => ["TYPE" => "USER", "VALUE" => "LAST_NAME"],
+			"NAME"           => ["TYPE" => "USER", "VALUE" => "NAME"],
+			"ADDRESS_FULL"   => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ADDRESS"]["ID"],
+			],
+			"INDEX"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ZIP"]["ID"],
+			],
+			"COUNTRY"        => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["LOCATION"]["ID"] .
+					"_COUNTRY",
+			],
+			"CITY"           => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["LOCATION"]["ID"] .
+					"_CITY",
+			],
+			"STREET"         => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["ADDRESS"]["ID"],
+			],
+			"EMAIL"          => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["EMAIL"]["ID"],
+			],
+			"CONTACT_PERSON" => [
+				"TYPE"  => "PROPERTY",
+				"VALUE" => $arGeneralInfo["properies"][$arGeneralInfo["personType"]["fiz_ua"]]["CONTACT_PERSON"]["ID"],
+			],
+			"IS_FIZ"         => "Y",
+		]
+	);
 	CSaleExport::Add(["PERSON_TYPE_ID" => $arGeneralInfo["personType"]["fiz"], "VARS" => $val]);
 }
 
@@ -1701,23 +1861,23 @@ $arPaySystems = [];
 $logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/cash.png";
 $arPicture = CFile::MakeFileArray($logo);
 $arPaySystems[] = [
-	'PAYSYSTEM' => [
-		"NAME" => Loc::getMessage("SALE_WIZARD_PS_CASH"),
-		"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_CASH"),
-		"SORT" => 10,
-		"ACTIVE" => "Y",
-		"IS_CASH" => "Y",
-		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PS_CASH_DESCR"),
-		"ACTION_FILE" => "cash",
-		"RESULT_FILE" => "",
-		"NEW_WINDOW" => "N",
-		"PARAMS" => "",
-		"HAVE_PAYMENT" => "Y",
-		"HAVE_ACTION" => "N",
-		"HAVE_RESULT" => "N",
-		"HAVE_PREPAY" => "N",
-		"HAVE_RESULT_RECEIVE" => "N",
-		"LOGOTIP" => $arPicture,
+	'PAYSYSTEM'   => [
+		"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_CASH"),
+		"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_CASH"),
+		"SORT"                 => 10,
+		"ACTIVE"               => "Y",
+		"IS_CASH"              => "Y",
+		"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_CASH_DESCR"),
+		"ACTION_FILE"          => "cash",
+		"RESULT_FILE"          => "",
+		"NEW_WINDOW"           => "N",
+		"PARAMS"               => "",
+		"HAVE_PAYMENT"         => "Y",
+		"HAVE_ACTION"          => "N",
+		"HAVE_RESULT"          => "N",
+		"HAVE_PREPAY"          => "N",
+		"HAVE_RESULT_RECEIVE"  => "N",
+		"LOGOTIP"              => $arPicture,
 		'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 	],
 	'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"]],
@@ -1725,20 +1885,20 @@ $arPaySystems[] = [
 
 if( $paysystem["collect"] == "Y" ) {
 	$arPaySystems[] = [
-		'PAYSYSTEM' => [
-			"NAME" => Loc::getMessage("SALE_WIZARD_PS_COLLECT"),
-			"SORT" => 20,
-			"ACTIVE" => "Y",
-			"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PS_COLLECT_DESCR"),
-			"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_COLLECT"),
-			"ACTION_FILE" => "cashondeliverycalc",
-			"RESULT_FILE" => "",
-			"NEW_WINDOW" => "N",
-			"HAVE_PAYMENT" => "Y",
-			"HAVE_ACTION" => "N",
-			"HAVE_RESULT" => "N",
-			"HAVE_PREPAY" => "N",
-			"HAVE_RESULT_RECEIVE" => "N",
+		'PAYSYSTEM'   => [
+			"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_COLLECT"),
+			"SORT"                 => 20,
+			"ACTIVE"               => "Y",
+			"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_COLLECT_DESCR"),
+			"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_COLLECT"),
+			"ACTION_FILE"          => "cashondeliverycalc",
+			"RESULT_FILE"          => "",
+			"NEW_WINDOW"           => "N",
+			"HAVE_PAYMENT"         => "Y",
+			"HAVE_ACTION"          => "N",
+			"HAVE_RESULT"          => "N",
+			"HAVE_PREPAY"          => "N",
+			"HAVE_RESULT_RECEIVE"  => "N",
 			'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 		],
 		'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"], $arGeneralInfo["personType"]["ur"]],
@@ -1748,78 +1908,80 @@ if( $paysystem["collect"] == "Y" ) {
 if( $personType["fiz"] == "Y" && $shopLocalization != "ua" ) {
 	if( $paysystem["sber"] == "Y" ) {
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_PS_SB"),
-				"SORT" => 30,
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PS_SB_DESCR"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_SB"),
-				"ACTION_FILE" => "sberbank",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "Y",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "N",
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_SB"),
+				"SORT"                 => 30,
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_SB_DESCR"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_SB"),
+				"ACTION_FILE"          => "sberbank",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "Y",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "N",
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
-			"BIZVAL" => ['' => [
-				"SELLER_COMPANY_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-				"SELLER_COMPANY_INN" => ["TYPE" => "", "VALUE" => $shopINN],
-				"SELLER_COMPANY_KPP" => ["TYPE" => "", "VALUE" => $shopKPP],
-				"SELLER_COMPANY_BANK_ACCOUNT" => ["TYPE" => "", "VALUE" => $shopNS],
-				"SELLER_COMPANY_BANK_NAME" => ["TYPE" => "", "VALUE" => $shopBANK],
-				"SELLER_COMPANY_BANK_BIC" => ["TYPE" => "", "VALUE" => $shopBANKREKV],
-				"SELLER_COMPANY_BANK_ACCOUNT_CORR" => ["TYPE" => "", "VALUE" => $shopKS],
-				"PAYMENT_ID" => ["TYPE" => "PAYMENT", "VALUE" => "ACCOUNT_NUMBER"],
-				"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_INSERT_DATE"],
-				"BUYER_PERSON_FIO" => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
-				"BUYER_PERSON_ZIP" => ["TYPE" => "PROPERTY", "VALUE" => "ZIP"],
-				"BUYER_PERSON_COUNTRY" => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_COUNTRY"],
-				"BUYER_PERSON_REGION" => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_REGION"],
-				"BUYER_PERSON_CITY" => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_CITY"],
-				"BUYER_PERSON_ADDRESS_FACT" => ["TYPE" => "PROPERTY", "VALUE" => "ADDRESS"],
-				"PAYMENT_SHOULD_PAY" => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-			]],
+			"BIZVAL"      => [
+				'' => [
+					"SELLER_COMPANY_NAME"              => ["TYPE" => "", "VALUE" => $shopOfName],
+					"SELLER_COMPANY_INN"               => ["TYPE" => "", "VALUE" => $shopINN],
+					"SELLER_COMPANY_KPP"               => ["TYPE" => "", "VALUE" => $shopKPP],
+					"SELLER_COMPANY_BANK_ACCOUNT"      => ["TYPE" => "", "VALUE" => $shopNS],
+					"SELLER_COMPANY_BANK_NAME"         => ["TYPE" => "", "VALUE" => $shopBANK],
+					"SELLER_COMPANY_BANK_BIC"          => ["TYPE" => "", "VALUE" => $shopBANKREKV],
+					"SELLER_COMPANY_BANK_ACCOUNT_CORR" => ["TYPE" => "", "VALUE" => $shopKS],
+					"PAYMENT_ID"                       => ["TYPE" => "PAYMENT", "VALUE" => "ACCOUNT_NUMBER"],
+					"PAYMENT_DATE_INSERT"              => ["TYPE" => "PAYMENT", "VALUE" => "DATE_INSERT_DATE"],
+					"BUYER_PERSON_FIO"                 => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
+					"BUYER_PERSON_ZIP"                 => ["TYPE" => "PROPERTY", "VALUE" => "ZIP"],
+					"BUYER_PERSON_COUNTRY"             => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_COUNTRY"],
+					"BUYER_PERSON_REGION"              => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_REGION"],
+					"BUYER_PERSON_CITY"                => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_CITY"],
+					"BUYER_PERSON_ADDRESS_FACT"        => ["TYPE" => "PROPERTY", "VALUE" => "ADDRESS"],
+					"PAYMENT_SHOULD_PAY"               => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
+				],
+			],
 		];
 	}
 }
 if( $shopLocalization == "ua" ) {
 	if( ($personType["fiz"] == "Y" || $personType["fiz_ua"] == "Y") && $paysystem["oshad"] == "Y" ) {
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_PS_OS"),
-				"SORT" => 30,
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PS_OS_DESCR"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_OS"),
-				"ACTION_FILE" => "/bitrix/modules/sale/payment/oshadbank",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "Y",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "N",
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_OS"),
+				"SORT"                 => 30,
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_OS_DESCR"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_OS"),
+				"ACTION_FILE"          => "/bitrix/modules/sale/payment/oshadbank",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "Y",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "N",
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"], $arGeneralInfo["personType"]["fiz_ua"]],
-			"BIZVAL" => [
+			"BIZVAL"      => [
 				'' => [
-					"RECIPIENT_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-					"RECIPIENT_ID" => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
-					"RECIPIENT_NUMBER" => ["TYPE" => "", "VALUE" => $shopNS_ua],
-					"RECIPIENT_BANK" => ["TYPE" => "", "VALUE" => $shopBank_ua],
-					"RECIPIENT_CODE_BANK" => ["TYPE" => "", "VALUE" => $shopMFO_ua],
-					"PAYER_FIO" => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
-					"PAYER_ADRES" => ["TYPE" => "PROPERTY", "VALUE" => "ADDRESS"],
-					"ORDER_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-					"DATE_INSERT" => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
+					"RECIPIENT_NAME"       => ["TYPE" => "", "VALUE" => $shopOfName],
+					"RECIPIENT_ID"         => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
+					"RECIPIENT_NUMBER"     => ["TYPE" => "", "VALUE" => $shopNS_ua],
+					"RECIPIENT_BANK"       => ["TYPE" => "", "VALUE" => $shopBank_ua],
+					"RECIPIENT_CODE_BANK"  => ["TYPE" => "", "VALUE" => $shopMFO_ua],
+					"PAYER_FIO"            => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
+					"PAYER_ADRES"          => ["TYPE" => "PROPERTY", "VALUE" => "ADDRESS"],
+					"ORDER_ID"             => ["TYPE" => "ORDER", "VALUE" => "ID"],
+					"DATE_INSERT"          => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
 					"PAYER_CONTACT_PERSON" => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
-					"PAYER_INDEX" => ["TYPE" => "PROPERTY", "VALUE" => "ZIP"],
-					"PAYER_COUNTRY" => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_COUNTRY"],
-					"PAYER_TOWN" => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_CITY"],
-					"SHOULD_PAY" => ["TYPE" => "ORDER", "VALUE" => "PRICE"],
+					"PAYER_INDEX"          => ["TYPE" => "PROPERTY", "VALUE" => "ZIP"],
+					"PAYER_COUNTRY"        => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_COUNTRY"],
+					"PAYER_TOWN"           => ["TYPE" => "PROPERTY", "VALUE" => "LOCATION_CITY"],
+					"SHOULD_PAY"           => ["TYPE" => "ORDER", "VALUE" => "PRICE"],
 				],
 			],
 		];
@@ -1830,33 +1992,35 @@ if( $personType["fiz"] == "Y" ) {
 
 	if( $paysystem["YMoney"] == "Y" ) {
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_YMoney"),
-				"SORT" => 40,
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_YMoney_DESC"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_YMoney"),
-				"ACTION_FILE" => "yandex",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "N",
-				"PS_MODE" => "PC",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "Y",
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_YMoney"),
+				"SORT"                 => 40,
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YMoney_DESC"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YMoney"),
+				"ACTION_FILE"          => "yandex",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "N",
+				"PS_MODE"              => "PC",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "Y",
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
 			'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"]],
-			"BIZVAL" => ['' => [
-				"PAYMENT_ID" => ["TYPE" => "PAYMENT", "VALUE" => "ID"],
-				"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-				"PAYMENT_SHOULD_PAY" => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-				"PS_IS_TEST" => ["VALUE" => "Y"],
-				"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-				"YANDEX_SHOP_ID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SCID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SHOP_KEY" => ["TYPE" => "", "VALUE" => ""],
-			]],
+			"BIZVAL"      => [
+				'' => [
+					"PAYMENT_ID"           => ["TYPE" => "PAYMENT", "VALUE" => "ID"],
+					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
+					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
+					"PS_IS_TEST"           => ["VALUE" => "Y"],
+					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
+					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
+				],
+			],
 		];
 	}
 
@@ -1864,33 +2028,35 @@ if( $personType["fiz"] == "Y" ) {
 		$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/yandex_cards.png";
 		$arPicture = CFile::MakeFileArray($logo);
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_YCards"),
-				"SORT" => 50,
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_YCards_DESC"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_YCards"),
-				"ACTION_FILE" => "yandex",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "N",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "Y",
-				"PS_MODE" => "AC",
-				"LOGOTIP" => $arPicture,
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_YCards"),
+				"SORT"                 => 50,
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YCards_DESC"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YCards"),
+				"ACTION_FILE"          => "yandex",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "N",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "Y",
+				"PS_MODE"              => "AC",
+				"LOGOTIP"              => $arPicture,
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
-			"BIZVAL" => ['' => [
-				"PAYMENT_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-				"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-				"PAYMENT_SHOULD_PAY" => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-				"PS_IS_TEST" => ["VALUE" => "Y"],
-				"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-				"YANDEX_SHOP_ID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SCID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SHOP_KEY" => ["TYPE" => "", "VALUE" => ""],
-			]],
+			"BIZVAL"      => [
+				'' => [
+					"PAYMENT_ID"           => ["TYPE" => "ORDER", "VALUE" => "ID"],
+					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
+					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
+					"PS_IS_TEST"           => ["VALUE" => "Y"],
+					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
+					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
+				],
+			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
 		];
 	}
@@ -1899,53 +2065,55 @@ if( $personType["fiz"] == "Y" ) {
 		$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/yandex_terminals.png";
 		$arPicture = CFile::MakeFileArray($logo);
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_YTerminals"),
-				"SORT" => 60,
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_YTerminals_DESC"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_YTerminals"),
-				"ACTION_FILE" => "yandex",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "N",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "Y",
-				"LOGOTIP" => $arPicture,
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_YTerminals"),
+				"SORT"                 => 60,
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YTerminals_DESC"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YTerminals"),
+				"ACTION_FILE"          => "yandex",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "N",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "Y",
+				"LOGOTIP"              => $arPicture,
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
-			"BIZVAL" => ['' => [
-				"PAYMENT_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-				"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-				"PAYMENT_SHOULD_PAY" => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-				"PS_IS_TEST" => ["VALUE" => "Y"],
-				"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-				"YANDEX_SHOP_ID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SCID" => ["TYPE" => "", "VALUE" => ""],
-				"YANDEX_SHOP_KEY" => ["TYPE" => "", "VALUE" => ""],
-			]],
+			"BIZVAL"      => [
+				'' => [
+					"PAYMENT_ID"           => ["TYPE" => "ORDER", "VALUE" => "ID"],
+					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
+					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
+					"PS_IS_TEST"           => ["VALUE" => "Y"],
+					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
+					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
+					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
+				],
+			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
 		];
 	}
 
 	if( $paysystem["webmoney"] == "Y" ) {
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => Loc::getMessage("SALE_WIZARD_PS_WM"),
-				"SORT" => 90,
-				"ACTIVE" => "N",
-				"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PS_WM_DESCR"),
-				"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_WM"),
-				"ACTION_FILE" => "webmoney",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "Y",
-				"PARAMS" => "",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "Y",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "N",
+			'PAYSYSTEM'   => [
+				"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_WM"),
+				"SORT"                 => 90,
+				"ACTIVE"               => "N",
+				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_WM_DESCR"),
+				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_WM"),
+				"ACTION_FILE"          => "webmoney",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "Y",
+				"PARAMS"               => "",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "Y",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "N",
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
@@ -1954,27 +2122,29 @@ if( $personType["fiz"] == "Y" ) {
 
 	if( $paysystem["paypal"] == "Y" ) {
 		$arPaySystems[] = [
-			'PAYSYSTEM' => [
-				"NAME" => "PayPal",
-				"SORT" => 90,
-				"DESCRIPTION" => "",
-				"PSA_NAME" => "PayPal",
-				"ACTION_FILE" => "paypal",
-				"RESULT_FILE" => "",
-				"NEW_WINDOW" => "N",
-				"HAVE_PAYMENT" => "Y",
-				"HAVE_ACTION" => "N",
-				"HAVE_RESULT" => "N",
-				"HAVE_PREPAY" => "N",
-				"HAVE_RESULT_RECEIVE" => "Y",
+			'PAYSYSTEM'   => [
+				"NAME"                 => "PayPal",
+				"SORT"                 => 90,
+				"DESCRIPTION"          => "",
+				"PSA_NAME"             => "PayPal",
+				"ACTION_FILE"          => "paypal",
+				"RESULT_FILE"          => "",
+				"NEW_WINDOW"           => "N",
+				"HAVE_PAYMENT"         => "Y",
+				"HAVE_ACTION"          => "N",
+				"HAVE_RESULT"          => "N",
+				"HAVE_PREPAY"          => "N",
+				"HAVE_RESULT_RECEIVE"  => "Y",
 				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
 			],
-			"BIZVAL" => ['' => [
-				"PAYMENT_ID" => ["TYPE" => "PAYMENT", "VALUE" => "ID"],
-				"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL_DATE"],
-				"PAYMENT_SHOULD_PAY" => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-				"PAYMENT_CURRENCY" => ["TYPE" => "PAYMENT", "VALUE" => "CURRENCY"],
-			]],
+			"BIZVAL"      => [
+				'' => [
+					"PAYMENT_ID"          => ["TYPE" => "PAYMENT", "VALUE" => "ID"],
+					"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL_DATE"],
+					"PAYMENT_SHOULD_PAY"  => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
+					"PAYMENT_CURRENCY"    => ["TYPE" => "PAYMENT", "VALUE" => "CURRENCY"],
+				],
+			],
 			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
 		];
 	}
@@ -1982,58 +2152,65 @@ if( $personType["fiz"] == "Y" ) {
 }
 
 // bill
+if( $paysystem["bill"] == "Y" ) {
+	$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/bill.png";
+	$arPicture = CFile::MakeFileArray($logo);
+}
 if( $personType["ur"] == "Y" && $paysystem["bill"] == "Y" && $shopLocalization != "ua" ) {
 	$arPaySystems[] = [
-		'PAYSYSTEM' => [
-			"NAME" => Loc::getMessage("SALE_WIZARD_PS_BILL"),
-			"SORT" => 100,
-			"DESCRIPTION" => "",
-			"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_BILL"),
-			"ACTION_FILE" => "bill",
-			"RESULT_FILE" => "",
-			"NEW_WINDOW" => "Y",
-			"HAVE_PAYMENT" => "Y",
-			"HAVE_ACTION" => "N",
-			"HAVE_RESULT" => "N",
-			"HAVE_PREPAY" => "N",
-			"HAVE_RESULT_RECEIVE" => "N",
+		'PAYSYSTEM'   => [
+			"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_BILL"),
+			"SORT"                 => 100,
+			"DESCRIPTION"          => "",
+			"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_BILL"),
+			"ACTION_FILE"          => "bill",
+			"RESULT_FILE"          => "",
+			"NEW_WINDOW"           => "Y",
+			"HAVE_PAYMENT"         => "Y",
+			"HAVE_ACTION"          => "N",
+			"HAVE_RESULT"          => "N",
+			"HAVE_PREPAY"          => "N",
+			"HAVE_RESULT_RECEIVE"  => "N",
 			'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-			//"LOGOTIP" => $arPicture,
+			"LOGOTIP"              => $arPicture,
 		],
 		"PERSON_TYPE" => [$arGeneralInfo["personType"]["ur"]],
-		"BIZVAL" => ['' => [
-			"PAYMENT_DATE_INSERT" => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL_DATE"],
-			"SELLER_COMPANY_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-			"SELLER_COMPANY_ADDRESS" => ["TYPE" => "", "VALUE" => $shopAdr],
-			"SELLER_COMPANY_PHONE" => ["TYPE" => "", "VALUE" => $siteTelephone],
-			"SELLER_COMPANY_INN" => ["TYPE" => "", "VALUE" => $shopINN],
-			"SELLER_COMPANY_KPP" => ["TYPE" => "", "VALUE" => $shopKPP],
-			"SELLER_COMPANY_BANK_ACCOUNT" => ["TYPE" => "", "VALUE" => $shopNS],
-			"SELLER_COMPANY_BANK_ACCOUNT_CORR" => ["TYPE" => "", "VALUE" => $shopKS],
-			"SELLER_COMPANY_BANK_BIC" => ["TYPE" => "", "VALUE" => $shopBANKREKV],
-			"BUYER_PERSON_COMPANY_NAME" => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_NAME"],
-			"BUYER_PERSON_COMPANY_INN" => ["TYPE" => "PROPERTY", "VALUE" => "INN"],
-			"BUYER_PERSON_COMPANY_ADDRESS" => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_ADR"],
-			"BUYER_PERSON_COMPANY_PHONE" => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
-			"BUYER_PERSON_COMPANY_FAX" => ["TYPE" => "PROPERTY", "VALUE" => "FAX"],
-			"BUYER_PERSON_COMPANY_NAME_CONTACT" => ["TYPE" => "PROPERTY", "VALUE" => "CONTACT_PERSON"],
-			"BILL_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
-		]],
+		"BIZVAL"      => [
+			'' => [
+				"PAYMENT_DATE_INSERT"               => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL_DATE"],
+				"SELLER_COMPANY_NAME"               => ["TYPE" => "", "VALUE" => $shopOfName],
+				"SELLER_COMPANY_ADDRESS"            => ["TYPE" => "", "VALUE" => $shopAdr],
+				///"SELLER_COMPANY_PHONE" => ["TYPE" => "", "VALUE" => $siteTelephone],
+				"SELLER_COMPANY_INN"                => ["TYPE" => "", "VALUE" => $shopINN],
+				"SELLER_COMPANY_KPP"                => ["TYPE" => "", "VALUE" => $shopKPP],
+				"SELLER_COMPANY_BANK_NAME"          => ["TYPE" => "", "VALUE" => $shopBANK],
+				"SELLER_COMPANY_BANK_ACCOUNT"       => ["TYPE" => "", "VALUE" => $shopNS],
+				"SELLER_COMPANY_BANK_ACCOUNT_CORR"  => ["TYPE" => "", "VALUE" => $shopKS],
+				"SELLER_COMPANY_BANK_BIC"           => ["TYPE" => "", "VALUE" => $shopBANKREKV],
+				"BUYER_PERSON_COMPANY_NAME"         => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_NAME"],
+				"BUYER_PERSON_COMPANY_INN"          => ["TYPE" => "PROPERTY", "VALUE" => "INN"],
+				"BUYER_PERSON_COMPANY_ADDRESS"      => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_ADR"],
+				"BUYER_PERSON_COMPANY_PHONE"        => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
+				"BUYER_PERSON_COMPANY_NAME_CONTACT" => ["TYPE" => "PROPERTY", "VALUE" => "CONTACT_PERSON"],
+				//"BILL_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
+			],
+		],
 	];
 }
 if( $shopLocalization == "ua" && $paysystem["bill"] == "Y" ) {
 	$arPaySystem['PAYSYSTEM'] = [
-		"NAME" => Loc::getMessage("SALE_WIZARD_PS_BILL"),
-		"PSA_NAME" => Loc::getMessage("SALE_WIZARD_PS_BILL"),
-		"ACTION_FILE" => "billua",
-		"RESULT_FILE" => "",
-		"NEW_WINDOW" => "Y",
-		"HAVE_PAYMENT" => "Y",
-		"HAVE_ACTION" => "N",
-		"HAVE_RESULT" => "N",
-		"HAVE_PREPAY" => "N",
-		"HAVE_RESULT_RECEIVE" => "N",
+		"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_BILL"),
+		"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_BILL"),
+		"ACTION_FILE"          => "billua",
+		"RESULT_FILE"          => "",
+		"NEW_WINDOW"           => "Y",
+		"HAVE_PAYMENT"         => "Y",
+		"HAVE_ACTION"          => "N",
+		"HAVE_RESULT"          => "N",
+		"HAVE_PREPAY"          => "N",
+		"HAVE_RESULT_RECEIVE"  => "N",
 		'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
+		"LOGOTIP"              => $arPicture,
 	];
 
 	$arPaySystem['PERSON_TYPE'] = [];
@@ -2042,69 +2219,66 @@ if( $shopLocalization == "ua" && $paysystem["bill"] == "Y" ) {
 	if( $personType["ur"] == "Y" ) {
 		$arPaySystem['PERSON_TYPE'][] = $arGeneralInfo["personType"]["ur"];
 		$arPaySystem['BIZVAL'][$arGeneralInfo["personType"]["ur"]] = [
-			"PAYMENT_DATE_INSERT" => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
-			"SELLER_COMPANY_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-			"SELLER_COMPANY_ADDRESS" => ["TYPE" => "", "VALUE" => $shopAdr],
-			"SELLER_COMPANY_PHONE" => ["TYPE" => "", "VALUE" => $siteTelephone],
-			"SELLER_COMPANY_IPN" => ["TYPE" => "", "VALUE" => $shopINN_ua],
-			"SELLER_COMPANY_EDRPOY" => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
-			"SELLER_COMPANY_BANK_ACCOUNT" => ["TYPE" => "", "VALUE" => $shopNS_ua],
-			"SELLER_COMPANY_BANK_NAME" => ["TYPE" => "", "VALUE" => $shopBank_ua],
-			"SELLER_COMPANY_MFO" => ["TYPE" => "", "VALUE" => $shopMFO_ua],
-			"SELLER_COMPANY_PDV" => ["TYPE" => "", "VALUE" => $shopNDS_ua],
-			"PAYMENT_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-			"SELLER_COMPANY_SYS" => ["TYPE" => "", "VALUE" => $shopTax_ua],
-			"BUYER_PERSON_COMPANY_NAME" => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_NAME"],
+			"PAYMENT_DATE_INSERT"          => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
+			"SELLER_COMPANY_NAME"          => ["TYPE" => "", "VALUE" => $shopOfName],
+			"SELLER_COMPANY_ADDRESS"       => ["TYPE" => "", "VALUE" => $shopAdr],
+			"SELLER_COMPANY_PHONE"         => ["TYPE" => "", "VALUE" => $siteTelephone],
+			"SELLER_COMPANY_IPN"           => ["TYPE" => "", "VALUE" => $shopINN_ua],
+			"SELLER_COMPANY_EDRPOY"        => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
+			"SELLER_COMPANY_BANK_ACCOUNT"  => ["TYPE" => "", "VALUE" => $shopNS_ua],
+			"SELLER_COMPANY_BANK_NAME"     => ["TYPE" => "", "VALUE" => $shopBank_ua],
+			"SELLER_COMPANY_MFO"           => ["TYPE" => "", "VALUE" => $shopMFO_ua],
+			"SELLER_COMPANY_PDV"           => ["TYPE" => "", "VALUE" => $shopNDS_ua],
+			"PAYMENT_ID"                   => ["TYPE" => "ORDER", "VALUE" => "ID"],
+			"SELLER_COMPANY_SYS"           => ["TYPE" => "", "VALUE" => $shopTax_ua],
+			"BUYER_PERSON_COMPANY_NAME"    => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_NAME"],
 			"BUYER_PERSON_COMPANY_ADDRESS" => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_ADR"],
-			"BUYER_PERSON_COMPANY_PHONE" => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
-			"BUYER_PERSON_COMPANY_FAX" => ["TYPE" => "PROPERTY", "VALUE" => "FAX"],
-			"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
+			"BUYER_PERSON_COMPANY_PHONE"   => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
+			//"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
 		];
 	}
 
 	if( $personType["fiz"] == "Y" ) {
 		$arPaySystem['PERSON_TYPE'][] = $arGeneralInfo["personType"]["fiz"];
 		$arPaySystem['BIZVAL'][$arGeneralInfo["personType"]["fiz"]] = [
-			"PAYMENT_DATE_INSERT" => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
-			"SELLER_COMPANY_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-			"SELLER_COMPANY_ADDRESS" => ["TYPE" => "", "VALUE" => $shopAdr],
-			"SELLER_COMPANY_PHONE" => ["TYPE" => "", "VALUE" => $siteTelephone],
-			"SELLER_COMPANY_IPN" => ["TYPE" => "", "VALUE" => $shopINN_ua],
-			"SELLER_COMPANY_EDRPOY" => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
-			"SELLER_COMPANY_BANK_ACCOUNT" => ["TYPE" => "", "VALUE" => $shopNS_ua],
-			"SELLER_COMPANY_BANK_NAME" => ["TYPE" => "", "VALUE" => $shopBank_ua],
-			"SELLER_COMPANY_MFO" => ["TYPE" => "", "VALUE" => $shopMFO_ua],
-			"SELLER_COMPANY_PDV" => ["TYPE" => "", "VALUE" => $shopNDS_ua],
-			"PAYMENT_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-			"SELLER_COMPANY_SYS" => ["TYPE" => "", "VALUE" => $shopTax_ua],
-			"BUYER_PERSON_COMPANY_NAME" => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
+			"PAYMENT_DATE_INSERT"          => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
+			"SELLER_COMPANY_NAME"          => ["TYPE" => "", "VALUE" => $shopOfName],
+			"SELLER_COMPANY_ADDRESS"       => ["TYPE" => "", "VALUE" => $shopAdr],
+			"SELLER_COMPANY_PHONE"         => ["TYPE" => "", "VALUE" => $siteTelephone],
+			"SELLER_COMPANY_IPN"           => ["TYPE" => "", "VALUE" => $shopINN_ua],
+			"SELLER_COMPANY_EDRPOY"        => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
+			"SELLER_COMPANY_BANK_ACCOUNT"  => ["TYPE" => "", "VALUE" => $shopNS_ua],
+			"SELLER_COMPANY_BANK_NAME"     => ["TYPE" => "", "VALUE" => $shopBank_ua],
+			"SELLER_COMPANY_MFO"           => ["TYPE" => "", "VALUE" => $shopMFO_ua],
+			"SELLER_COMPANY_PDV"           => ["TYPE" => "", "VALUE" => $shopNDS_ua],
+			"PAYMENT_ID"                   => ["TYPE" => "ORDER", "VALUE" => "ID"],
+			"SELLER_COMPANY_SYS"           => ["TYPE" => "", "VALUE" => $shopTax_ua],
+			"BUYER_PERSON_COMPANY_NAME"    => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
 			"BUYER_PERSON_COMPANY_ADDRESS" => ["TYPE" => "PROPERTY", "VALUE" => "ADDRESS"],
-			"BUYER_PERSON_COMPANY_PHONE" => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
-			"BUYER_PERSON_COMPANY_FAX" => ["TYPE" => "PROPERTY", "VALUE" => "FAX"],
-			"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
+			"BUYER_PERSON_COMPANY_PHONE"   => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
+			//"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
 		];
 	}
 
 	if( $personType["fiz_ua"] == "Y" ) {
 		$arPaySystem['PERSON_TYPE'][] = $arGeneralInfo["personType"]["fiz_ua"];
 		$arPaySystem['BIZVAL'][$arGeneralInfo["personType"]["fiz_ua"]] = [
-			"PAYMENT_DATE_INSERT" => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
-			"SELLER_COMPANY_NAME" => ["TYPE" => "", "VALUE" => $shopOfName],
-			"SELLER_COMPANY_ADDRESS" => ["TYPE" => "", "VALUE" => $shopAdr],
-			"SELLER_COMPANY_PHONE" => ["TYPE" => "", "VALUE" => $siteTelephone],
-			"SELLER_COMPANY_IPN" => ["TYPE" => "", "VALUE" => $shopINN_ua],
-			"SELLER_COMPANY_EDRPOY" => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
-			"SELLER_COMPANY_BANK_ACCOUNT" => ["TYPE" => "", "VALUE" => $shopNS_ua],
-			"SELLER_COMPANY_BANK_NAME" => ["TYPE" => "", "VALUE" => $shopBank_ua],
-			"SELLER_COMPANY_MFO" => ["TYPE" => "", "VALUE" => $shopMFO_ua],
-			"SELLER_COMPANY_PDV" => ["TYPE" => "", "VALUE" => $shopNDS_ua],
-			"PAYMENT_ID" => ["TYPE" => "ORDER", "VALUE" => "ID"],
-			"SELLER_COMPANY_SYS" => ["TYPE" => "", "VALUE" => $shopTax_ua],
-			"BUYER_PERSON_COMPANY_NAME" => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
+			"PAYMENT_DATE_INSERT"          => ["TYPE" => "ORDER", "VALUE" => "DATE_INSERT_DATE"],
+			"SELLER_COMPANY_NAME"          => ["TYPE" => "", "VALUE" => $shopOfName],
+			"SELLER_COMPANY_ADDRESS"       => ["TYPE" => "", "VALUE" => $shopAdr],
+			"SELLER_COMPANY_PHONE"         => ["TYPE" => "", "VALUE" => $siteTelephone],
+			"SELLER_COMPANY_IPN"           => ["TYPE" => "", "VALUE" => $shopINN_ua],
+			"SELLER_COMPANY_EDRPOY"        => ["TYPE" => "", "VALUE" => $shopEGRPU_ua],
+			"SELLER_COMPANY_BANK_ACCOUNT"  => ["TYPE" => "", "VALUE" => $shopNS_ua],
+			"SELLER_COMPANY_BANK_NAME"     => ["TYPE" => "", "VALUE" => $shopBank_ua],
+			"SELLER_COMPANY_MFO"           => ["TYPE" => "", "VALUE" => $shopMFO_ua],
+			"SELLER_COMPANY_PDV"           => ["TYPE" => "", "VALUE" => $shopNDS_ua],
+			"PAYMENT_ID"                   => ["TYPE" => "ORDER", "VALUE" => "ID"],
+			"SELLER_COMPANY_SYS"           => ["TYPE" => "", "VALUE" => $shopTax_ua],
+			"BUYER_PERSON_COMPANY_NAME"    => ["TYPE" => "PROPERTY", "VALUE" => "FIO"],
 			"BUYER_PERSON_COMPANY_ADDRESS" => ["TYPE" => "PROPERTY", "VALUE" => "COMPANY_ADR"],
-			"BUYER_PERSON_COMPANY_PHONE" => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
-			"BUYER_PERSON_COMPANY_FAX" => ["TYPE" => "PROPERTY", "VALUE" => "FAX"],
-			"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
+			"BUYER_PERSON_COMPANY_PHONE"   => ["TYPE" => "PROPERTY", "VALUE" => "PHONE"],
+			//"BILLUA_PATH_TO_STAMP" => ["TYPE" => "", "VALUE" => $siteStamp],
 		];
 	}
 
@@ -2132,8 +2306,13 @@ foreach( $arPaySystems as $arPaySystem ) {
 				$arGeneralInfo["paySystem"][$arPaySystem["ACTION_FILE"]] = $id;
 				foreach( $arPaySystem['BIZVAL'] as $personType => $codes ) {
 					foreach( $codes as $code => $map ) {
-						\Bitrix\Sale\BusinessValue::setMapping($code, 'PAYSYSTEM_' . $id, $personType,
-							['PROVIDER_KEY' => $map['TYPE'] ?: 'VALUE', 'PROVIDER_VALUE' => $map['VALUE']], true);
+						\Bitrix\Sale\BusinessValue::setMapping(
+							$code,
+							'PAYSYSTEM_' . $id,
+							$personType,
+							['PROVIDER_KEY' => $map['TYPE'] ?: 'VALUE', 'PROVIDER_VALUE' => $map['VALUE']],
+							true
+						);
 					}
 				}
 			}
@@ -2141,25 +2320,36 @@ foreach( $arPaySystems as $arPaySystem ) {
 			if( $arPaySystem['PERSON_TYPE'] ) {
 				$params = [
 					'filter' => [
-						"SERVICE_ID" => $id,
+						"SERVICE_ID"   => $id,
 						"SERVICE_TYPE" => Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-						"=CLASS_NAME" => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
+						"=CLASS_NAME"  => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
 					],
 				];
 
 				$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList($params);
 				if( !$dbRes->fetch() ) {
 					$fields = [
-						"SERVICE_ID" => $id,
+						"SERVICE_ID"   => $id,
 						"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-						"SORT" => 100,
-						"PARAMS" => [
+						"SORT"         => 100,
+						"PARAMS"       => [
 							'PERSON_TYPE_ID' => $arPaySystem['PERSON_TYPE'],
 						],
 					];
 					\Bitrix\Sale\Services\PaySystem\Restrictions\PersonType::save($fields);
 				}
 			}
+
+			$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add(
+				[
+					"SERVICE_ID"   => $id,
+					"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
+					"CLASS_NAME"   => '\Bitrix\Sale\Services\PaySystem\Restrictions\Site',
+					"PARAMS"       => [
+						"SITE_ID" => [WIZARD_SITE_ID],
+					],
+				]
+			);
 
 			$updateFields['PARAMS'] = serialize(['BX_PAY_SYSTEM_ID' => $id]);
 			$updateFields['PAY_SYSTEM_ID'] = $id;
@@ -2182,9 +2372,9 @@ foreach( $arPaySystems as $arPaySystem ) {
 
 		$params = [
 			'filter' => [
-				"SERVICE_ID" => $tmpPaySystem['ID'],
+				"SERVICE_ID"   => $tmpPaySystem['ID'],
 				"SERVICE_TYPE" => Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-				"=CLASS_NAME" => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
+				"=CLASS_NAME"  => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
 			],
 		];
 
@@ -2204,10 +2394,10 @@ foreach( $arPaySystems as $arPaySystem ) {
 
 		if( $flag ) {
 			$fields = [
-				"SERVICE_ID" => $restrictionId,
+				"SERVICE_ID"   => $restrictionId,
 				"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-				"SORT" => 100,
-				"PARAMS" => [
+				"SORT"         => 100,
+				"PARAMS"       => [
 					'PERSON_TYPE_ID' => $arPaySystem['PERSON_TYPE'],
 				],
 			];
@@ -2230,7 +2420,10 @@ if( $s_count < 2 ) {
 		$deliveryShipmentStatus = 'DS';
 
 		$statusIds = [
-			$orderPaidStatus, $deliveryAssembleStatus, $deliveryGoodsStatus, $deliveryTransportStatus,
+			$orderPaidStatus,
+			$deliveryAssembleStatus,
+			$deliveryGoodsStatus,
+			$deliveryTransportStatus,
 			$deliveryShipmentStatus,
 		];
 
@@ -2242,49 +2435,59 @@ if( $s_count < 2 ) {
 			foreach( $statusIds as $statusId ) {
 				if( $statusName = Loc::getMessage("SALE_STATUS_{$statusId}") ) {
 					$statusLanguages[$statusId] [] = [
-						'LID' => $langID,
-						'NAME' => $statusName,
+						'LID'         => $langID,
+						'NAME'        => $statusName,
 						'DESCRIPTION' => Loc::getMessage("SALE_STATUS_{$statusId}_DESCR"),
 					];
 				}
 			}
 		}
 
-		OrderStatus::install([
-			'ID' => $orderPaidStatus,
-			'SORT' => 150,
-			'NOTIFY' => 'Y',
-			'LANG' => $statusLanguages[$orderPaidStatus],
-		]);
+		OrderStatus::install(
+			[
+				'ID'     => $orderPaidStatus,
+				'SORT'   => 150,
+				'NOTIFY' => 'Y',
+				'LANG'   => $statusLanguages[$orderPaidStatus],
+			]
+		);
 		CSaleStatus::CreateMailTemplate($orderPaidStatus);
 
-		DeliveryStatus::install([
-			'ID' => $deliveryAssembleStatus,
-			'SORT' => 310,
-			'NOTIFY' => 'Y',
-			'LANG' => $statusLanguages[$deliveryAssembleStatus],
-		]);
+		DeliveryStatus::install(
+			[
+				'ID'     => $deliveryAssembleStatus,
+				'SORT'   => 310,
+				'NOTIFY' => 'Y',
+				'LANG'   => $statusLanguages[$deliveryAssembleStatus],
+			]
+		);
 
-		DeliveryStatus::install([
-			'ID' => $deliveryGoodsStatus,
-			'SORT' => 320,
-			'NOTIFY' => 'Y',
-			'LANG' => $statusLanguages[$deliveryGoodsStatus],
-		]);
+		DeliveryStatus::install(
+			[
+				'ID'     => $deliveryGoodsStatus,
+				'SORT'   => 320,
+				'NOTIFY' => 'Y',
+				'LANG'   => $statusLanguages[$deliveryGoodsStatus],
+			]
+		);
 
-		DeliveryStatus::install([
-			'ID' => $deliveryTransportStatus,
-			'SORT' => 330,
-			'NOTIFY' => 'Y',
-			'LANG' => $statusLanguages[$deliveryTransportStatus],
-		]);
+		DeliveryStatus::install(
+			[
+				'ID'     => $deliveryTransportStatus,
+				'SORT'   => 330,
+				'NOTIFY' => 'Y',
+				'LANG'   => $statusLanguages[$deliveryTransportStatus],
+			]
+		);
 
-		DeliveryStatus::install([
-			'ID' => $deliveryShipmentStatus,
-			'SORT' => 340,
-			'NOTIFY' => 'Y',
-			'LANG' => $statusLanguages[$deliveryShipmentStatus],
-		]);
+		DeliveryStatus::install(
+			[
+				'ID'     => $deliveryShipmentStatus,
+				'SORT'   => 340,
+				'NOTIFY' => 'Y',
+				'LANG'   => $statusLanguages[$deliveryShipmentStatus],
+			]
+		);
 	}
 	else {
 		$bStatusP = false;
@@ -2294,8 +2497,11 @@ if( $s_count < 2 ) {
 			foreach( $arLanguages as $langID ) {
 				WizardServices::IncludeServiceLang("step1.php", $langID);
 				$arFields["LANG"][] =
-					["LID" => $langID, "NAME" => Loc::getMessage("WIZ_SALE_STATUS_" . $arStatus["ID"]),
-						"DESCRIPTION" => Loc::getMessage("WIZ_SALE_STATUS_DESCRIPTION_" . $arStatus["ID"])];
+					[
+						"LID"         => $langID,
+						"NAME"        => Loc::getMessage("WIZ_SALE_STATUS_" . $arStatus["ID"]),
+						"DESCRIPTION" => Loc::getMessage("WIZ_SALE_STATUS_DESCRIPTION_" . $arStatus["ID"]),
+					];
 			}
 			$arFields["ID"] = $arStatus["ID"];
 			CSaleStatus::Update($arStatus["ID"], $arFields);
@@ -2307,8 +2513,11 @@ if( $s_count < 2 ) {
 			$arFields = ["ID" => "P", "SORT" => 150];
 			foreach( $arLanguages as $langID ) {
 				WizardServices::IncludeServiceLang("step1.php", $langID);
-				$arFields["LANG"][] = ["LID" => $langID, "NAME" => Loc::getMessage("WIZ_SALE_STATUS_P"),
-					"DESCRIPTION" => Loc::getMessage("WIZ_SALE_STATUS_DESCRIPTION_P")];
+				$arFields["LANG"][] = [
+					"LID"         => $langID,
+					"NAME"        => Loc::getMessage("WIZ_SALE_STATUS_P"),
+					"DESCRIPTION" => Loc::getMessage("WIZ_SALE_STATUS_DESCRIPTION_P"),
+				];
 			}
 
 			$ID = CSaleStatus::Add($arFields);

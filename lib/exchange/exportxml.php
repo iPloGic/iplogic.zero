@@ -29,6 +29,11 @@ class ExportXML extends Base
 		}
 	}
 
+	public function go() {
+		$this->startXML();
+		$this->saveXML();
+	}
+
 	protected function startXML() {
 		$this->main_node = $this->putChildren($this->main_node, $this->config["NODES"]["CHILDREN"]);
 	}

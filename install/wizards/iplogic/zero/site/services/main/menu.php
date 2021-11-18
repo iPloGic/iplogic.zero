@@ -10,7 +10,7 @@ CModule::IncludeModule('fileman');
 $arMenuTypes = GetMenuTypes($siteID);
 
 if ($wizard->GetVar("menuTop") == "Y") {
-	$arMenuTypes['TOP'] = Loc::getMessage("MENU_TOP");
+	$arMenuTypes['top'] = Loc::getMessage("MENU_TOP");
 }
 
 if ($wizard->GetVar("menuBottom") == "Y") {
@@ -18,7 +18,7 @@ if ($wizard->GetVar("menuBottom") == "Y") {
 }
 
 if ($wizard->GetVar("menuSide") == "Y") {
-	$arMenuTypes['side'] = Loc::getMessage("SIDE_BOTTOM");
+	$arMenuTypes['side'] = Loc::getMessage("MENU_SIDE");
 }
 
 if ($wizard->GetVar("menuCatalog") == "Y") {

@@ -6,6 +6,11 @@ use Bitrix\Main\Config\Option,
 if( !Loader::includeModule("iblock") ) {
 	return;
 }
+
+if( $wizard->GetVar("iblockBrand") != "Y" ) {
+	return;
+}
+
 $iblockXMLFile = WIZARD_SERVICE_RELATIVE_PATH . "/xml/" . LANGUAGE_ID . "/brands.xml";
 $iblockCode = "brands_" . WIZARD_SITE_ID;
 $iblockType = "catalog";
@@ -30,11 +35,10 @@ if( $iblockID == false ) {
 		$permissions[$arGroup["ID"]] = 'W';
 	}
 
-	$iblockID = WizardServices::ImportIBlockFromXML(
+	$iblockID = ImportIBlockFromXMLEx(
 		$iblockXMLFile,
 		$iblockCode,
 		$iblockType,
-		WIZARD_SITE_ID,
 		$permissions
 	);
 
