@@ -33,24 +33,20 @@ Class iplogic_zero extends CModule
 		$this->PARTNER_URI = Loc::getMessage("IPLOGIC_PARTNER_URI");
 	}
 
-	function InstallDB($arParams = array())
+	function InstallDB()
 	{
-		if ($arParams["firststep"] == "Y") {
-			Option::set(self::MODULE_ID,"istalled",'Y');
-		}
-		if ($arParams["installcragent"] == "Y") {
-			CAgent::AddAgent( "\Iplogic\Zero\Agent::GetCurrencyRateAgent();", self::MODULE_ID, "N", 86400, "", "Y");
-		}
-		if ($arParams["installcuagent"] == "Y") {
-			CAgent::AddAgent( "\Iplogic\Zero\Agent::CleanUpUploadAgent();", self::MODULE_ID, "N", 86400, "", "Y");
-		}
+		global $DB, $DBType, $APPLICATION;
+		RegisterModule(self::MODULE_ID);
+		Option::set(self::MODULE_ID,"istalled",'Y');
 		return true;
 	}
 
 	function UnInstallDB($arParams = array())
 	{
+		global $DB, $DBType, $APPLICATION;
 		CAgent::RemoveModuleAgents(self::MODULE_ID);
 		Option::delete(self::MODULE_ID);
+		UnRegisterModule(self::MODULE_ID);
 		return true;
 	}
 
@@ -66,8 +62,8 @@ Class iplogic_zero extends CModule
 
 	function InstallFiles($arParams = array())
 	{
-		CopyDirFiles(__DIR__.'/wizards/', Application::getDocumentRoot().'/bitrix/wizards', true, true);
-		CopyDirFiles(__DIR__.'/components/', Application::getDocumentRoot().'/bitrix/components', true, true);
+		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".self::MODULE_ID."/install/wizards/", Application::getDocumentRoot().'/bitrix/wizards', true, true);
+		//CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/".self::MODULE_ID."/install/components/", Application::getDocumentRoot().'/bitrix/components', true, true);
 		return true;
 	}
 
@@ -79,36 +75,8 @@ Class iplogic_zero extends CModule
 
 	function DoInstall()
 	{
-		global $APPLICATION, $step;
 		$this->InstallFiles();
-		$this->InstallDB([
-			"firststep" => "Y",
-		]);
-		RegisterModule(self::MODULE_ID);
-		$APPLICATION->IncludeAdminFile(Loc::getMessage("IPLOGIC_MODULE_INSTALLED_TITLE"),
-			Application::getDocumentRoot()."/bitrix/modules/".$this->MODULE_ID."/install/step2.php");
-		RegisterModule(self::MODULE_ID);
-		// 2 step installation
-		/*$step = IntVal($step);
-		if($step<2)
-		{
-			$this->InstallFiles();
-			$this->InstallDB([
-				"firststep" => "Y",
-			]);
-			$APPLICATION->IncludeAdminFile(Loc::getMessage("IPLOGIC_MODULE_INSTALLED_TITLE"),
-				Application::getDocumentRoot()."/bitrix/modules/".$this->MODULE_ID."/install/step1.php");
-		}
-		elseif($step==2)
-		{
-			$this->InstallDB([
-				"installcragent" => $_REQUEST["installcragent"],
-				"installcuagent" => $_REQUEST["installcuagent"],
-			]);
-			RegisterModule(self::MODULE_ID);
-			$APPLICATION->IncludeAdminFile(Loc::getMessage("IPLOGIC_MODULE_INSTALLED_TITLE"),
-				Application::getDocumentRoot()."/bitrix/modules/".$this->MODULE_ID."/install/step2.php");
-		}*/
+		$this->InstallDB();
 		return true;
 	}
 
@@ -121,7 +89,6 @@ Class iplogic_zero extends CModule
 			$APPLICATION->IncludeAdminFile(Loc::getMessage("IPLOGIC_MODULE_UNINSTALLED_TITLE"), Application::getDocumentRoot()."/bitrix/modules/".$this->MODULE_ID."/install/unstep1.php");
 		}
 		elseif($step==2) {
-			UnRegisterModule(self::MODULE_ID);
 			$this->UnInstallDB();
 			$this->UnInstallFiles();
 			$APPLICATION->IncludeAdminFile(Loc::getMessage("IPLOGIC_MODULE_UNINSTALLED_TITLE"),

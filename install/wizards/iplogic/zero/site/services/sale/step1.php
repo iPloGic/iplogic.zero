@@ -320,6 +320,7 @@ if( $s_count < 2 ) {
 	Option::set('sale', 'recalc_product_list_period', '4');
 	Option::set('sale', 'order_email', $shopEmail);
 	Option::set('sale', 'encode_fuser_id', 'Y');
+	Option::set('sale', 'order_changes_cleaner_active', 'Y');
 	if( $bRus ) {
 		Option::set('sale', '1C_SALE_SITE_LIST', WIZARD_SITE_ID);
 		Option::set('sale', '1C_EXPORT_PAYED_ORDERS', 'N');

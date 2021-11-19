@@ -80,5 +80,7 @@ while( $sites_f = $sites->Fetch() )
 
 if( $s_count < 2 ) {
 	Option::set('iblock', 'combined_list_mode', 'Y');
+	Option::set("iblock", "use_htmledit", "Y");
 }
+Option::set("iblock", "show_xml_id", "Y");
 ?>

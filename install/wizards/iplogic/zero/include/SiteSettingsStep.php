@@ -1,6 +1,7 @@
 <?php
-use Bitrix\Main\Config\Option;
-use Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\Config\Option;
+use \Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\Loader;
 
 class SiteSettingsStep extends CSiteSettingsWizardStep
 {
@@ -10,8 +11,15 @@ class SiteSettingsStep extends CSiteSettingsWizardStep
 	{
 		$this->SetStepID("site_settings");
 
+		$IS_SHOP = (Loader::includeModule("sale") && Loader::includeModule("catalog"));
+
 		$this->SetPrevStep("select_template");
-		$this->SetNextStep("shop_settings");
+		if($IS_SHOP) {
+			$this->SetNextStep("shop_settings");
+		}
+		else {
+			$this->SetNextStep("special_settings");
+		}
 
 		$this->SetTitle(Loc::getMessage("wiz_site_settings"));
 		$this->SetNextCaption(Loc::getMessage("NEXT_BUTTON"));

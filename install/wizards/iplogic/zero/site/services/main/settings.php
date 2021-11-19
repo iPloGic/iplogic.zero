@@ -18,6 +18,7 @@ if( $s_count < 2 ) {
 	Option::set('main', 'email_from', $siteEmail);
 	Option::set('main', 'new_user_registration', 'Y');
 	Option::set('main', 'captcha_registration', 'Y');
+	Option::set('main', 'new_user_email_uniq_check', 'Y');
 	Option::set('main', 'site_name', $siteName);
 	Option::set("main", "vendor", "iPloGic");
 	Option::set("main", "move_js_to_body", "Y");
@@ -60,10 +61,6 @@ if( $s_count < 2 ) {
 	Option::set("search", "use_tf_cache", "Y");
 	Option::set("search", "use_word_distance", "Y");
 	Option::set("search", "use_social_rating", "Y");
-
-	Option::set("iblock", "use_htmledit", "Y");
-	Option::set("iblock", "combined_list_mode", "Y");
-	Option::set("iblock", "show_xml_id", "Y");
 
 	// social auth services
 	if( Option::get("socialservices", "auth_services") == "" ) {

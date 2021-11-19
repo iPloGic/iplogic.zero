@@ -9,7 +9,14 @@ class SpecialSettingsStep extends CWizardStep
 	{
 		$this->SetStepID("special_settings");
 
-		$this->SetPrevStep("payer_and_loc");
+		$IS_SHOP = (Loader::includeModule("sale") && Loader::includeModule("catalog"));
+
+		if($IS_SHOP) {
+			$this->SetPrevStep("payer_and_loc");
+		}
+		else {
+			$this->SetPrevStep("site_settings");
+		}
 		$this->SetNextStep("data_install");
 
 		$this->SetTitle(Loc::getMessage("wiz_agents_settings"));

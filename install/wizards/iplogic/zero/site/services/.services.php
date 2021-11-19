@@ -4,6 +4,7 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 use Bitrix\Main\Localization\Loc;
 
 $arServices = [
+
 	"main" => [
 		"NAME" => Loc::getMessage("SERVICE_MAIN_SETTINGS"),
 		"STAGES" => [
@@ -26,15 +27,15 @@ $arServices = [
 		],
 	],
 
-		"iblock" => [
-			"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
-			"STAGES" => [
-				"types.php", //IBlock types
-				"brands.php",
-				"catalog.php",
-				"offers.php",
-				"news.php",
-				"banners.php",
+	"iblock" => [
+		"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
+		"STAGES" => [
+			"types.php", //IBlock types
+			"brands.php",
+			"catalog.php",
+			"offers.php",
+			"news.php",
+			"banners.php",
 		],
 	],
 

@@ -108,4 +108,5 @@ if( $s_count < 2 ) {
 	Option::set("catalog", "default_subscribe", "Y");
 	Option::set("catalog", "use_store_control", "N");
 	Option::set("catalog", "enable_reservation", "N");
+	Option::set("catalog", "enable_processing_deprecated_events", "Y");
 }

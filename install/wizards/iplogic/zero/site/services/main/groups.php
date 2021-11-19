@@ -58,7 +58,7 @@ if( $s_count < 2 ) {
 
 		$groupID = $group->Add($arFields);
 		if( $groupID > 0 ) {
-			Option::setOption("main", "new_user_registration_def_group", $groupID);
+			Option::set("main", "new_user_registration_def_group", $groupID);
 			if( $editProfileTask ) {
 				CGroup::SetTasks($groupID, [$editProfileTask], true);
 			}
