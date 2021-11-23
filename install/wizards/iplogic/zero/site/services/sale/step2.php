@@ -374,7 +374,7 @@ foreach( $deliveryItems as $code => $fields ) {
 				]);*/
 
 				//Link delivery "pickup" to store
-				if( $fields["NAME"] == Loc::getMessage("SALE_WIZARD_COUR1") ) {
+				if( $fields["NAME"] == Loc::getMessage("SALE_WIZARD_PICK") ) {
 					\Bitrix\Main\Loader::includeModule('catalog');
 					$dbStores = CCatalogStore::GetList([], ["ACTIVE" => 'Y'], false, false, ["ID"]);
 

@@ -1,11 +1,11 @@
 <?
-$MESS["CATALOG_TYPE_NAME"] = "ÐšÐ°Ñ‚Ð°Ð»Ð¾Ð³";
-$MESS["CATALOG_ELEMENT_NAME"] = "Ð¢Ð¾Ð²Ð°Ñ€Ñ‹";
-$MESS["CATALOG_SECTION_NAME"] = "Ð Ð°Ð·Ð´ÐµÐ»Ñ‹";
-$MESS["CONTENT_TYPE_NAME"] = "ÐšÐ¾Ð½Ñ‚ÐµÐ½Ñ‚";
-$MESS["CONTENT_ELEMENT_NAME"] = "ÐœÐ°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹";
-$MESS["CONTENT_SECTION_NAME"] = "Ð Ð°Ð·Ð´ÐµÐ»Ñ‹";
-$MESS["REFERENCE_TYPE_NAME"] = "Ð¡Ð¿Ñ€Ð°Ð²Ð¾Ñ‡Ð½Ð¸ÐºÐ¸";
-$MESS["REFERENCE_ELEMENT_NAME"] = "Ð­Ð»ÐµÐ¼ÐµÐ½Ñ‚Ñ‹";
-$MESS["REFERENCE_SECTION_NAME"] = "Ð Ð°Ð·Ð´ÐµÐ»Ñ‹";
+$MESS["CATALOG_TYPE_NAME"] = "Êàòàëîã";
+$MESS["CATALOG_ELEMENT_NAME"] = "Òîâàðû";
+$MESS["CATALOG_SECTION_NAME"] = "Ðàçäåëû";
+$MESS["CONTENT_TYPE_NAME"] = "Êîíòåíò";
+$MESS["CONTENT_ELEMENT_NAME"] = "Ìàòåðèàëû";
+$MESS["CONTENT_SECTION_NAME"] = "Ðàçäåëû";
+$MESS["REFERENCE_TYPE_NAME"] = "Ñïðàâî÷íèêè";
+$MESS["REFERENCE_ELEMENT_NAME"] = "Ýëåìåíòû";
+$MESS["REFERENCE_SECTION_NAME"] = "Ðàçäåëû";
 ?>

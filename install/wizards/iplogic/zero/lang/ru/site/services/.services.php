@@ -1,7 +1,7 @@
 <?
-$MESS ['SERVICE_MAIN_SETTINGS'] = "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐ°Ð¹Ñ‚Ð°";
-$MESS ['SERVICE_IBLOCK'] = "Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ðµ Ð±Ð»Ð¾ÐºÐ¸";
-$MESS ['SERVICE_FILES'] = "Ð¤Ð°Ð¹Ð»Ñ‹";
-$MESS ['SERVICE_CATALOG'] = "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³Ð°";
-$MESS ['SERVICE_SALE'] = "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¸Ð½Ñ‚ÐµÑ€Ð½ÐµÑ‚-Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½Ð°";
+$MESS ['SERVICE_MAIN_SETTINGS'] = "Íàñòðîéêè ñàéòà";
+$MESS ['SERVICE_IBLOCK'] = "Èíôîðìàöèîííûå áëîêè";
+$MESS ['SERVICE_FILES'] = "Ôàéëû";
+$MESS ['SERVICE_CATALOG'] = "Íàñòðîéêè êàòàëîãà";
+$MESS ['SERVICE_SALE'] = "Íàñòðîéêè èíòåðíåò-ìàãàçèíà";
 ?>

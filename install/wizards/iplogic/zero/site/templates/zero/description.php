@@ -1,7 +1,7 @@
 <?
 $arTemplate = array (
 	'NAME' => 'Zero',
-	'DESCRIPTION' => 'Шаблон для начала разработки',
+	'DESCRIPTION' => Loc::getMessage("TEMPLATE_DESCRIPTION"),
 	'SORT' => 100,
 );
 ?>

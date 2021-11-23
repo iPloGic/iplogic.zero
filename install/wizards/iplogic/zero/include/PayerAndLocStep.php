@@ -121,6 +121,11 @@ class PayerAndLocStep extends CWizardStep
 				<div class="wizard-input-form-field wizard-input-form-field-checkbox">';
 		$this->content .=
 			'<div class="wizard-catalog-form-item">'
+			.$this->ShowCheckboxField('paysystem[cash]', 'Y', (array("id" => "paysystemCash"))).
+			' <label for="paysystemCash">'.Loc::getMessage("WIZ_PAYSYSTEM_CASH").'</label>
+			</div>';
+		$this->content .=
+			'<div class="wizard-catalog-form-item">'
 			.$this->ShowCheckboxField('paysystem[bill]', 'Y', (array("id" => "paysystemBill"))).
 			' <label for="paysystemBill">'.Loc::getMessage("WIZ_PAYSYSTEM_BILL").'</label>
 			</div>';
@@ -143,26 +148,6 @@ class PayerAndLocStep extends CWizardStep
 				' <label for="paysystemOshad">'.Loc::getMessage("WIZ_PAYSYSTEM_OSHAD").'</label>
 				</div>';
 		}
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'
-			.$this->ShowCheckboxField('paysystem[YMoney]', 'Y', (array("id" => "paysystemYMoney"))).
-			' <label for="paysystemYMoney">'.Loc::getMessage("WIZ_PAYSYSTEM_YMONEY").'</label>
-			</div>';
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'
-			.$this->ShowCheckboxField('paysystem[YCards]', 'Y', (array("id" => "paysystemYCards"))).
-			' <label for="paysystemYCards">'.Loc::getMessage("WIZ_PAYSYSTEM_YCARDS").'</label>
-			</div>';
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'
-			.$this->ShowCheckboxField('paysystem[YTerminals]', 'Y', (array("id" => "paysystemYTerminals"))).
-			' <label for="paysystemYTerminals">'.Loc::getMessage("WIZ_PAYSYSTEM_YTERMINALS").'</label>
-			</div>';
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'
-			.$this->ShowCheckboxField('paysystem[webmoney]', 'Y', (array("id" => "paysystemWebmoney"))).
-			' <label for="paysystemWebmoney">'.Loc::getMessage("WIZ_PAYSYSTEM_WEBMONEY").'</label>
-			</div>';
 		$this->content .=
 			'<div class="wizard-catalog-form-item">'
 			.$this->ShowCheckboxField('paysystem[paypal]', 'Y', (array("id" => "paysystemPaypal"))).

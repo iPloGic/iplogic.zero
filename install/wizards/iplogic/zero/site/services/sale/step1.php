@@ -336,7 +336,6 @@ Option::set('sale', 'ADDRESS_different_set', "Y");
 Option::set('sale', 'WEIGHT_different_set', "Y");
 
 Option::set('sale', 'weight_unit', Loc::getMessage("SALE_WIZARD_WEIGHT_UNIT"), WIZARD_SITE_ID);
-//Option::set('sale', 'WEIGHT_different_set', 'Y', WIZARD_SITE_ID);
 Option::set('sale', 'weight_koef', '1000', WIZARD_SITE_ID);
 if( $bRus ) {
 	Option::set('sale', 'location_zip', $shopZip, WIZARD_SITE_ID);
@@ -1859,30 +1858,32 @@ if( $shopLocalization == "ua" && !$fizUaExist ) {
 //PaySystem
 $arPaySystems = [];
 
-$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/cash.png";
-$arPicture = CFile::MakeFileArray($logo);
-$arPaySystems[] = [
-	'PAYSYSTEM'   => [
-		"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_CASH"),
-		"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_CASH"),
-		"SORT"                 => 10,
-		"ACTIVE"               => "Y",
-		"IS_CASH"              => "Y",
-		"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_CASH_DESCR"),
-		"ACTION_FILE"          => "cash",
-		"RESULT_FILE"          => "",
-		"NEW_WINDOW"           => "N",
-		"PARAMS"               => "",
-		"HAVE_PAYMENT"         => "Y",
-		"HAVE_ACTION"          => "N",
-		"HAVE_RESULT"          => "N",
-		"HAVE_PREPAY"          => "N",
-		"HAVE_RESULT_RECEIVE"  => "N",
-		"LOGOTIP"              => $arPicture,
-		'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-	],
-	'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"]],
-];
+if( $paysystem["cash"] == "Y" ) {
+	$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/cash.png";
+	$arPicture = CFile::MakeFileArray($logo);
+	$arPaySystems[] = [
+		'PAYSYSTEM'   => [
+			"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_CASH"),
+			"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_CASH"),
+			"SORT"                 => 10,
+			"ACTIVE"               => "Y",
+			"IS_CASH"              => "Y",
+			"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_CASH_DESCR"),
+			"ACTION_FILE"          => "cash",
+			"RESULT_FILE"          => "",
+			"NEW_WINDOW"           => "N",
+			"PARAMS"               => "",
+			"HAVE_PAYMENT"         => "Y",
+			"HAVE_ACTION"          => "N",
+			"HAVE_RESULT"          => "N",
+			"HAVE_PREPAY"          => "N",
+			"HAVE_RESULT_RECEIVE"  => "N",
+			"LOGOTIP"              => $arPicture,
+			'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
+		],
+		'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"]],
+	];
+}
 
 if( $paysystem["collect"] == "Y" ) {
 	$arPaySystems[] = [
@@ -1990,136 +1991,6 @@ if( $shopLocalization == "ua" ) {
 }
 
 if( $personType["fiz"] == "Y" ) {
-
-	if( $paysystem["YMoney"] == "Y" ) {
-		$arPaySystems[] = [
-			'PAYSYSTEM'   => [
-				"NAME"                 => Loc::getMessage("SALE_WIZARD_YMoney"),
-				"SORT"                 => 40,
-				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YMoney_DESC"),
-				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YMoney"),
-				"ACTION_FILE"          => "yandex",
-				"RESULT_FILE"          => "",
-				"NEW_WINDOW"           => "N",
-				"PS_MODE"              => "PC",
-				"HAVE_PAYMENT"         => "Y",
-				"HAVE_ACTION"          => "N",
-				"HAVE_RESULT"          => "N",
-				"HAVE_PREPAY"          => "N",
-				"HAVE_RESULT_RECEIVE"  => "Y",
-				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-			],
-			'PERSON_TYPE' => [$arGeneralInfo["personType"]["fiz"]],
-			"BIZVAL"      => [
-				'' => [
-					"PAYMENT_ID"           => ["TYPE" => "PAYMENT", "VALUE" => "ID"],
-					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-					"PS_IS_TEST"           => ["VALUE" => "Y"],
-					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
-				],
-			],
-		];
-	}
-
-	if( $paysystem["YCards"] == "Y" ) {
-		$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/yandex_cards.png";
-		$arPicture = CFile::MakeFileArray($logo);
-		$arPaySystems[] = [
-			'PAYSYSTEM'   => [
-				"NAME"                 => Loc::getMessage("SALE_WIZARD_YCards"),
-				"SORT"                 => 50,
-				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YCards_DESC"),
-				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YCards"),
-				"ACTION_FILE"          => "yandex",
-				"RESULT_FILE"          => "",
-				"NEW_WINDOW"           => "N",
-				"HAVE_PAYMENT"         => "Y",
-				"HAVE_ACTION"          => "N",
-				"HAVE_RESULT"          => "N",
-				"HAVE_PREPAY"          => "N",
-				"HAVE_RESULT_RECEIVE"  => "Y",
-				"PS_MODE"              => "AC",
-				"LOGOTIP"              => $arPicture,
-				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-			],
-			"BIZVAL"      => [
-				'' => [
-					"PAYMENT_ID"           => ["TYPE" => "ORDER", "VALUE" => "ID"],
-					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-					"PS_IS_TEST"           => ["VALUE" => "Y"],
-					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
-				],
-			],
-			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
-		];
-	}
-
-	if( $paysystem["YTerminals"] == "Y" ) {
-		$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/yandex_terminals.png";
-		$arPicture = CFile::MakeFileArray($logo);
-		$arPaySystems[] = [
-			'PAYSYSTEM'   => [
-				"NAME"                 => Loc::getMessage("SALE_WIZARD_YTerminals"),
-				"SORT"                 => 60,
-				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_YTerminals_DESC"),
-				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_YTerminals"),
-				"ACTION_FILE"          => "yandex",
-				"RESULT_FILE"          => "",
-				"NEW_WINDOW"           => "N",
-				"HAVE_PAYMENT"         => "Y",
-				"HAVE_ACTION"          => "N",
-				"HAVE_RESULT"          => "N",
-				"HAVE_PREPAY"          => "N",
-				"HAVE_RESULT_RECEIVE"  => "Y",
-				"LOGOTIP"              => $arPicture,
-				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-			],
-			"BIZVAL"      => [
-				'' => [
-					"PAYMENT_ID"           => ["TYPE" => "ORDER", "VALUE" => "ID"],
-					"PAYMENT_DATE_INSERT"  => ["TYPE" => "PAYMENT", "VALUE" => "DATE_BILL"],
-					"PAYMENT_SHOULD_PAY"   => ["TYPE" => "PAYMENT", "VALUE" => "SUM"],
-					"PS_IS_TEST"           => ["VALUE" => "Y"],
-					"PS_CHANGE_STATUS_PAY" => ["VALUE" => "Y"],
-					"YANDEX_SHOP_ID"       => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SCID"          => ["TYPE" => "", "VALUE" => ""],
-					"YANDEX_SHOP_KEY"      => ["TYPE" => "", "VALUE" => ""],
-				],
-			],
-			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
-		];
-	}
-
-	if( $paysystem["webmoney"] == "Y" ) {
-		$arPaySystems[] = [
-			'PAYSYSTEM'   => [
-				"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_WM"),
-				"SORT"                 => 90,
-				"ACTIVE"               => "N",
-				"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_WM_DESCR"),
-				"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_WM"),
-				"ACTION_FILE"          => "webmoney",
-				"RESULT_FILE"          => "",
-				"NEW_WINDOW"           => "Y",
-				"PARAMS"               => "",
-				"HAVE_PAYMENT"         => "Y",
-				"HAVE_ACTION"          => "N",
-				"HAVE_RESULT"          => "Y",
-				"HAVE_PREPAY"          => "N",
-				"HAVE_RESULT_RECEIVE"  => "N",
-				'ENTITY_REGISTRY_TYPE' => Sale\Registry::REGISTRY_TYPE_ORDER,
-			],
-			"PERSON_TYPE" => [$arGeneralInfo["personType"]["fiz"]],
-		];
-	}
 
 	if( $paysystem["paypal"] == "Y" ) {
 		$arPaySystems[] = [

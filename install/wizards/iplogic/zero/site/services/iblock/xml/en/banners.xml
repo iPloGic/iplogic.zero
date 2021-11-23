@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommerceInformation SchemaVersion="2.021" CreationDate="2018-10-22T16:51:35">
+    <Metadata>
+        <Id>cdac8d42e852eb0497b42308a5fc5d4a_wizard_zero</Id>
+        <Title>Banners</Title>
+        <Properties>
+            <Property>
+                <Id>CML2_ACTIVE</Id>
+                <Title>BitrixActive</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_CODE</Id>
+                <Title>Code</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_SORT</Id>
+                <Title>Sort</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_ACTIVE_FROM</Id>
+                <Title>Start time</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_ACTIVE_TO</Id>
+                <Title>End time</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_PREVIEW_TEXT</Id>
+                <Title>Anons</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_DETAIL_TEXT</Id>
+                <Title>Description</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_PREVIEW_PICTURE</Id>
+                <Title>Preview picture</Title>
+                <Multiple>false</Multiple>
+            </Property>
+        </Properties>
+    </Metadata>
+    <Catalog>
+        <Id>cdac8d42e852eb0497b42308a5fc5d4a_wizard_zero</Id>
+        <MetadataId>cdac8d42e852eb0497b42308a5fc5d4a_wizard_zero</MetadataId>
+        <Title>Banners</Title>
+        <BitrixCode>banners_wizard_zero</BitrixCode>
+        <BitrixSort>500</BitrixSort>
+        <BitrixListURL>#SITE_DIR#/banners/</BitrixListURL>
+        <BitrixDetailURL>#SITE_DIR#/banners/#ELEMENT_CODE#/</BitrixDetailURL>
+        <BitrixSectionURL>#SITE_DIR#/banners/#SECTION_CODE#/</BitrixSectionURL>
+        <BitrixPicture></BitrixPicture>
+        <BitrixIndexElements>true</BitrixIndexElements>
+        <BitrixIndexSections>false</BitrixIndexSections>
+        <BitrixWorkflow>false</BitrixWorkflow>
+        <BitrixLabels>
+            <BitrixLabel>
+                <Id>ELEMENT_NAME</Id>
+                <Value>Banner</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENTS_NAME</Id>
+                <Value>Banners</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_ADD</Id>
+                <Value>Add Banner</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_EDIT</Id>
+                <Value>Edit Banner</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_DELETE</Id>
+                <Value>Delete Banner</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_NAME</Id>
+                <Value>Section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTIONS_NAME</Id>
+                <Value>Sections</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_ADD</Id>
+                <Value>Add new section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_EDIT</Id>
+                <Value>Edit section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_DELETE</Id>
+                <Value>Delete section</Value>
+            </BitrixLabel>
+        </BitrixLabels>
+    </Catalog>
+</CommerceInformation>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommerceInformation SchemaVersion="2.021" CreationDate="2018-10-22T16:51:35">
+    <Metadata>
+        <Id>c26749cca4cef03937d6f43daad8f94e_wizard_zero</Id>
+        <Title>News</Title>
+        <Properties>
+            <Property>
+                <Id>CML2_ACTIVE</Id>
+                <Title>BitrixActive</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_CODE</Id>
+                <Title>Code</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_SORT</Id>
+                <Title>Sort</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_ACTIVE_FROM</Id>
+                <Title>Start time</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_ACTIVE_TO</Id>
+                <Title>End time</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_PREVIEW_TEXT</Id>
+                <Title>Anons</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_DETAIL_TEXT</Id>
+                <Title>Description</Title>
+                <Multiple>false</Multiple>
+            </Property>
+            <Property>
+                <Id>CML2_PREVIEW_PICTURE</Id>
+                <Title>Preview picture</Title>
+                <Multiple>false</Multiple>
+            </Property>
+        </Properties>
+    </Metadata>
+    <Catalog>
+        <Id>c26749cca4cef03937d6f43daad8f94e_wizard_zero</Id>
+        <MetadataId>c26749cca4cef03937d6f43daad8f94e_wizard_zero</MetadataId>
+        <Title>News</Title>
+        <BitrixCode>news_wizard_zero</BitrixCode>
+        <BitrixSort>400</BitrixSort>
+        <BitrixListURL>#SITE_DIR#/news/</BitrixListURL>
+        <BitrixDetailURL>#SITE_DIR#/news/#ELEMENT_CODE#/</BitrixDetailURL>
+        <BitrixSectionURL>#SITE_DIR#/news/#SECTION_CODE#/</BitrixSectionURL>
+        <BitrixPicture></BitrixPicture>
+        <BitrixIndexElements>true</BitrixIndexElements>
+        <BitrixIndexSections>true</BitrixIndexSections>
+        <BitrixWorkflow>false</BitrixWorkflow>
+        <BitrixLabels>
+            <BitrixLabel>
+                <Id>ELEMENT_NAME</Id>
+                <Value>News</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENTS_NAME</Id>
+                <Value>News</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_ADD</Id>
+                <Value>Add News</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_EDIT</Id>
+                <Value>Edit News</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>ELEMENT_DELETE</Id>
+                <Value>Delete News</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_NAME</Id>
+                <Value>Section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTIONS_NAME</Id>
+                <Value>Sections</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_ADD</Id>
+                <Value>Add new section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_EDIT</Id>
+                <Value>Edit section</Value>
+            </BitrixLabel>
+            <BitrixLabel>
+                <Id>SECTION_DELETE</Id>
+                <Value>Delete section</Value>
+            </BitrixLabel>
+        </BitrixLabels>
+    </Catalog>
+</CommerceInformation>

@@ -31,17 +31,20 @@ class Catalog
 		return true;
 	}
 
-	public function getAllIdsByProp($field)
+	public function getAllIdsByProp($field, $activeOnly = false)
 	{
-		return $this->getIdsByProp($this->product_iblock_id, $field) +
-			$this->getIdsByProp($this->offer_iblock_id, $field);
+		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly) +
+			$this->getIdsByProp($this->offer_iblock_id, $field, $activeOnly);
 	}
 
-	public function getIdsByProp($iblock, $field)
+	public function getIdsByProp($iblock, $field, $activeOnly = false)
 	{
 		$arIds = [];
 		$notField = "!".$field;
 		$arFilter = ['IBLOCK_ID' => $iblock, $notField => false];
+		if($activeOnly) {
+			$arFilter["=ACTIVE"] = "Y";
+		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
 		$_prd = \CIBlockElement::GetList([],$arFilter,false,false,$arSelect);
 		$key = $field;
@@ -53,17 +56,20 @@ class Catalog
 		return $arIds;
 	}
 
-	public function getPropByAllIds($field)
+	public function getPropByAllIds($field, $activeOnly = false)
 	{
-		return $this->getPropByIds($this->product_iblock_id, $field) +
-			$this->getPropByIds($this->offer_iblock_id, $field);
+		return $this->getPropByIds($this->product_iblock_id, $field, $activeOnly) +
+			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly);
 	}
 
-	public function getPropByIds($iblock, $field)
+	public function getPropByIds($iblock, $field, $activeOnly = false)
 	{
 		$arIds = [];
 		$notField = "!".$field;
 		$arFilter = ['IBLOCK_ID' => $iblock, $notField => false];
+		if($activeOnly) {
+			$arFilter["=ACTIVE"] = "Y";
+		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
 		$_prd = \CIBlockElement::GetList([],$arFilter,false,false,$arSelect);
 		$key = $field;

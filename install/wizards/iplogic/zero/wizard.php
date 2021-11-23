@@ -24,6 +24,7 @@ function getSite($wizard)
 			$site = [
 				"ID"  => $siteID,
 				"DIR" => $arSite["DIR"],
+				"LANG" => $arSite["LANGUAGE_ID"],
 			];
 		}
 	}
@@ -31,6 +32,7 @@ function getSite($wizard)
 		$site = [
 			"ID"  => $wizard->GetVar("siteNewID"),
 			"DIR" => $wizard->GetVar("siteFolder"),
+			"LANG" => "ru",
 		];
 	}
 	return $site;
