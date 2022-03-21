@@ -1,7 +1,10 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Каталог");
-?><?$APPLICATION->IncludeComponent(
+?>
+<section>
+	<div class="section-block content">
+<?$APPLICATION->IncludeComponent(
 	"bitrix:catalog", 
 	".default", 
 	array(
@@ -264,4 +267,8 @@ $APPLICATION->SetTitle("Каталог");
 		)
 	),
 	false
-);?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);?>
+	</div>
+	<div class="spacer40"></div>
+</section>
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

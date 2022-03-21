@@ -1,11 +1,11 @@
 <?
-$MESS["iplogic.zero_MODULE_OPTIONS"] = "ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¼Ð¾Ð´ÑƒÐ»Ñ Zero";
-$MESS["MODULE_OPTIONS_DENIED"] = "ÐÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾ Ð¿Ñ€Ð°Ð² Ð´Ð»Ñ Ð¿Ñ€Ð¾ÑÐ¼Ð¾Ñ‚Ñ€Ð°";
-$MESS["IPL_BACKGROUND_SCRIPTS"] = "Ð—Ð°Ð¿ÑƒÑÐº Ñ„Ð¾Ð½Ð¾Ð²Ñ‹Ñ… ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð²";
-$MESS["IPL_CLI_METHOD"] = "ÐœÐµÑ‚Ð¾Ð´ Ð·Ð°Ð¿ÑƒÑÐºÐ°";
-$MESS["IPL_CLI_MISS_CERT"] = "ÐÐµ Ð¿Ñ€Ð¾Ð²Ñ€ÑÑ‚ÑŒ ÑÐµÑ€Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚";
-$MESS["IPL_PHP_FILE"] = "Ð¤Ð°Ð¹Ð» Ð·Ð°Ð¿ÑƒÑÐºÐ° PHP";
-$MESS["IPL_ACTIONS"] = "Ð”ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ";
-$MESS["IPL_TURN_ON_Ð¡U_AGENT"] = "Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð°Ð³ÐµÐ½Ñ‚ Ð¾Ñ‡Ð¸ÑÑ‚ÐºÐ¸ Ð¿Ð°Ð¿ÐºÐ¸ upload";
-$MESS["IPL_TURN_ON_Ð¡R_AGENT"] = "Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð°Ð³ÐµÐ½Ñ‚ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÐºÑƒÑ€ÑÐ° Ð²Ð°Ð»ÑŽÑ‚";
+$MESS["iplogic.zero_MODULE_OPTIONS"] = "Íàñòðîéêè ìîäóëÿ Zero";
+$MESS["MODULE_OPTIONS_DENIED"] = "Íåäîñòàòî÷íî ïðàâ äëÿ ïðîñìîòðà";
+$MESS["IPL_BACKGROUND_SCRIPTS"] = "Çàïóñê ôîíîâûõ ñêðèïòîâ";
+$MESS["IPL_CLI_METHOD"] = "Ìåòîä çàïóñêà";
+$MESS["IPL_CLI_MISS_CERT"] = "Íå ïðîâðÿòü ñåðòèôèêàò";
+$MESS["IPL_PHP_FILE"] = "Ôàéë çàïóñêà PHP";
+$MESS["IPL_ACTIONS"] = "Äåéñòâèÿ";
+$MESS["IPL_TURN_ON_ÑU_AGENT"] = "Âêëþ÷èòü àãåíò î÷èñòêè ïàïêè upload";
+$MESS["IPL_TURN_ON_ÑR_AGENT"] = "Âêëþ÷èòü àãåíò ïîëó÷åíèÿ êóðñà âàëþò";
 ?>

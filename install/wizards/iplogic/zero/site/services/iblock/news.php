@@ -48,3 +48,43 @@ if( $iblockID == false ) {
 }
 
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/news/index.php", ["NEWS_IBLOCK_ID" => $iblockID]);
+
+$arFields = [
+	"ACTIVE_FROM" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => "=now"
+	],
+	"CODE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => [
+			"UNIQUE" => "Y",
+			"TRANSLITERATION" => "Y",
+			"TRANS_LEN" => 100,
+			"TRANS_CASE" => "L",
+			"TRANS_SPACE" => "-",
+			"TRANS_OTHER" => "-",
+			"TRANS_EAT" => "Y",
+			"USE_GOOGLE" => "N"
+		]
+	],
+	"PREVIEW_PICTURE" => [
+		"IS_REQUIRED" => "N",
+		"DEFAULT_VALUE" => [
+			"FROM_DETAIL" => "Y",
+			"SCALE" => "N",
+			"WIDTH" => "",
+			"HEIGHT" => "",
+			"IGNORE_ERRORS" => "N",
+			"METHOD" => "resample",
+			"COMPRESSION" => 95,
+			"DELETE_WITH_DETAIL" => "N",
+			"UPDATE_WITH_DETAIL" => "N",
+		]
+	],
+	"DETAIL_TEXT_TYPE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => "html"
+	],
+];
+\CIBlock::setFields($iblockID, $arFields);
+

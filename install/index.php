@@ -18,7 +18,6 @@ Class iplogic_zero extends CModule
 	var $MODULE_NAME;
 	var $MODULE_DESCRIPTION;
 	var $MODULE_CSS;
-	var $strError = '';
 
 	function __construct()
 	{

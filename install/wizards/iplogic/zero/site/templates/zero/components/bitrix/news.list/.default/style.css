@@ -1,0 +1,10 @@
+div.news-list
+{
+	word-wrap: break-word;
+}
+.news-item {
+	margin-bottom:20px;
+}
+.news-date-time {
+	color:#486DAA;
+}

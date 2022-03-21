@@ -22,6 +22,7 @@ if( $s_count < 2 ) {
 	Option::set('main', 'site_name', $siteName);
 	Option::set("main", "vendor", "iPloGic");
 	Option::set("main", "move_js_to_body", "Y");
+	Option::set("main", "optimize_css_files", "N");
 	Option::set("main", "session_show_message", "N");
 
 	if( strlen(Option::get('main', 'CAPTCHA_presets', '')) <= 0 ) {

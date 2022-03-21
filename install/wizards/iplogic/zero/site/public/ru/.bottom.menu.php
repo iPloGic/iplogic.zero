@@ -1,18 +1,18 @@
 <?
-$aMenuLinks = Array(
-	Array(
+$aMenuLinks = [
+	[
 		"Главная", 
 		"/", 
-		Array(), 
-		Array(), 
+		[],
+		[],
 		"" 
-	),
-	Array(
+	],
+	[
 		"Каталог", 
 		"/catalog/", 
-		Array(), 
-		Array(), 
+		[],
+		[],
 		"" 
-	)
-);
+	]
+];
 ?>

@@ -1,3 +1,3 @@
 <?
-$MESS["TEMPLATE_DESCRIPTION"] = "ÐŸÑƒÑÑ‚Ð¾Ð¹ ÑˆÐ°Ð±Ð»Ð¾Ð½";
+$MESS["TEMPLATE_DESCRIPTION"] = "Ïóñòîé øàáëîí";
 ?>

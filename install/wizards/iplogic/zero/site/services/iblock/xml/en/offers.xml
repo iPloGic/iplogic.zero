@@ -122,7 +122,7 @@
 	<OffersList>
 		<Id>cc5c084f8e31c330212c7d0300dc9c82_wizard_zero</Id>
 		<MetadataId>cc5c084f8e31c330212c7d0300dc9c82_wizard_zero</MetadataId>
-		<Title>Main catalog</Title>
+		<Title>Offers of main catalog</Title>
 		<BitrixCode>catalog_offers_wizard_zero</BitrixCode>
 		<BitrixSort>200</BitrixSort>
 		<BitrixListURL>#SITE_DIR#/catalog/</BitrixListURL>

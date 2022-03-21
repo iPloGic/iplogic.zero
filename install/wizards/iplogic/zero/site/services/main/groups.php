@@ -14,11 +14,9 @@ if( $s_count < 2 ) {
 	/*USER GROUPS*/
 
 	$arGroupPolicy = [
-		"SESSION_TIMEOUT"      => 180,
-		"SESSION_IP_MASK"      => "255.255.255.255",
+		"SESSION_TIMEOUT"      => 60 * 24 * 5,
 		"MAX_STORE_NUM"        => 1,
-		"STORE_IP_MASK"        => "255.255.255.255",
-		"STORE_TIMEOUT"        => 60 * 24 * 5,
+		"STORE_TIMEOUT"        => 60 * 24 * 7,
 		"CHECKWORD_TIMEOUT"    => 60,
 		"PASSWORD_LENGTH"      => 6,
 		"PASSWORD_UPPERCASE"   => "N",

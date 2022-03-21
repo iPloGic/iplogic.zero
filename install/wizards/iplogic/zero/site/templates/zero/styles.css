@@ -1,37 +1,70 @@
-@import url('css/common.css');
-@import url('css/zero.css');
+/*@import url('css/common.css');
 @import url('css/solid.css');
 @import url('css/fontawesome.css');
+can be used if you have separated css set in main module options
+uncomment this lines and remove call of this files from header.php
+*/
 
 
 html, body { background-color:#fff; }
 
 /* buttons colors */
-input[type="button"], input[type="submit"], button, a.button { background-color: #D3016A; border-color: #D3016A; color:#ffffff; }
-input[type="button"].light, input[type="submit"].light, button.light, a.button.light { background-color: transparent; border-color:#D3016A; color:#D3016A; }
-input[type="button"]:hover, input[type="submit"]:hover, button:hover, a.button:hover { background-color:#fb3a9b; border-color:#fb3a9b; }
-input[type="button"].light:hover, input[type="submit"].light:hover, button.light:hover, a.button .light:hover{ background-color: transparent; border-color:#fb3a9b; color:#fb3a9b; }
+input[type="button"], input[type="submit"], button, a.button { background-color: #444444; border-color: #444444; color:#ffffff; }
+input[type="button"].light, input[type="submit"].light, button.light, a.button.light { background-color: transparent; border-color: #444444; color: #444444; }
+input[type="button"]:hover, input[type="submit"]:hover, button:hover, a.button:hover { background-color: #6d6d6d; border-color: #6d6d6d; }
+input[type="button"].light:hover, input[type="submit"].light:hover, button.light:hover, a.button .light:hover{ background-color: transparent; border-color: #6d6d6d; color: #6d6d6d; }
 
 /* headers */
 h1, h2, h3, h4, h5, h6, h1 a, h2 a, 
 h3 a, h4 a, h5 a, h6 a, h1 a:hover, 
 h2 a:hover, h3 a:hover, h4 a:hover, 
-h5 a:hover, h6 a:hover { color: #930074 !important; text-decoration:none; font-weight:normal; width:100%; line-height:1.6em; }
+h5 a:hover, h6 a:hover { color: #001474 !important; text-decoration:none; font-weight:normal; width:100%; line-height:1.6em; }
 h1, h1 a, h1 a:hover { font-size:28px; padding-bottom:15px; }h2, h2 a, h2 a:hover { font-size:24px; }h3, h3 a, h3 a:hover { font-size:20px; }h4, h4 a, h4 a:hover { font-size:18px; }h5, h5 a, h5 a:hover { font-size:16px; }h6, h6 a, h6 a:hover { font-size:16px; }
 
 /* references */
-a { color: #930074; }
-a:hover { color: #6d91fa; }
+a { color: #0e5c00; }
+a:hover { color: #2c8420; }
 
+/* form messages */
+.form_success {
+	color: #317b00;
+	background-color: #cce9b9;
+	border: 1px solid #317b00;
+	padding:10px;
+	margin:10px 0;
+}
+.form_error {
+	color: #fe180d;
+	background-color: #f6c9c7;
+	border: 1px solid #fe180d;
+	padding:10px;
+	margin:10px 0;
+}
+.starrequired {
+	color:red;
+	font-weight:bold;
+}
 
-/* custom menu */
-ul.menu-h li a {  padding: 11px 15px 0px 15px; height:100%;  }
-ul.menu-h.dropdown ul {  width:250px;   }
-ul.menu-h.dropdown > li.drop > a { padding-right:30px; }
-
-ul.menu-v li a { padding: 8px 30px 8px 15px; }
-ul.menu-v li ul.menu-v li { /* font-size: 95%; decrease font size on every level in hierarchical menus if you want */ }
-
-ul.dropdown > .drop > a i.open-icon { position:absolute; right:15px; top:10px; font-size:28px; /*padding:10px 15px; right:0px; top:0px;*/ }
-ul.dropdown > li > ul { border-style:solid; border-width:1px; }
-ul.dropdown > li > ul > li:last-child { clear:both; }
+/* z-form */
+.z-form {
+	max-width:800px;
+	margin:0 auto;
+}
+.z-form .form-group {
+	padding-bottom:15px;
+}
+.z-form .form-group.sub-title,
+.z-form .form-group.buttons {
+	text-align:left;
+}
+.z-form .form-group input[type="text"],
+.z-form .form-group input[type="password"],
+.z-form .form-group input[type="number"],
+.z-form .form-group input[type="email"],
+.z-form .form-group input[type="tel"],
+.z-form .form-group input[type="search"]{
+	width:100%;
+}
+.z-form .form-group .short > input {
+	width:180px;
+}

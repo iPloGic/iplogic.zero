@@ -1,7 +1,9 @@
 <?php
+
 namespace Iplogic\Zero;
 
 use \Bitrix\Main\Loader;
+use \Bitrix\Main\Config\Option;
 
 class Catalog
 {
@@ -10,22 +12,20 @@ class Catalog
 	public $brand_iblock_id;
 	public $currency;
 	protected $obIblockElement;
-	protected $obProduct;
 	protected $arStoreStocks;
 
 	function __construct($config = [])
 	{
 		self::modulesCheck();
 		$this->obIblockElement = new \CIBlockElement;
-		$this->obProduct = new \CCatalogProduct;
 	}
 
 	public static function modulesCheck()
 	{
-		if (!Loader::includeModule("catalog")){
+		if( !Loader::includeModule("catalog") ) {
 			return false;
 		}
-		if (!Loader::includeModule("iblock")){
+		if( !Loader::includeModule("iblock") ) {
 			return false;
 		}
 		return true;
@@ -40,17 +40,18 @@ class Catalog
 	public function getIdsByProp($iblock, $field, $activeOnly = false)
 	{
 		$arIds = [];
-		$notField = "!".$field;
+		$notField = "!" . $field;
 		$arFilter = ['IBLOCK_ID' => $iblock, $notField => false];
-		if($activeOnly) {
+		if( $activeOnly ) {
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
-		$_prd = \CIBlockElement::GetList([],$arFilter,false,false,$arSelect);
+		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
-		if(substr($field,0, 9) == "PROPERTY_")
+		if( substr($field, 0, 9) == "PROPERTY_" ) {
 			$key .= "_VALUE";
-		while ($prd = $_prd->GetNext()) {
+		}
+		while( $prd = $_prd->GetNext() ) {
 			$arIds[$prd[$key]] = $prd['ID'];
 		}
 		return $arIds;
@@ -65,17 +66,18 @@ class Catalog
 	public function getPropByIds($iblock, $field, $activeOnly = false)
 	{
 		$arIds = [];
-		$notField = "!".$field;
+		$notField = "!" . $field;
 		$arFilter = ['IBLOCK_ID' => $iblock, $notField => false];
-		if($activeOnly) {
+		if( $activeOnly ) {
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
-		$_prd = \CIBlockElement::GetList([],$arFilter,false,false,$arSelect);
+		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
-		if(substr($field,0, 9) == "PROPERTY_")
+		if( substr($field, 0, 9) == "PROPERTY_" ) {
 			$key .= "_VALUE";
-		while ($prd = $_prd->GetNext()) {
+		}
+		while( $prd = $_prd->GetNext() ) {
 			$arIds[(string)$prd['ID']] = $prd[$key];
 		}
 		return $arIds;
@@ -83,37 +85,46 @@ class Catalog
 
 	public function setStock($ID, $stock = 0, $store = false)
 	{
-		if(!is_array($ID))
+		if( !is_array($ID) ) {
 			$ID = [$ID];
-		foreach($ID as $priductID) {
-			if ($store) {
-				$arFields = Array(
+		}
+		foreach( $ID as $priductID ) {
+			if( $store ) {
+				$arFields = [
 					"PRODUCT_ID" => $priductID,
-					"STORE_ID" => $store,
-					"AMOUNT" => $stock,
-				);
-				if (array_key_exists($priductID, $this->getStoreStocks($store))) {
-					\CCatalogStoreProduct::Update($this->arStoreStocks[$store][$priductID]["ID"], $arFields);
+					"STORE_ID"   => $store,
+					"AMOUNT"     => $stock,
+				];
+				if( array_key_exists($priductID, $this->getStoreStocks($store)) ) {
+					if( $this->arStoreStocks[$store][$priductID]["AMOUNT"] != $stock ) {
+						\Bitrix\Catalog\StoreProductTable::update(
+							$this->arStoreStocks[$store][$priductID]["ID"],
+							$arFields
+						);
+					}
 				}
 				else {
-					\CCatalogStoreProduct::Add($arFields);
+					\Bitrix\Catalog\StoreProductTable::add($arFields);
 				}
 			}
 			else {
-				$this->obProduct->Update($priductID, ['QUANTITY'=>$stock]);
+				\Bitrix\Catalog\ProductTable::update($priductID, ['QUANTITY' => $stock]);
 			}
 		}
 	}
 
 	public function getStoreStocks($ID)
 	{
-		if(isset($this->arStoreStocks[$ID]))
+		if( isset($this->arStoreStocks[$ID]) ) {
 			return $this->arStoreStocks[$ID];
-		$rsStore = \CCatalogStoreProduct::GetList([], ['STORE_ID' => $ID], false, false, ['ID','PRODUCT_ID','AMOUNT']);
-		while ($arStore = $rsStore->Fetch()) {
+		}
+		$rsStore = \Bitrix\Catalog\StoreProductTable::getList(
+			["filter" => ['STORE_ID' => $ID], "select" => ['ID', 'PRODUCT_ID', 'AMOUNT']]
+		);
+		while( $arStore = $rsStore->Fetch() ) {
 			$this->arStoreStocks[$ID][$arStore['PRODUCT_ID']] = [
-				"ID" => $arStore['AMOUNT'],
-				"AMOUNT" => $arStore['AMOUNT']
+				"ID"     => $arStore['ID'],
+				"AMOUNT" => $arStore['AMOUNT'],
 			];
 		}
 		return $this->arStoreStocks[$ID];
@@ -121,35 +132,99 @@ class Catalog
 
 	public function setPrice($priductID, $price, $groupID)
 	{
-		$arFields = Array(
-			"PRODUCT_ID" => $priductID,
+		$arFields = [
+			"PRODUCT_ID"       => $priductID,
 			"CATALOG_GROUP_ID" => $groupID,
-			"PRICE" => (int)$price,
-			"CURRENCY" => $this->currency,
-		);
-		$res = \CPrice::GetList([],["PRODUCT_ID" => $priductID, "CATALOG_GROUP_ID" => $groupID]);
-		if ($arr = $res->Fetch()){
+			"PRICE"            => (int)$price,
+			"CURRENCY"         => $this->currency,
+		];
+		$res = \CPrice::GetList([], ["PRODUCT_ID" => $priductID, "CATALOG_GROUP_ID" => $groupID]);
+		if( $arr = $res->Fetch() ) {
 			\CPrice::Update($arr["ID"], $arFields);
-		}else{
+		}
+		else {
 			\CPrice::Add($arFields);
 		}
 	}
 
-	public function getBrands($fields = []) {
+	public function getBrands($fields = [])
+	{
 		$arBrands = [];
-		if (!in_array("ID", $fields))
+		if( !in_array("ID", $fields) ) {
 			$fields[] = "ID";
-		if (!in_array("IBLOCK_ID", $fields))
+		}
+		if( !in_array("IBLOCK_ID", $fields) ) {
 			$fields[] = "IBLOCK_ID";
-		$_mfs = \CIBlockElement::GetList([],['IBLOCK_ID'=>$this->brand_iblock_id],false,false,$fields);
-		while ($mfs = $_mfs->GetNext()) {
+		}
+		$_mfs = \CIBlockElement::GetList([], ['IBLOCK_ID' => $this->brand_iblock_id], false, false, $fields);
+		while( $mfs = $_mfs->GetNext() ) {
 			$brand = [];
-			foreach($fields as $field) {
+			foreach( $fields as $field ) {
 				$brand[$field] = $mfs[$field];
 			}
 			$arBrands[$mfs['ID']] = $brand;
 		}
 		return $arBrands;
+	}
+
+	public function productAvailabilityReindex()
+	{
+		if ( Option::get("catalog", "show_catalog_tab_with_offers", "N") == "Y" ) {
+			return;
+		}
+		$arProducts = [];
+		$arOffers = [];
+		$arFilter = ['IBLOCK_ID' => $this->product_iblock_id, "=ACTIVE" => "Y"];
+		$arSelect = ['ID', 'IBLOCK_ID', 'AVAILABLE', 'QUANTITY', 'TYPE'];
+		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		while( $prd = $_prd->GetNext() ) {
+			$arProducts[(string)$prd['ID']] = [
+				"AVAILABLE" => $prd["AVAILABLE"],
+				"QUANTITY" => $prd["QUANTITY"],
+				"TYPE" => $prd["TYPE"],
+			];
+		}
+		$arFilter = ['IBLOCK_ID' => $this->offer_iblock_id, "=ACTIVE" => "Y"];
+		$arSelect = ['ID', 'IBLOCK_ID', 'AVAILABLE', 'QUANTITY', 'PROPERTY_CML2_LINK'];
+		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
+		while( $prd = $_prd->GetNext() ) {
+			$arOffers[(string)$prd['ID']] = [
+				"AVAILABLE" => $prd["AVAILABLE"],
+				"QUANTITY" => $prd["QUANTITY"],
+				"CML2_LINK" => $prd["PROPERTY_CML2_LINK_VALUE"],
+			];
+		}
+		foreach($arOffers as $ID => $offer) {
+			if ($offer["QUANTITY"] > 0) {
+				if ($offer["AVAILABLE"] != "Y") {
+					\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "Y"]);
+				}
+				if (isset($arProducts[$offer["CML2_LINK"]]) && $arProducts[$offer["CML2_LINK"]]["AVAILABLE"] != "Y") {
+					\Bitrix\Catalog\ProductTable::update($offer["CML2_LINK"], ['AVAILABLE' => "Y"]);
+					unset($arProducts[$offer["CML2_LINK"]]);
+				}
+			}
+			else {
+				if ($offer["AVAILABLE"] != "N") {
+					\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "N"]);
+				}
+			}
+		}
+		foreach($arProducts as $ID => $product) {
+			if ($product["QUANTITY"] > 0) {
+				if ($product["AVAILABLE"] != "Y" && $product["TYPE"] == 1) {
+					\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "Y"]);
+				}
+			}
+			else {
+				if ($product["AVAILABLE"] != "N" && $product["TYPE"] == 1) {
+					\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "N"]);
+				}
+			}
+			if ($product["TYPE"] == 3 && $product["AVAILABLE"] != "N") {
+				\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "N", "QUANTITY" => 0]);
+			}
+		}
 	}
 
 }

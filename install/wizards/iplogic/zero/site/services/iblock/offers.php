@@ -63,7 +63,27 @@ if( $catalogIblockId != "" ) {
 	CCatalog::Update($iblockID, ['PRODUCT_IBLOCK_ID' => $catalogIblockId, 'SKU_PROPERTY_ID' => $ID_SKU]);
 }
 
-CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/bitrix/templates/" . $wizard->GetVar("templateDir") . "/header.php",
+CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/local/templates/" . $wizard->GetVar("templateDir") . "/header.php",
 	["OFFERS_IBLOCK_ID" => $iblockID]);
 
-?>
+$arFields = [
+	"PREVIEW_PICTURE" => [
+		"IS_REQUIRED" => "N",
+		"DEFAULT_VALUE" => [
+			"FROM_DETAIL" => "Y",
+			"SCALE" => "N",
+			"WIDTH" => "",
+			"HEIGHT" => "",
+			"IGNORE_ERRORS" => "N",
+			"METHOD" => "resample",
+			"COMPRESSION" => 95,
+			"DELETE_WITH_DETAIL" => "N",
+			"UPDATE_WITH_DETAIL" => "N",
+		]
+	],
+	"DETAIL_TEXT_TYPE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => "html"
+	],
+];
+\CIBlock::setFields($iblockID, $arFields);

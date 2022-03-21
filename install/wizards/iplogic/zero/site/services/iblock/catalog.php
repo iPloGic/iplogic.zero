@@ -78,8 +78,65 @@ if( !$ibp->Update($prop_fields['ID'], $arFields) ) {
 
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/catalog/index.php", ["CATALOG_IBLOCK_ID" => $iblockID]);
 CWizardUtil::ReplaceMacros(
-	WIZARD_SITE_PATH . "/bitrix/templates/" . $wizard->GetVar("templateDir") . "/header.php",
+	WIZARD_SITE_PATH . "/local/templates/" . $wizard->GetVar("templateDir") . "/header.php",
 	["CATALOG_IBLOCK_ID" => $iblockID]
 );
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/.catalog.menu_ext.php", ["CATALOG_IBLOCK_ID" => $iblockID]);
-?>
+
+$arFields = [
+	"CODE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => [
+			"UNIQUE" => "Y",
+			"TRANSLITERATION" => "Y",
+			"TRANS_LEN" => 100,
+			"TRANS_CASE" => "L",
+			"TRANS_SPACE" => "-",
+			"TRANS_OTHER" => "-",
+			"TRANS_EAT" => "Y",
+			"USE_GOOGLE" => "N"
+		]
+	],
+	"PREVIEW_PICTURE" => [
+		"IS_REQUIRED" => "N",
+		"DEFAULT_VALUE" => [
+			"FROM_DETAIL" => "Y",
+			"SCALE" => "N",
+			"WIDTH" => "",
+			"HEIGHT" => "",
+			"IGNORE_ERRORS" => "N",
+			"METHOD" => "resample",
+			"COMPRESSION" => 95,
+			"DELETE_WITH_DETAIL" => "N",
+			"UPDATE_WITH_DETAIL" => "N",
+		]
+	],
+	"DETAIL_TEXT_TYPE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => "html"
+	],
+	"IBLOCK_SECTION" => [
+		"IS_REQUIRED" => "N",
+		"DEFAULT_VALUE" => [
+			"KEEP_IBLOCK_SECTION_ID" => "Y"
+		]
+	],
+	"SECTION_CODE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => [
+			"UNIQUE" => "N",
+			"TRANSLITERATION" => "Y",
+			"TRANS_LEN" => 100,
+			"TRANS_CASE" => "L",
+			"TRANS_SPACE" => "-",
+			"TRANS_OTHER" => "-",
+			"TRANS_EAT" => "Y",
+			"USE_GOOGLE" => "N"
+		]
+	],
+	"SECTION_DETAIL_TEXT_TYPE" => [
+		"IS_REQUIRED" => "Y",
+		"DEFAULT_VALUE" => "html"
+	],
+];
+\CIBlock::setFields($iblockID, $arFields);
