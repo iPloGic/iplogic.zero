@@ -25,8 +25,7 @@ $arURILine = explode('/',$APPLICATION->GetCurPage());
 $SECTION = $arURILine[1];
 
 $APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/css/common.css');
-$APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/css/solid.css');
-$APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/css/fontawesome.css');
+$APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/assets/fontawesome-6.1.1/css/all.css');
 $APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/assets/slick/slick.css');
 $APPLICATION->SetAdditionalCss(SITE_TEMPLATE_PATH.'/assets/slick/slick-theme.css');
 
