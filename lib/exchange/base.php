@@ -52,6 +52,7 @@ class Base
 	{
 		$type = strtoupper($type);
 		$cl = new HttpClient(['socketTimeout' => 100]);
+		$cl->disableSslVerification();
 		foreach( $headers as $key => $val ) {
 			$cl->setHeader($key, $val);
 		}

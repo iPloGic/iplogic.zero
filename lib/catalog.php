@@ -31,13 +31,13 @@ class Catalog
 		return true;
 	}
 
-	public function getAllIdsByProp($field, $activeOnly = false)
+	public function getAllIdsByProp($field, $activeOnly = false, $aditionFields = false)
 	{
-		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly) +
-			$this->getIdsByProp($this->offer_iblock_id, $field, $activeOnly);
+		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly, $aditionFields) +
+			$this->getIdsByProp($this->offer_iblock_id, $field, $aditionFields);
 	}
 
-	public function getIdsByProp($iblock, $field, $activeOnly = false)
+	public function getIdsByProp($iblock, $field, $activeOnly = false, $aditionFields = false)
 	{
 		$arIds = [];
 		$notField = "!" . $field;
@@ -46,24 +46,32 @@ class Catalog
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
+		if($aditionFields) {
+			$arSelect = array_merge($arSelect, $aditionFields);
+		}
 		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
 		if( substr($field, 0, 9) == "PROPERTY_" ) {
 			$key .= "_VALUE";
 		}
 		while( $prd = $_prd->GetNext() ) {
-			$arIds[$prd[$key]] = $prd['ID'];
+			if(count($arSelect) < 4) {
+				$arIds[$prd[$key]] = $prd['ID'];
+			}
+			else {
+				$arIds[$prd[$key]] = $prd;
+			}
 		}
 		return $arIds;
 	}
 
-	public function getPropByAllIds($field, $activeOnly = false)
+	public function getPropByAllIds($field, $activeOnly = false, $aditionFields = false)
 	{
-		return $this->getPropByIds($this->product_iblock_id, $field, $activeOnly) +
-			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly);
+		return $this->getPropByIds($this->product_iblock_id, $field, $activeOnly, $aditionFields) +
+			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly, $aditionFields);
 	}
 
-	public function getPropByIds($iblock, $field, $activeOnly = false)
+	public function getPropByIds($iblock, $field, $activeOnly = false, $aditionFields = false)
 	{
 		$arIds = [];
 		$notField = "!" . $field;
@@ -72,13 +80,21 @@ class Catalog
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
+		if($aditionFields) {
+			$arSelect = array_merge($arSelect, $aditionFields);
+		}
 		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
 		if( substr($field, 0, 9) == "PROPERTY_" ) {
 			$key .= "_VALUE";
 		}
 		while( $prd = $_prd->GetNext() ) {
-			$arIds[(string)$prd['ID']] = $prd[$key];
+			if(count($arSelect) < 4) {
+				$arIds[(string)$prd['ID']] = $prd[$key];
+			}
+			else {
+				$arIds[(string)$prd['ID']] = $prd;
+			}
 		}
 		return $arIds;
 	}
