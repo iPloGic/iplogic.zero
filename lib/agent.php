@@ -68,7 +68,7 @@ class Agent {
 			return false;
 		}
 		if (LANG_CHARSET == "UTF-8")
-			$strQueryText = \Iplogic\Zero\Exchange\Base::($strQueryText);
+			$strQueryText = \Iplogic\Zero\Exchange\Base::utfEncodeRecursive($strQueryText);
 		return $strQueryText;
 	}
 

@@ -132,6 +132,13 @@ if ($wizard->GetVar("phpInterface") == "Y") {
 	if(!is_dir($dir)) {
 		mkdir($dir, 0755, true);
 	}
+	CopyDirFiles(
+		WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
+		$dir,
+		$rewrite = true,
+		$recursive = true,
+		$delete_after_copy = false
+	);
 	$dir = $_SERVER["DOCUMENT_ROOT"]."/local/php_interface/".$siteID;
 	if(!is_dir($dir)) {
 		mkdir($dir, 0755, true);
@@ -143,6 +150,31 @@ if ($wizard->GetVar("phpInterface") == "Y") {
 		$recursive = true,
 		$delete_after_copy = false
 	);
+}
+
+$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components";
+if(!is_dir($dir)) {
+	mkdir($dir, 0755, true);
+}
+$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components/iplogic";
+if(!is_dir($dir)) {
+	mkdir($dir, 0755, true);
+}
+CopyDirFiles(
+	WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
+	$dir,
+	$rewrite = true,
+	$recursive = true,
+	$delete_after_copy = false
+);
+
+$dir = $_SERVER["DOCUMENT_ROOT"]."/local/ajax";
+if(!is_dir($dir)) {
+	mkdir($dir, 0755, true);
+}
+$dir = $_SERVER["DOCUMENT_ROOT"]."/local/cli";
+if(!is_dir($dir)) {
+	mkdir($dir, 0755, true);
 }
 
 
