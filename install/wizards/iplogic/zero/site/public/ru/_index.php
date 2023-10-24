@@ -1,14 +1,10 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-$APPLICATION->SetTitle("Новый магазин");
+$APPLICATION->SetTitle("Новый сайт");
 ?>
 <?
 /*
- * Remove unneeded blocks below
- * */
-
-/*
- * Main banner (all screen wide slider)
+ * Insert your content here
  * */
 ?>
 <?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

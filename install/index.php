@@ -37,6 +37,14 @@ Class iplogic_zero extends CModule
 		global $DB, $DBType, $APPLICATION;
 		RegisterModule(self::MODULE_ID);
 		Option::set(self::MODULE_ID,"istalled",'Y');
+		Option::set(self::MODULE_ID,"cli_execute_method",'WGET');
+		Option::set(self::MODULE_ID,"cli_php",'/usr/bin/php');
+		Option::set(self::MODULE_ID,"cli_wget_miss_cert",'Y');
+		Option::set(self::MODULE_ID,"agent_currencies",'USD,EUR');
+		Option::set(self::MODULE_ID,"agent_delete_files",'Y');
+		Option::set(self::MODULE_ID,"agent_save_backup",'Y');
+		Option::set(self::MODULE_ID,"agent_search_path",'/iblock');
+		Option::set(self::MODULE_ID,"agent_backup_folder",'/iblock_Backup/');
 		return true;
 	}
 

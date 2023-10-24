@@ -28,10 +28,7 @@ $delivery = $wizard->GetVar("delivery");
 
 $defCurrency = "EUR";
 if( $lang == "ru" ) {
-	if( $shopLocalization == "ua" ) {
-		$defCurrency = "UAH";
-	}
-	elseif( $shopLocalization == "bl" ) {
+	if( $shopLocalization == "bl" ) {
 		$defCurrency = "BYR";
 	}
 	elseif( $shopLocalization == "kz" ) {
@@ -131,7 +128,7 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 				'=CLASS_NAME' => [
 					'\Bitrix\Sale\Delivery\Services\Configurable',
 				],
-				'=SERVICE_ID' => $arIds,
+				'=ID' => $arIds,
 			],
 			'select' => ['ID', 'NAME'],
 		]);
@@ -171,7 +168,7 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 			"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Configurable',
 			"CURRENCY" => $defCurrency,
 			"SORT" => 200,
-			"ACTIVE" => $delivery["self"] == "Y" ? "Y" : "N",
+			"ACTIVE" => $delivery["pickup"] == "Y" ? "Y" : "N",
 			"LOGOTIP" => WIZARD_SERVICE_RELATIVE_PATH . "/images/picup.png",
 			"CONFIG" => [
 				"MAIN" => [
@@ -213,6 +210,31 @@ while( $dlv = $dbRes->fetch() ) {
 }
 
 
+if(empty($existAutoDlv["spsr"])) {
+	$deliveryItems["spsr"] = [
+		"NAME" => Loc::getMessage("SALE_WIZARD_SPSR"),
+		"CODE" => "spsr",
+		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_SPSR_DESCR"),
+		"CLASS_NAME" => '\Sale\Handlers\Delivery\SpsrHandler',
+		"CURRENCY" => $defCurrency,
+		"SORT" => 300,
+		"LOGOTIP" => "/bitrix/modules/sale/handlers/delivery/spsr/logo.png",
+		"ACTIVE" => $delivery["spsr"] == "Y" ? "Y" : "N",
+		"CONFIG" => [
+			"MAIN" => [
+				"CALCULATE_IMMEDIATELY" => "Y",
+				"DEFAULT_WEIGHT" => 1000,
+				"AMOUNT_CHECK" => 1,
+				"NATURE" => 1,
+				"LOGIN" => "",
+				"PASS" => "",
+				"ICN" => ""
+			]
+		]
+	];
+}
+
+
 //new russian post
 if( !empty($delivery["rus_post"]) ) {
 	$deliveryItems["rus_post"] = [
@@ -233,24 +255,6 @@ if( !empty($delivery["rus_post"]) ) {
 	];
 }
 
-if( !empty($delivery["ua_post"]) ) {
-	$deliveryItems["ua_post"] = [
-		"NAME" => Loc::getMessage("SALE_WIZARD_UA_POST"),
-		"DESCRIPTION" => "",
-		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 600,
-		"ACTIVE" => $delivery["ua_post"] == "Y" ? "Y" : "N",
-		"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/ua_post_logo.png",
-		"CONFIG" => [
-			"MAIN" => [
-				"SID" => "ua_post",
-				"MARGIN_VALUE" => 0,
-				"MARGIN_TYPE" => "%",
-			],
-		],
-	];
-}
 
 if( !empty($delivery["kaz_post"]) ) {
 	$deliveryItems["kaz_post"] = [
@@ -258,7 +262,7 @@ if( !empty($delivery["kaz_post"]) ) {
 		"DESCRIPTION" => "",
 		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
 		"CURRENCY" => $defCurrency,
-		"SORT" => 600,
+		"SORT" => 400,
 		"ACTIVE" => $delivery["kaz_post"] == "Y" ? "Y" : "N",
 		"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/kaz_post_logo.png",
 		"CONFIG" => [
@@ -277,7 +281,7 @@ if( !empty($delivery["ups"]) ) {
 		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_UPS"),
 		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
 		"CURRENCY" => $defCurrency,
-		"SORT" => 300,
+		"SORT" => 500,
 		"ACTIVE" => $delivery["ups"] == "Y" ? "Y" : "N",
 		"LOGOTIP" => "/bitrix/modules/sale/delivery/ups_logo.gif",
 		"CONFIG" => [
@@ -285,43 +289,27 @@ if( !empty($delivery["ups"]) ) {
 				"SID" => "ups",
 				"MARGIN_VALUE" => 0,
 				"MARGIN_TYPE" => "%",
-				"OLD_SETTINGS" => [
-					"SETTINGS" => "/bitrix/modules/sale/delivery/ups/ru_csv_zones.csv;/bitrix/modules/sale/delivery/ups/ru_csv_export.csv",
-				],
+				"OLD_SETTINGS" => "/bitrix/modules/sale/delivery/ups/ru_csv_zones.csv;/bitrix/modules/sale/delivery/ups/ru_csv_export.csv",
 			],
 		],
 	];
 }
 
-if( !empty($delivery["dhlusa"]) ) {
-	$deliveryItems["dhlusa"] = [
-		"NAME" => "DHL (USA)",
-		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_UPS"),
-		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 300,
-		"ACTIVE" => $delivery["dhlusa"] == "Y" ? "Y" : "N",
-		"LOGOTIP" => "/bitrix/modules/sale/delivery/dhlusa_logo.gif",
-		"CONFIG" => [
-			"MAIN" => [
-				"SID" => "dhlusa",
-				"MARGIN_VALUE" => 0,
-				"MARGIN_TYPE" => "%",
-			],
-		],
-	];
-}
+
 
 foreach( $deliveryItems as $code => $fields ) {
-	//If service already exist just set activity
 	if(
 		$fields['CLASS_NAME'] == '\Bitrix\Sale\Delivery\Services\Automatic' && !empty($existAutoDlv[$code]) &&
 		$fields["ACTIVE"] == "Y"
 	) {
+		/*
+		//If service already exist just set activity
 		\Bitrix\Sale\Delivery\Services\Manager::update(
 			$existAutoDlv[$code]["ID"],
 			["ACTIVE" => "Y"]
 		);
+		*/
+		continue;
 	}
 	//not exist
 	else {

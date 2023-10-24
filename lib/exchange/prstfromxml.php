@@ -6,6 +6,8 @@ use \Iplogic\Zero\Catalog;
 class PriceAndStockFromXML extends ParseXML
 {
 	protected $catalog;
+	protected $arFromXML;
+	protected $arProdIds;
 
 	function __construct($config = [])
 	{
@@ -31,29 +33,32 @@ class PriceAndStockFromXML extends ParseXML
 
 	public function go()
 	{
-		$arProdIds = $this->catalog->getAllIdsByProp($this->config["KEY_FIELD"]);
+		$this->arProdIds = $this->catalog->getAllIdsByProp($this->config["KEY_FIELD"]);
 		if($this->config["RESET_STOCKS_TO_ZERO"]) {
 			foreach($this->config["COMPARISON"] as $field => $source) {
 				if ($field == "STOCK") {
-					$this->catalog->setStock($arProdIds);
+					$this->catalog->setStock($this->arProdIds);
 				}
 				if (substr($field,0,6) == "STORE_") {
 					$store = self::getNumberFromKey($field);
-					$this->catalog->setStock($arProdIds, 0, $store);
+					$this->catalog->setStock($this->arProdIds, 0, $store);
 				}
 			}
 		}
-		if($arFromXML = $this->getClearElementsListArray()) {
-			foreach($arFromXML as $set) {
+		if($this->arFromXML = $this->getClearElementsListArray()) {
+			foreach($this->arFromXML as $set) {
 				$productID = false;
 				foreach($set as $key => $value) {
 					if ($key == $this->config["KEY_FIELD"]) {
-						$productID = $arProdIds[$value];
+						$productID = $this->arProdIds[$value];
 						break;
 					}
 				}
 				if($productID) {
 					foreach($set as $key => $value) {
+						if ($value == "") {
+							$value = 0;
+						}
 						if ($key == "STOCK") {
 							$this->catalog->setStock($productID, $value);
 						}

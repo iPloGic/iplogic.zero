@@ -1,35 +1,8 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("ќформление заказа");
-?><?$APPLICATION->IncludeComponent(
-	"iplogic:sale.order.ajax",
-	"",
-	Array(
-		"BASKET_HIDE_BLOCK" => "N",
-		"CACHE_TIME" => "36000",
-		"CACHE_TYPE" => "N",
-		"CATALOG_REF" => "/catalog/",
-		"CLEAR_FIELDS" => "Y",
-		"COMMENT_HIDE_BLOCK" => "N",
-		"COMMENT_OPEN_BLOCK" => "Y",
-		"COMMENT_TO_PROPS" => "N",
-		"DEFAULT_DELIVERY" => "0",
-		"DEFAULT_PAYMENT" => "0",
-		"DELIVERY_HIDE_BLOCK" => "N",
-		"DELIVERY_OPEN_BLOCK" => "N",
-		"HARD_STEPS" => "N",
-		"IF_EMPTY_BASKET" => "template",
-		"IF_EMPTY_BASKET_REF" => "/cart/",
-		"PAYER_HIDE_BLOCK" => "N",
-		"PAYER_OPEN_BLOCK" => "N",
-		"PAYMENT_HIDE_BLOCK" => "N",
-		"PAYMENT_OPEN_BLOCK" => "N",
-		"PERSON_TYPE_ID" => "",
-		"PROPS_HIDE_BLOCK" => "N",
-		"PROPS_OPEN_BLOCK" => "N"
-	)
-);?>
-<?/*$APPLICATION->IncludeComponent(
+?>
+<?$APPLICATION->IncludeComponent(
 	"bitrix:sale.order.ajax",
 	"",
 	Array(
@@ -54,7 +27,7 @@ $APPLICATION->SetTitle("ќформление заказа");
 		"ONLY_FULL_PAY_FROM_ACCOUNT" => "N",
 		"PATH_TO_AUTH" => "/auth/",
 		"PATH_TO_BASKET" => "/cart/",
-		"PATH_TO_PAYMENT" => "payment.php",
+		"PATH_TO_PAYMENT" => "/cart/order/payment/",
 		"PATH_TO_PERSONAL" => "/personal/",
 		"PAY_FROM_ACCOUNT" => "N",
 		"PAY_SYSTEMS_PER_PAGE" => "9",
@@ -99,4 +72,4 @@ $APPLICATION->SetTitle("ќформление заказа");
 		"USE_PREPAYMENT" => "N",
 		"USE_YM_GOALS" => "N"
 	)
-);*/?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

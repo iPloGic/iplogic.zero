@@ -18,9 +18,11 @@ class ShopSettingsStep extends CWizardStep
 
 		$wizard =& $this->GetWizard();
 
-		// replace by real if it needed
-		//$siteStamp =$wizard->GetPath()."/site/templates/minimal/images/pechat.gif";
-		//$siteStamp = "";
+		$siteLogo = "";
+		$siteStamp = "";
+		$siteDirSign = "";
+		$siteAccSign = "";
+
 		$siteID = getSite($wizard)["ID"];
 		//$siteLang = getSite($wizard)["LANG"];
 
@@ -68,39 +70,11 @@ class ShopSettingsStep extends CWizardStep
 					$siteID
 				),
 				"shopKS"           => Option::get("iplogic.zero", "shopKS", "30101 810 4 0000 0000225", $siteID),
-				//"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
+				"siteLogo" => Option::get("iplogic.zero", "siteLogo", $siteLogo, $siteID),
+				"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
+				"siteDirSign" => Option::get("iplogic.zero", "siteDirSign", $siteDirSign, $siteID),
+				"siteAccSign" => Option::get("iplogic.zero", "siteAccSign", $siteAccSign, $siteID),
 
-				//"shopCompany_ua" => Option::get("iplogic.zero", "shopCompany_ua", "", $siteID),
-				"shopOfName_ua"    => Option::get(
-					"iplogic.zero",
-					"shopOfName_ua",
-					Loc::getMessage("WIZ_SHOP_OF_NAME_DEF_UA"),
-					$siteID
-				),
-				"shopLocation_ua"  => Option::get(
-					"iplogic.zero",
-					"shopLocation_ua",
-					Loc::getMessage("WIZ_SHOP_LOCATION_DEF_UA"),
-					$siteID
-				),
-				"shopZip_ua"       => Option::get("iplogic.zero", "shopZip_ua", "10100", $siteID),
-				"shopAdr_ua"       => Option::get(
-					"iplogic.zero",
-					"shopAdr_ua",
-					Loc::getMessage("WIZ_SHOP_ADR_DEF_UA"),
-					$siteID
-				),
-				"shopEGRPU_ua"     => Option::get("iplogic.zero", "shopEGRPU_ua", "", $siteID),
-				"shopINN_ua"       => Option::get("iplogic.zero", "shopINN_ua", "", $siteID),
-				"shopNDS_ua"       => Option::get("iplogic.zero", "shopNDS_ua", "", $siteID),
-				"shopNS_ua"        => Option::get("iplogic.zero", "shopNS_ua", "", $siteID),
-				"shopBank_ua"      => Option::get("iplogic.zero", "shopBank_ua", "", $siteID),
-				"shopMFO_ua"       => Option::get("iplogic.zero", "shopMFO_ua", "", $siteID),
-				"shopPlace_ua"     => Option::get("iplogic.zero", "shopPlace_ua", "", $siteID),
-				"shopFIO_ua"       => Option::get("iplogic.zero", "shopFIO_ua", "", $siteID),
-				"shopTax_ua"       => Option::get("iplogic.zero", "shopTax_ua", "", $siteID),
-
-				//"installPriceBASE" => Option::get("iplogic.zero", "installPriceBASE", "Y", $siteID),
 			]
 		);
 	}
@@ -108,7 +82,10 @@ class ShopSettingsStep extends CWizardStep
 	function ShowStep()
 	{
 		$wizard =& $this->GetWizard();
-		//$siteStamp = $wizard->GetVar("siteStamp", true);
+		$siteLogo = $wizard->GetVar("siteLogo", true);
+		$siteStamp = $wizard->GetVar("siteStamp", true);
+		$siteDirSign = $wizard->GetVar("siteDirSign", true);
+		$siteAccSign = $wizard->GetVar("siteAccSign", true);
 
 		if( !CModule::IncludeModule("catalog") ) {
 			$this->content .= "<p style='color:red'>" . Loc::getMessage("WIZ_NO_MODULE_CATALOG") . "</p>";
@@ -122,7 +99,6 @@ class ShopSettingsStep extends CWizardStep
 					"shopLocalization",
 					[
 						"ru" => Loc::getMessage("WIZ_SHOP_LOCALIZATION_RUSSIA"),
-						"ua" => Loc::getMessage("WIZ_SHOP_LOCALIZATION_UKRAINE"),
 						"kz" => Loc::getMessage("WIZ_SHOP_LOCALIZATION_KAZAKHSTAN"),
 						"bl" => Loc::getMessage("WIZ_SHOP_LOCALIZATION_BELORUSSIA"),
 						"an" => Loc::getMessage("WIZ_SHOP_LOCALIZATION_ANOTHER"),
@@ -221,105 +197,26 @@ class ShopSettingsStep extends CWizardStep
 							<td class="wizard-input-table-right">' .
 				$this->ShowInputField('text', 'shopKS', ["class" => "wizard-field"]) . '</td>
 						</tr>
-						<!--<tr>
+						<tr>
+							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_LOGO") . ':</td>
+							<td class="wizard-input-table-right">' .
+				$this->ShowFileField("siteLogo", ["show_file_info" => "N", "id" => "siteLogo"]) . '<br />' .
+				CFile::ShowImage($siteLogo, 75, 75, "border=0 vspace=5", false, false) . '</td>
+						</tr>						<tr>
 							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_STAMP") . ':</td>
 							<td class="wizard-input-table-right">' .
 				$this->ShowFileField("siteStamp", ["show_file_info" => "N", "id" => "siteStamp"]) . '<br />' .
 				CFile::ShowImage($siteStamp, 75, 75, "border=0 vspace=5", false, false) . '</td>
-						</tr>-->
-					</table>
-				</div><!--ru-->
-				';
-
-			$this->content .= '<div id="ua_bank_details" class="wizard-input-form-block" style="display:' .
-				(($currentLocalization == "ua") ? 'block' : 'none') . '">';
-			$this->content .= '
-				<div class="wizard-input-form-block">
-					<label class="wizard-input-title" for="shopOfName_ua">' . Loc::getMessage("WIZ_SHOP_OF_NAME") .
-				'</label><br>'
-				. $this->ShowInputField('text', 'shopOfName_ua', ["id" => "shopOfName_ua", "class" => "wizard-field"]) . '
-					<p style="color:grey; margin: 3px 0 7px;">' . Loc::getMessage("WIZ_SHOP_OF_NAME_DESCR_UA") . '</p>
-				</div>';
-
-			$this->content .= '
-				<div class="wizard-input-form-block">
-					<label class="wizard-input-title" for="shopLocation_ua">' . Loc::getMessage("WIZ_SHOP_LOCATION") .
-				'</label><br>'
-				. $this->ShowInputField(
-					'text',
-					'shopLocation_ua',
-					["id" => "shopLocation_ua", "class" => "wizard-field"]
-				) . '
-					<p style="color:grey; margin: 3px 0 7px;">' . Loc::getMessage("WIZ_SHOP_LOCATION_DESCR_UA") . '</p>
-				</div>';
-
-			$this->content .= '
-				<div class="wizard-input-form-block">
-					<label class="wizard-input-title" for="shopZip_ua">' . Loc::getMessage("WIZ_SHOP_ZIP") . '</label><br>'
-				. $this->ShowInputField('text', 'shopZip_ua', ["id" => "shopZip_ua", "class" => "wizard-field"]) . '
-				</div>';
-
-			$this->content .= '
-				<div class="wizard-input-form-block">
-					<label class="wizard-input-title" for="shopAdr_ua">' . Loc::getMessage("WIZ_SHOP_ADR") .
-				'</label><br>' .
-				$this->ShowInputField(
-					'textarea',
-					'shopAdr_ua',
-					["rows" => "3", "id" => "shopAdr_ua", "class" => "wizard-field"]
-				) . '
-					<p style="color:grey; margin: 3px 0 7px;">' . Loc::getMessage("WIZ_SHOP_ADR_DESCR_UA") . '</p>
-				</div>';
-
-
-			$this->content .= '
-					<div class="wizard-catalog-title">' . Loc::getMessage("WIZ_SHOP_RECV_UA") . '</div>
-					<p>' . Loc::getMessage("WIZ_SHOP_RECV_UA_DESC") . '</p>
-					<table class="wizard-input-table">
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_EGRPU_UA") . ':</td>
+						</tr>						<tr>
+							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_DIR_SIG") . ':</td>
 							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopEGRPU_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_INN_UA") . ':</td>
+				$this->ShowFileField("siteDirSign", ["show_file_info" => "N", "id" => "siteDirSign"]) . '<br />' .
+				CFile::ShowImage($siteDirSign, 75, 75, "border=0 vspace=5", false, false) . '</td>
+						</tr>						<tr>
+							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_ACC_SIG") . ':</td>
 							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopINN_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_NDS_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopNDS_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_NS_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopNS_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_BANK_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopBank_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_MFO_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopMFO_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_PLACE_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopPlace_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_FIO_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopFIO_ua', ["class" => "wizard-field"]) . '</td>
-						</tr>
-						<tr>
-							<td class="wizard-input-table-left">' . Loc::getMessage("WIZ_SHOP_TAX_UA") . ':</td>
-							<td class="wizard-input-table-right">' .
-				$this->ShowInputField('text', 'shopTax_ua', ["class" => "wizard-field"]) . '</td>
+				$this->ShowFileField("siteAccSign", ["show_file_info" => "N", "id" => "siteAccSign"]) . '<br />' .
+				CFile::ShowImage($siteAccSign, 75, 75, "border=0 vspace=5", false, false) . '</td>
 						</tr>
 					</table>
 				</div>
@@ -338,25 +235,6 @@ class ShopSettingsStep extends CWizardStep
 
 			$this->content .= '</div>';
 
-			/*if (CModule::IncludeModule("catalog"))
-			{
-				$db_res = CCatalogGroup::GetGroupsList(array("CATALOG_GROUP_ID"=>'1', "BUY"=>"Y", "GROUP_ID"=>2));
-				if (!$db_res->Fetch())
-				{
-					$this->content .= '
-					<div class="wizard-input-form-block">
-						<div class="wizard-catalog-title">'.Loc::getMessage("WIZ_SHOP_PRICE_BASE_TITLE").'</div>
-						<div class="wizard-input-form-block-content">
-							'. Loc::getMessage("WIZ_SHOP_PRICE_BASE_TEXT1") .'<br><br>
-							'. $this->ShowCheckboxField("installPriceBASE", "Y",
-							(array("id" => "install-demo-data")))
-							. ' <label for="install-demo-data">'.Loc::getMessage("WIZ_SHOP_PRICE_BASE_TEXT2").'</label><br />
-
-						</div>
-					</div>';
-				}
-			}*/
-
 			$this->content .= '</div>';
 
 			$this->content .= '
@@ -366,7 +244,6 @@ class ShopSettingsStep extends CWizardStep
 						var objSel = document.getElementById("localization_select");
 						var locSelected = objSel.options[objSel.selectedIndex].value;
 						document.getElementById("ru_bank_details").style.display = (locSelected == "ru" || locSelected == "kz" || locSelected == "bl") ? "block" : "none";
-						document.getElementById("ua_bank_details").style.display = (locSelected == "ua") ? "block" : "none";
 						document.getElementById("an_bank_details").style.display = (locSelected == "an") ? "block" : "none";
 						/*document.getElementById("kz_bank_details").style.display = (locSelected == "kz") ? "block" : "none";*/
 					}
@@ -377,8 +254,11 @@ class ShopSettingsStep extends CWizardStep
 
 	function OnPostForm()
 	{
-		/*$wizard =& $this->GetWizard();
-		$res = $this->SaveFile("siteStamp", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 70, "max_width" => 190, "make_preview" => "Y"));*/
+		$wizard =& $this->GetWizard();
+		$res = $this->SaveFile("siteLogo", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
+		$res = $this->SaveFile("siteStamp", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
+		$res = $this->SaveFile("siteDirSign", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
+		$res = $this->SaveFile("siteAccSign", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
 	}
 
 }

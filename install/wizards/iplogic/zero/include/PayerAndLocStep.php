@@ -64,12 +64,6 @@ class PayerAndLocStep extends CWizardStep
 						'.$this->ShowCheckboxField('personType[ur]', 'Y', (array("id" => "personTypeU"))).
 			' <label for="personTypeU">'.Loc::getMessage("WIZ_PERSON_TYPE_UR").'</label><br />
 					</div>';
-		if ($shopLocalization == "ua")
-			$this->content .=
-				'<div class="wizard-catalog-form-item">'
-				.$this->ShowCheckboxField('personType[fiz_ua]', 'Y', (array("id" => "personTypeFua"))).
-				' <label for="personTypeFua">'.Loc::getMessage("WIZ_PERSON_TYPE_FIZ_UA").'</label>
-					</div>';
 		$this->content .= '
 				</div>
 			</div>
@@ -86,11 +80,6 @@ class PayerAndLocStep extends CWizardStep
 			'<div class="wizard-catalog-form-item">'.
 			$this->ShowRadioField("locations_csv", "loc_ussr.csv", array("id" => "loc_ussr", "checked" => "checked"))
 			." <label for=\"loc_ussr\">".Loc::getMessage('WSL_STEP2_GFILE_USSR')."</label>
-			</div>";
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'.
-			$this->ShowRadioField("locations_csv", "loc_ua.csv", array("id" => "loc_ua"))
-			." <label for=\"loc_ua\">".Loc::getMessage('WSL_STEP2_GFILE_UA')."</label>
 			</div>";
 		$this->content .=
 			'<div class="wizard-catalog-form-item">'.
@@ -115,7 +104,7 @@ class PayerAndLocStep extends CWizardStep
 
 
 		$this->content .= '
-		<div>
+		<br><br><div>
 			<div class="wizard-catalog-title">'.Loc::getMessage("WIZ_PAYMENT_TITLE").'</div>
 			<div>
 				<div class="wizard-input-form-field wizard-input-form-field-checkbox">';
@@ -134,29 +123,22 @@ class PayerAndLocStep extends CWizardStep
 			.$this->ShowCheckboxField('paysystem[collect]', 'Y', (array("id" => "paysystemCollect"))).
 			' <label for="paysystemCollect">'.Loc::getMessage("WIZ_PAYSYSTEM_COLLECT").'</label>
 			</div>';
-		if ($shopLocalization != "ua") {
-			$this->content .=
-				'<div class="wizard-catalog-form-item">'
-				.$this->ShowCheckboxField('paysystem[sber]', 'Y', (array("id" => "paysystemSber"))).
-				' <label for="paysystemSber">'.Loc::getMessage("WIZ_PAYSYSTEM_SBER").'</label>
-				</div>';
-		}
-		else {
-			$this->content .=
-				'<div class="wizard-catalog-form-item">'
-				.$this->ShowCheckboxField('paysystem[oshad]', 'Y', (array("id" => "paysystemOshad"))).
-				' <label for="paysystemOshad">'.Loc::getMessage("WIZ_PAYSYSTEM_OSHAD").'</label>
-				</div>';
-		}
+
 		$this->content .=
+			'<div class="wizard-catalog-form-item">'
+			.$this->ShowCheckboxField('paysystem[sber]', 'Y', (array("id" => "paysystemSber"))).
+			' <label for="paysystemSber">'.Loc::getMessage("WIZ_PAYSYSTEM_SBER").'</label>
+			</div>';
+
+		/*$this->content .=
 			'<div class="wizard-catalog-form-item">'
 			.$this->ShowCheckboxField('paysystem[paypal]', 'Y', (array("id" => "paysystemPaypal"))).
 			' <label for="paysystemPaypal">PayPal</label>
-			</div>';
+			</div>';*/
 
 
 		$this->content .= '
-		<div>
+		<br><br><div>
 			<div class="wizard-catalog-title">'.Loc::getMessage("WIZ_DELIVERY_TITLE").'</div>
 			<div>
 				<div class="wizard-input-form-field wizard-input-form-field-checkbox">';
@@ -173,15 +155,14 @@ class PayerAndLocStep extends CWizardStep
 		if ($shopLocalization == "ru") {
 			$this->content .=
 				'<div class="wizard-catalog-form-item">'
-				. $this->ShowCheckboxField('delivery[rus_post]', 'Y', (["id" => "deliveryRusPost"])) .
-				' <label for="deliveryRusPost">' . Loc::getMessage("WIZ_DELIVERY_RUS_POST") . '</label>
-				</div>';
-		}
-		if ($shopLocalization == "ua") {
+				.$this->ShowCheckboxField('delivery[spsr]', 'Y', (array("id" => "deliverySpsr"))).
+				' <label for="deliverySpsr">'.Loc::getMessage("WIZ_DELIVERY_SPSR").'</label>
+			</div>';
+
 			$this->content .=
 				'<div class="wizard-catalog-form-item">'
-				.$this->ShowCheckboxField('delivery[ua_post]', 'Y', (array("id" => "deliveryUaPost"))).
-				' <label for="deliveryUaPost">'.Loc::getMessage("WIZ_DELIVERY_UA_POST").'</label>
+				. $this->ShowCheckboxField('delivery[rus_post]', 'Y', (["id" => "deliveryRusPost"])) .
+				' <label for="deliveryRusPost">' . Loc::getMessage("WIZ_DELIVERY_RUS_POST") . '</label>
 				</div>';
 		}
 		if ($shopLocalization == "kz") {
@@ -195,12 +176,6 @@ class PayerAndLocStep extends CWizardStep
 			'<div class="wizard-catalog-form-item">'
 			.$this->ShowCheckboxField('delivery[ups]', 'Y', (array("id" => "deliveryUps"))).
 			' <label for="deliveryUps">'.Loc::getMessage("WIZ_DELIVERY_UPS").'</label>
-			</div>';
-
-		$this->content .=
-			'<div class="wizard-catalog-form-item">'
-			.$this->ShowCheckboxField('delivery[dhlusa]', 'Y', (array("id" => "deliveryDhlusa"))).
-			' <label for="deliveryDhlusa">'.Loc::getMessage("WIZ_DELIVERY_DHLUSA").'</label>
 			</div>';
 
 

@@ -11,7 +11,7 @@ class Helper
 	 * @param $arDesignations - unit designations array
 	 * @return string
 	 */
-	function humanFileSize($bites, $rounding = 2, $arDesignations = [" B"," Kb"," Mb"," Gb"]) {
+	static function humanFileSize($bites, $rounding = 2, $arDesignations = [" B"," Kb"," Mb"," Gb"]) {
 		if ($bites < 1024) {
 			return $bites.$arDesignations[0];
 		}
@@ -37,7 +37,7 @@ class Helper
 	 * @param $titles - declension (one|two|five)
 	 * @return mixed
 	 */
-	function numberEnd($number, $titles)
+	static function numberEnd($number, $titles)
 	{
 		if (!is_array($titles))
 			$titles = explode("|", $titles);
@@ -52,10 +52,38 @@ class Helper
 	 * @param $ob - object
 	 * @return mixed
 	 */
-	function objToArray($ob)
+	static function objToArray($ob)
 	{
 		$json_string = json_encode( $ob );
 		return json_decode( $json_string, TRUE );
+	}
+
+	/**
+	 * Clean directory without removal
+	 *
+	 * @param $path - string
+	 * @return bool
+	 */
+	static function ClearDir($path){
+		if(file_exists($path) && is_dir($path)) {
+			$dirHandle = opendir($path);
+			while (false !== ($file = readdir($dirHandle))) {
+				if ($file!='.' && $file!='..') {
+					$tmpPath=$path.DIRECTORY_SEPARATOR.$file;
+					if (is_dir($tmpPath)) {
+						\Bitrix\Main\IO\Directory::deleteDirectory($tmpPath);
+					}
+					else {
+						if(file_exists($tmpPath)) {
+							unlink($tmpPath);
+						}
+					}
+				}
+			}
+			closedir($dirHandle);
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -1,10 +1,10 @@
 <?
 $module_id = "iplogic.zero";
 
-use \Bitrix\Main\Config\Option,
-	\Bitrix\Main\Localization\Loc,
-	\Bitrix\Main\Application,
-	\Bitrix\Main\Loader;
+use \Bitrix\Main\Config\Option;
+use \Bitrix\Main\Localization\Loc;
+use \Bitrix\Main\Application;
+use \Bitrix\Main\Loader;
 
 Loader::includeModule($module_id);
 
@@ -26,9 +26,15 @@ if($RIGHT >= "R") {
 		]]],
 		["cli_php", Loc::getMessage("IPL_PHP_FILE"), "/usr/bin/php", ["text", 15]],
 		["cli_wget_miss_cert", Loc::getMessage("IPL_CLI_MISS_CERT"), "Y", ["checkbox"]],
-		Loc::getMessage("IPL_ACTIONS"),
+		Loc::getMessage("IPL_AGENTS"),
 		["turn_on_сu_agent", Loc::getMessage("IPL_TURN_ON_СU_AGENT"), "N", ["checkbox"]],
+		["agent_delete_files", Loc::getMessage("IPL_СU_AGENT_DELETE"), "Y", ["checkbox"]],
+		["agent_save_backup", Loc::getMessage("IPL_СU_AGENT_BACKUP"), "Y", ["checkbox"]],
+		["agent_search_path", Loc::getMessage("IPL_СU_AGENT_SEARCH_PATH"), "/iblock", ["text", 15]],
+		["agent_backup_folder", Loc::getMessage("IPL_СU_AGENT_BACKUP_FOLDER"), "/iblock_Backup/", ["text", 15]],
 		["turn_on_сr_agent", Loc::getMessage("IPL_TURN_ON_СR_AGENT"), "N", ["checkbox"]],
+		["agent_currencies", Loc::getMessage("IPL_СR_AGENT_CURRENCIES"), "USD,EUR", ["text", 15]],
+		//Loc::getMessage("IPL_ACTIONS"),
 	];
 
 	$aTabs = [

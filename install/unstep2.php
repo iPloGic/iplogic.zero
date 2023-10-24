@@ -3,4 +3,8 @@
 <?
 echo CAdminMessage::ShowNote(Loc::getMessage("IPLOGIC_MODULE_UNINSTALLED"));
 ?>
-<a href="/bitrix/admin/partner_modules.php"><button style="padding:7px;"><?=Loc::getMessage("BACK")?></button></a>
+<form action="<?echo $APPLICATION->GetCurPage()?>">
+	<?=bitrix_sessid_post()?>
+	<input type="hidden" name="lang" value="<?echo LANG?>">
+	<input type="submit" name="inst" value="<?echo Loc::getMessage("BACK")?>">
+</form>

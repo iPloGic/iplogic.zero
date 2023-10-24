@@ -1,31 +1,32 @@
 <?
 namespace Iplogic\Zero;
 
-use Bitrix\Main\Loader;
+use \Bitrix\Main\Loader;
+use \Bitrix\Main\Config\Option;
 
 
 class Agent {
+
+	const MODULE_ID = 'iplogic.zero';
 
 	public static function GetCurrencyRateAgent()
 	{
 		global $DB;
 
 		if(!Loader::includeModule('currency'))
-			return "AgentGetCurrencyRate();";
+			return "\Iplogic\Zero\Agent::GetCurrencyRateAgent();";
 
 		$attempt = 0;
 		$mAnswer = False;
 		$rateDay = GetTime(time(), "SHORT", LANGUAGE_ID);
 
-		// Список нужных валют
-		$arCurList = array('USD', 'EUR');
+		// Currencies list
+		$arCurList = explode(",", Option::get(self::MODULE_ID,"agent_currencies",'USD,EUR'));
 
 		while (!$mAnswer) {
 			$mAnswer = self::GetCurrencyXML();
 			$attempt++;
 			if (!$mAnswer && $attempt>100) {
-				// если результат не получен с 100-й попытки, то прекращаем обращения к серверу и отправляем сообщение администратору (раскоментировать)
-				// mail('admin@mysite.ru', 'Неудача обновления курсов валют', 'Неудача обновления курсов валют',"Content-type: text/html; charset=\"utf-8\" \r\n");
 				break;
 			}
 		}
@@ -37,8 +38,7 @@ class Agent {
 			$objXML = new \CDataXML();
 			$objXML->LoadString($strQueryText);
 			$arData = $objXML->GetArray();
-			$arFields = array();
-			$arCurRate["CURRENCY_CBRF"] = array();
+			$arCurRate["CURRENCY_CBRF"] = [];
 
 			if (is_array($arData) && count($arData["ValCurs"]["#"]["Valute"])>0) {
 				for ($j1 = 0; $j1<count($arData["ValCurs"]["#"]["Valute"]); $j1++) { 
@@ -60,11 +60,10 @@ class Agent {
 	private static function GetCurrencyXML() {
 		global $DB;
 		$rateDay = GetTime(time(), "SHORT", LANGUAGE_ID);
-		$QUERY_STR = "date_req=".$DB->FormatDate($rateDay, \CLang::GetDateFormat("SHORT", SITE_ID), "D.M.Y");
+		$QUERY_STR = "date_req=" . $DB->FormatDate($rateDay, \CLang::GetDateFormat("SHORT", SITE_ID), "D.M.Y");
 		$strQueryText = QueryGetData("www.cbr.ru", 80, "/scripts/XML_daily.asp", $QUERY_STR, $errno, $errstr);
 		$strQueryText = trim($strQueryText);
 		if (strlen($strQueryText) <= 0) {
-			//AddMessage2Log("Empty answer from CBRF");
 			return false;
 		}
 		if (LANG_CHARSET == "UTF-8")
@@ -74,26 +73,21 @@ class Agent {
 
 	public static function CleanUpUploadAgent() {
 		global $DB;
-		define("NO_KEEP_STATISTIC", true);
-		define("NOT_CHECK_PERMISSIONS", true);
-		$deleteFiles = 'yes'; // Should we delete files yes/no
-		$saveBackup = 'yes'; // Create backup yes/no
-		// Backup dir
-		$patchBackup = $_SERVER['DOCUMENT_ROOT'] . "/upload/iblock_Backup/";
-		// Dir for file searching
-		$rootDirPath = $_SERVER['DOCUMENT_ROOT'] . "/upload/iblock";
 
-		$time_start = microtime(true);
+		$deleteFiles = Option::get(self::MODULE_ID,"agent_delete_files",'Y');
+		$saveBackup = Option::get(self::MODULE_ID,"agent_save_backup",'Y');
+		$patchBackup = $_SERVER['DOCUMENT_ROOT'] . "/upload" . Option::get(self::MODULE_ID,"agent_backup_folder",'/iblock_Backup/');
+		$rootDirPath = $_SERVER['DOCUMENT_ROOT'] . "/upload" . Option::get(self::MODULE_ID,"agent_search_path",'/iblock');
+		$relDirPath = Option::get(self::MODULE_ID,"agent_search_path",'/iblock');
 
-		// Backup dir creating
-		if (!file_exists($patchBackup)) {
+		if (!file_exists($patchBackup) && $saveBackup == "Y") {
 			CheckDirPath($patchBackup);
 		}
-		// Получаем записи из таблицы b_file
+
 		$arFilesCache = array();
 		$result = $DB->Query('SELECT FILE_NAME, SUBDIR FROM b_file WHERE MODULE_ID = "iblock"');
 		while ($row = $result->Fetch()) {
-			$arFilesCache[$row['FILE_NAME']] = $row['SUBDIR'];
+			$arFilesCache[] = "/" . $row['SUBDIR'] . "/" . $row['FILE_NAME'];
 		}
 		$hRootDir = opendir($rootDirPath);
 		$count = 0;
@@ -105,48 +99,88 @@ class Agent {
 			if ($subDirName == '.' || $subDirName == '..') {
 				continue;
 			}
-			//Счётчик пройденых файлов
+			// Checked files counter
 			$filesCount = 0;
-			$subDirPath = "$rootDirPath/$subDirName"; //Путь до подкатегорий с файлами
+			$subDirPath = "$rootDirPath/$subDirName";
 			$hSubDir = opendir($subDirPath);
 			while (false !== ($fileName = readdir($hSubDir))) {
 				if ($fileName == '.' || $fileName == '..') {
 					continue;
 				}
-				$countFile++;
-				if (array_key_exists($fileName, $arFilesCache)) { //Файл с диска есть в списке файлов базы - пропуск
-					$filesCount++;
-					continue;
+				$fullPath = "$subDirPath/$fileName";
+				if (is_dir($fullPath)) {
+					$subSubDirPath = "$rootDirPath/$subDirName/$fileName";
+					$hSubSubDir = opendir($subSubDirPath);
+					while (false !== ($fName = readdir($hSubSubDir))) {
+						if( $fName == '.' || $fName == '..' ) {
+							continue;
+						}
+						$countFile++;
+						$_fullPath = "$subSubDirPath/$fName";
+						if (in_array("$relDirPath/$subDirName/$fileName/$fName", $arFilesCache)) {
+							$filesCount++;
+							continue;
+						}
+						$backTrue = false;
+						if ($deleteFiles === 'Y') {
+							if($saveBackup == "Y") {
+								if (!file_exists($patchBackup . $subSubDirPath)) {
+									if (CheckDirPath($patchBackup . $subSubDirPath . '/')) {
+										$backTrue = true;
+									}
+								} else {
+									$backTrue = true;
+								}
+							}
+							if ($backTrue) {
+								if ($saveBackup === 'Y') {
+									CopyDirFiles($_fullPath, $patchBackup . $subSubDirPath . '/' . $fName);
+								}
+							}
+							if (unlink($_fullPath)) {
+								rmdir($subSubDirPath);
+								$removeFile++;
+							}
+						} else {
+							$filesCount++;
+						}
+					}
 				}
-				$fullPath = "$subDirPath/$fileName"; // полный путь до файла
-				$backTrue = false; //для создание бэкапа
-				if ($deleteFiles === 'yes') {
-					if (!file_exists($patchBackup . $subDirName)) {
-						if (CheckDirPath($patchBackup . $subDirName . '/')) { //создал поддиректорию
-							$backTrue = true;
+				else {
+					$countFile++;
+					if (in_array("$relDirPath/$subDirName/$fileName", $arFilesCache)) {
+						$filesCount++;
+						continue;
+					}
+					$backTrue = false;
+					if ($deleteFiles === 'Y') {
+						if($saveBackup == "Y") {
+							if (!file_exists($patchBackup . $subDirName)) {
+								if (CheckDirPath($patchBackup . $subDirName . '/')) {
+									$backTrue = true;
+								}
+							} else {
+								$backTrue = true;
+							}
+						}
+						if ($backTrue) {
+							if ($saveBackup === 'Y') {
+								CopyDirFiles($fullPath, $patchBackup . $subDirName . '/' . $fileName);
+							}
+						}
+						if (unlink($fullPath)) {
+							$removeFile++;
 						}
 					} else {
-						$backTrue = true;
+						$filesCount++;
 					}
-					if ($backTrue) {
-						if ($saveBackup === 'yes') {
-							CopyDirFiles($fullPath, $patchBackup . $subDirName . '/' . $fileName); //копия в бэкап
-						}
-					}
-					//Удаление файла
-					if (unlink($fullPath)) {
-						$removeFile++;
-					}
-				} else {
-					$filesCount++;
 				}
 				$i++;
 				$count++;
 				unset($fileName, $backTrue);
 			}
 			closedir($hSubDir);
-			//Удалить поддиректорию, если удаление активно и счётчик файлов пустой - т.е каталог пуст
-			if ($deleteFiles && !$filesCount) {
+			if ($deleteFiles == "Y" && !$filesCount) {
 				rmdir($subDirPath);
 			}
 			$contDir++;

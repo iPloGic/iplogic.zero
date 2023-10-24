@@ -12,7 +12,7 @@ class Catalog
 	public $brand_iblock_id;
 	public $currency;
 	protected $obIblockElement;
-	protected $arStoreStocks;
+	public $arStoreStocks = [];
 
 	function __construct($config = [])
 	{
@@ -71,7 +71,7 @@ class Catalog
 			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly, $aditionFields);
 	}
 
-	public function getPropByIds($iblock, $field, $activeOnly = false, $aditionFields = false)
+	public function getPropByIds($iblock, $field, $activeOnly = false, $additionFields = false)
 	{
 		$arIds = [];
 		$notField = "!" . $field;
@@ -80,8 +80,8 @@ class Catalog
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
-		if($aditionFields) {
-			$arSelect = array_merge($arSelect, $aditionFields);
+		if($additionFields) {
+			$arSelect = array_merge($arSelect, $additionFields);
 		}
 		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
@@ -111,16 +111,24 @@ class Catalog
 					"STORE_ID"   => $store,
 					"AMOUNT"     => $stock,
 				];
-				if( array_key_exists($priductID, $this->getStoreStocks($store)) ) {
+				$this->getStoreStocks($store);
+				if( isset($this->arStoreStocks[$store][$priductID]) ) {
 					if( $this->arStoreStocks[$store][$priductID]["AMOUNT"] != $stock ) {
 						\Bitrix\Catalog\StoreProductTable::update(
 							$this->arStoreStocks[$store][$priductID]["ID"],
 							$arFields
 						);
+						$this->arStoreStocks[$store][$priductID]["AMOUNT"] = $stock;
 					}
 				}
 				else {
-					\Bitrix\Catalog\StoreProductTable::add($arFields);
+					$result = \Bitrix\Catalog\StoreProductTable::add($arFields);
+					if($result->isSuccess()) {
+						$this->arStoreStocks[$store][$priductID] = [
+							"ID" => $result->getId(),
+							"AMOUNT" => $stock
+						];
+					}
 				}
 			}
 			else {
@@ -134,12 +142,13 @@ class Catalog
 		if( isset($this->arStoreStocks[$ID]) ) {
 			return $this->arStoreStocks[$ID];
 		}
+		$this->arStoreStocks[$ID] = [];
 		$rsStore = \Bitrix\Catalog\StoreProductTable::getList(
 			["filter" => ['STORE_ID' => $ID], "select" => ['ID', 'PRODUCT_ID', 'AMOUNT']]
 		);
 		while( $arStore = $rsStore->Fetch() ) {
 			$this->arStoreStocks[$ID][$arStore['PRODUCT_ID']] = [
-				"ID"     => $arStore['ID'],
+				"ID"     => (int)$arStore['ID'],
 				"AMOUNT" => $arStore['AMOUNT'],
 			];
 		}

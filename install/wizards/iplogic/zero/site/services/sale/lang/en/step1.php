@@ -45,7 +45,6 @@ $MESS["SALE_WIZARD_PROP_49"] = "Taxpayer ID";
 $MESS["SALE_WIZARD_PROP_46"] = "VAT certificate number";
 $MESS["WIZ_COUNTRY"] = "Your country";
 $MESS["WIZ_COUNTRY_RU"] = "Russia";
-$MESS["WIZ_COUNTRY_UA"] = "Ukraine";
 $MESS["WIZ_COUNTRY_KZ"] = "Kazakhstan";
 $MESS["WIZ_COUNTRY_BL"] = "Belarus";
 
@@ -54,7 +53,6 @@ $MESS["SALE_WIZARD_PS_CASH_DESCR"] = "Payment in cash made at the time of delive
 $MESS["SALE_WIZARD_PS_COLLECT"] = "Cash on Delivery";
 $MESS["SALE_WIZARD_PS_COLLECT_DESCR"] = "Payment at the time of delivery.";
 $MESS["SALE_WIZARD_PS_OS"] = "Oschadbank";
-$MESS["SALE_WIZARD_PS_OS_DESCR"] = "You can pay for your order at any branch of Oschadbank. For the money transfer service you will be charged from 3 to 7% of the order value, depending on the region. Money transfer will take up to 10 days.";
 $MESS["SALE_WIZARD_PS_SB"] = "Sberbank";
 $MESS["SALE_WIZARD_PS_SB_DESCR"] = "You can pay for your order at any branch of Sberbank. For the money transfer service you will be charged from 3 to 7% of the order value, depending on the region. Money transfer will take up to 10 days.";
 $MESS["SALE_WIZARD_PS_BILL"] = " ";
@@ -79,7 +77,5 @@ $MESS["CURRENCY_FORMAT_BYR"] = "# руб.";
 $MESS["CURRENCY_NAME_BYR"] = "Belarusian ruble";
 $MESS["CURRENCY_FORMAT_KZT"] = "# tg.";
 $MESS["CURRENCY_NAME_KZT"] = "Tenge";
-$MESS["CURRENCY_FORMAT_UAH"] = "# hrn.";
-$MESS["CURRENCY_NAME_UAH"] = "Hryvnia";
 
 ?>

@@ -19,6 +19,25 @@ class ParseXML extends Base
 		parent::__construct($config);
 	}
 
+	public function copyLocalFile($substitutes = [])
+	{
+		if($this->config["SOURCE"] == "local") {
+			if(!is_array($substitutes) || !count($substitutes)) {
+				copy($this->config["REMOTE_FILE"], self::processingFilePath($this->config["LOCAL_FILE"]));
+			}
+			else {
+				$fileText = file_get_contents($this->config["REMOTE_FILE"]);
+				foreach($substitutes as $old => $new) {
+					$fileText = str_replace(["<".$old, "</".$old], ["<".$new, "</".$new], $fileText);
+				}
+				file_put_contents($this->config["LOCAL_FILE"], $fileText);
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
 	public function getElementsList()
 	{
 		if ($this->config["SOURCE"] == "ftp") {
@@ -88,8 +107,12 @@ class ParseXML extends Base
 			$val = [];
 			foreach ($this->config["COMPARISON"] as $field => $source) {
 				$name = $source["NAME"];
-				if ($source["TYPE"] == "ATTR")
+				if ($source["TYPE"] == "NODE") {
+					$val[$field] = $item->$name;
+				}
+				if ($source["TYPE"] == "ATTR") {
 					$val[$field] = $item->attributes()->$name->__toString();
+				}
 				if ($source["TYPE"] == "SUBNODE_TEXT") {
 					$val[$field] = $item->$name->__toString();
 				}

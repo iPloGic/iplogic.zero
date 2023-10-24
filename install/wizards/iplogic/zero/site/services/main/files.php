@@ -6,6 +6,11 @@ if (!defined("WIZARD_SITE_PATH"))
 
 $siteID = getSite($wizard)["ID"];
 
+$s_count = 0;
+$sites = \CSite::GetList($by = "sort", $order = "desc");
+while( $sites_f = $sites->Fetch() )
+	$s_count++;
+
 if ($wizard->GetVar("pubAuth") == "Y") {
 	$dir = WIZARD_SITE_PATH."/auth";
 	if(!is_dir($dir)) {
@@ -76,6 +81,16 @@ if ($wizard->GetVar("pubCart") == "Y") {
 	);
 }
 
+unlink(WIZARD_SITE_PATH."/favicon.ico");
+copy(
+	WIZARD_ABSOLUTE_PATH."/site/public/favicon.svg",
+	WIZARD_SITE_PATH."/favicon.svg"
+);
+copy(
+	WIZARD_ABSOLUTE_PATH."/site/public/favicon.ico",
+	WIZARD_SITE_PATH."/favicon.ico"
+);
+
 if ($wizard->GetVar("pubIndex") == "Y") {
 	copy(
 		WIZARD_ABSOLUTE_PATH."/site/public/".LANGUAGE_ID."/_index.php",
@@ -132,13 +147,21 @@ if ($wizard->GetVar("phpInterface") == "Y") {
 	if(!is_dir($dir)) {
 		mkdir($dir, 0755, true);
 	}
-	CopyDirFiles(
-		WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
-		$dir,
-		$rewrite = true,
-		$recursive = true,
-		$delete_after_copy = false
-	);
+	if(!file_exists($dir . "/cron_events.php")) {
+		copy(
+			WIZARD_ABSOLUTE_PATH."/site/local/cron_events.php",
+			$dir . "/cron_events.php"
+		);
+	}
+	if ($s_count<=1) {
+		CopyDirFiles(
+			WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
+			$dir,
+			$rewrite = true,
+			$recursive = true,
+			$delete_after_copy = false
+		);
+	}
 	$dir = $_SERVER["DOCUMENT_ROOT"]."/local/php_interface/".$siteID;
 	if(!is_dir($dir)) {
 		mkdir($dir, 0755, true);
@@ -156,17 +179,17 @@ $dir = $_SERVER["DOCUMENT_ROOT"]."/local/components";
 if(!is_dir($dir)) {
 	mkdir($dir, 0755, true);
 }
-$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components/iplogic";
+/*$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components/iplogic";
 if(!is_dir($dir)) {
 	mkdir($dir, 0755, true);
 }
 CopyDirFiles(
-	WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
+	WIZARD_ABSOLUTE_PATH . "/site/local/components/iplogic",
 	$dir,
 	$rewrite = true,
 	$recursive = true,
 	$delete_after_copy = false
-);
+);*/
 
 $dir = $_SERVER["DOCUMENT_ROOT"]."/local/ajax";
 if(!is_dir($dir)) {

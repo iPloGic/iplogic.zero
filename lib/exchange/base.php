@@ -37,6 +37,10 @@ class Base
 		if( !$objXML = simplexml_load_file($name) ) {
 			if( ZERO_EXCHANGE_DEBUG ) {
 				echo "Cant create XML object tree from file:<br>" . $name . "<br><br>";
+				$errors = libxml_get_errors();
+				foreach ($errors as $error) {
+					echo display_xml_error($error, $objXML);
+				}
 			}
 			return false;
 		}
@@ -88,7 +92,7 @@ class Base
 		if( $type == 'GET' ) {
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 600);
-			curl_setopt($ch, CURLOPT_HEADEROPT, CURLHEADER_UNIFIED);
+			//curl_setopt($ch, CURLOPT_HEADEROPT, CURLHEADER_UNIFIED);
 			curl_setopt($ch, CURLOPT_USERAGENT,
 				'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0');
 		}
