@@ -5,6 +5,7 @@ $MESS["SELECT_TEMPLATE_TITLE"] = "Template choose";
 $MESS["wiz_company_name"] = "Site name:";
 $MESS["wiz_email_from"] = "Default E-Mail address:";
 $MESS["wiz_name"] = "New online shop";
+$MESS["wiz_name_site"] = "New website";
 $MESS["wiz_site_folder"] = "Site folder:";
 $MESS["wiz_server_name"] = "Server URL (without http://):";
 $MESS["wiz_domains"] = "Domen name:<br>(domen names list, each in new line)";

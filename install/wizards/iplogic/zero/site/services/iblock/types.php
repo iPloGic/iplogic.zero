@@ -13,25 +13,25 @@ if( !CModule::IncludeModule("iblock") ) {
 $arTypes = [];
 if(
 	$wizard->GetVar("iblockCatalog") == "Y" || $wizard->GetVar("iblockOffer") == "Y" ||
-		$wizard->GetVar("iblockBrand") == "Y"
+	$wizard->GetVar("iblockBrand") == "Y"
 ) {
 	$arTypes[] = [
-		"ID" => "catalog",
+		"ID"       => "catalog",
 		"SECTIONS" => "Y",
-		"IN_RSS" => "N",
-		"SORT" => 100,
-		"LANG" => [],
+		"IN_RSS"   => "N",
+		"SORT"     => 100,
+		"LANG"     => [],
 	];
 }
 if(
 	$wizard->GetVar("iblockNews") == "Y" || $wizard->GetVar("iblockBanner") == "Y"
 ) {
 	$arTypes[] = [
-		"ID" => "content",
+		"ID"       => "content",
 		"SECTIONS" => "Y",
-		"IN_RSS" => "Y",
-		"SORT" => 200,
-		"LANG" => [],
+		"IN_RSS"   => "Y",
+		"SORT"     => 200,
+		"LANG"     => [],
 	];
 }
 
@@ -42,31 +42,32 @@ if( !count($arTypes) ) {
 
 $arLanguages = [];
 $rsLanguage = CLanguage::GetList();
-while($arLanguage = $rsLanguage->Fetch())
+while( $arLanguage = $rsLanguage->Fetch() )
 	$arLanguages[] = $arLanguage["LID"];
 
-$arAvLanguages = ["en","ru"];
+$arAvLanguages = ["en", "ru"];
 
 $iblockType = new CIBlockType;
-foreach($arTypes as $arType)
-{
-	$dbType = CIBlockType::GetList([],["=ID" => $arType["ID"]]);
-	if($dbType->Fetch())
+foreach( $arTypes as $arType ) {
+	$dbType = CIBlockType::GetList([], ["=ID" => $arType["ID"]]);
+	if( $dbType->Fetch() ) {
 		continue;
+	}
 
-	foreach($arLanguages as $languageID)
-	{
+	foreach( $arLanguages as $languageID ) {
 		$fileLanguage = $languageID;
-		if (!in_array($languageID, $arAvLanguages))
+		if( !in_array($languageID, $arAvLanguages) ) {
 			$fileLanguage = "en";
+		}
 		WizardServices::IncludeServiceLang("type_names.php", $fileLanguage);
 
 		$code = mb_strtoupper($arType["ID"]);
-		$arType["LANG"][$languageID]["NAME"] = GetMessage($code."_TYPE_NAME");
-		$arType["LANG"][$languageID]["ELEMENT_NAME"] = GetMessage($code."_ELEMENT_NAME");
+		$arType["LANG"][$languageID]["NAME"] = GetMessage($code . "_TYPE_NAME");
+		$arType["LANG"][$languageID]["ELEMENT_NAME"] = GetMessage($code . "_ELEMENT_NAME");
 
-		if ($arType["SECTIONS"] == "Y")
-			$arType["LANG"][$languageID]["SECTION_NAME"] = GetMessage($code."_SECTION_NAME");
+		if( $arType["SECTIONS"] == "Y" ) {
+			$arType["LANG"][$languageID]["SECTION_NAME"] = GetMessage($code . "_SECTION_NAME");
+		}
 	}
 
 	$iblockType->Add($arType);

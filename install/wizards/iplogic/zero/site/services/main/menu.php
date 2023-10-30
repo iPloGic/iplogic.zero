@@ -1,8 +1,8 @@
 <?
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
-use Bitrix\Main\Config\Option,
-	Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Config\Option;
+use Bitrix\Main\Localization\Loc;
 
 $siteID = getSite($wizard)["ID"];
 

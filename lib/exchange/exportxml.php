@@ -1,11 +1,29 @@
 <?php
+
 namespace Iplogic\Zero\Exchange;
 
+/**
+ * XML file creation class / Класс создания XML файлов
+ * @package Iplogic\Zero\Exchange
+ */
 class ExportXML extends Base
 {
+	/**
+	 * DomDocument object / Объект DomDocument
+	 * @var object
+	 */
 	protected $xml;
+	/**
+	 * Main document node SimpleXMLElement object / SimpleXMLElement объект основного узла документа
+	 * @var object
+	 */
 	protected $main_node;
 
+
+	/**
+	 * Class constructor / Конструктор класса
+	 * @param array $config - configuration array / массив конфигурации
+	 */
 	function __construct($config = [])
 	{
 		$configKeys = [
@@ -13,65 +31,96 @@ class ExportXML extends Base
 			"NODES",
 			"DISPLAY",
 		];
-		foreach ($configKeys as $key) {
-			if (isset($config[$key]))
+		foreach( $configKeys as $key ) {
+			if( isset($config[$key]) ) {
 				$this->config[$key] = $config[$key];
-			else
+			}
+			else {
 				$this->config[$key] = false;
+			}
 		}
 		parent::__construct($config);
-		$this->xml = new \DomDocument('1.0',LANG_CHARSET);
+		$this->xml = new \DomDocument('1.0', LANG_CHARSET);
 		$this->main_node = simplexml_import_dom($this->xml->createElement($this->config["NODES"]["NAME"]));
-		if(isset($this->config["NODES"]["ATTR"])) {
-			foreach($this->config["NODES"]["ATTR"] as $name => $value) {
+		if( isset($this->config["NODES"]["ATTR"]) ) {
+			foreach( $this->config["NODES"]["ATTR"] as $name => $value ) {
 				$this->main_node->addAttribute($name, $value);
 			}
 		}
 	}
 
-	public function go() {
+
+	/**
+	 * Export run / Запуск экспорта
+	 * @return bool
+	 */
+	public function go()
+	{
 		$this->startXML();
-		$this->saveXML();
+		return $this->saveXML();
 	}
 
-	protected function startXML() {
+
+	/**
+	 * Starts filling the main node / Начинает заполнение главного узла
+	 */
+	protected function startXML()
+	{
 		$this->main_node = $this->putChildren($this->main_node, $this->config["NODES"]["CHILDREN"]);
 	}
 
-	protected function putChildren($node, $children) {
-		foreach($children as $child) {
-			if (isset($child["TEXT"]))
+
+	/**
+	 * Adding children to a node / Добавление потомков к узлу
+	 *
+	 * @param object $node - node SimpleXMLElement object / SimpleXMLElement объект узла
+	 * @param array $children - array of children
+	 * @return mixed
+	 */
+	protected function putChildren($node, $children)
+	{
+		foreach( $children as $child ) {
+			if( isset($child["TEXT"]) ) {
 				$obChild = $node->addChild($child["NAME"], $this->prepareXmlText($child["TEXT"]));
-			else
+			}
+			else {
 				$obChild = $node->addChild($child["NAME"]);
-			if(isset($child["ATTR"])) {
-				foreach($child["ATTR"] as $name => $value) {
+			}
+			if( isset($child["ATTR"]) ) {
+				foreach( $child["ATTR"] as $name => $value ) {
 					$obChild->addAttribute($name, $value);
 				}
 			}
-			if (isset($child["CHILDREN"]))
+			if( isset($child["CHILDREN"]) ) {
 				$obChild = $this->putChildren($obChild, $child["CHILDREN"]);
+			}
 		}
 		return $node;
 	}
 
-	protected function saveXML() {
+
+	/**
+	 * Generating an XML file from the main node object / Формирование XML файла из объекта главного узла
+	 * @return bool
+	 */
+	protected function saveXML()
+	{
 		$this->xml->appendChild(dom_import_simplexml($this->main_node));
 		$this->xml->formatOutput = true;
-		if($this->config["DISPLAY"]) {
+		if( $this->config["DISPLAY"] ) {
 			header('Content-type: text/xml; charset=utf-8');
-			echo $this->xml->saveXML(null, LIBXML_NOEMPTYTAG );
+			echo $this->xml->saveXML(null, LIBXML_NOEMPTYTAG);
 		}
 		else {
-			if (!$this->xml->save(self::processingFilePath($this->config["LOCAL_FILE"]), LIBXML_NOEMPTYTAG )) {
-				if (ZERO_EXCHANGE_DEBUG) {
-					echo "Cant save local file ".self::processingFilePath($this->config["LOCAL_FILE"])."<br><br>";
+			if( !$this->xml->save(self::processingFilePath($this->config["LOCAL_FILE"]), LIBXML_NOEMPTYTAG) ) {
+				if( ZERO_EXCHANGE_DEBUG ) {
+					echo "Cant save local file " . self::processingFilePath($this->config["LOCAL_FILE"]) . "<br><br>";
 				}
 				return false;
 			}
-			if ($this->config["DESTINATION"] == "ftp") {
-				if(!$this->sendFTP()) {
-					if (ZERO_EXCHANGE_DEBUG) {
+			if( $this->config["DESTINATION"] == "ftp" ) {
+				if( !$this->sendFTP() ) {
+					if( ZERO_EXCHANGE_DEBUG ) {
 						echo "Cant copy file to FTP<br><br>";
 					}
 					return false;

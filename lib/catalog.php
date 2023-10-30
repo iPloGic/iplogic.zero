@@ -5,21 +5,60 @@ namespace Iplogic\Zero;
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\Config\Option;
 
+
+/**
+ * Product Catalog function extension class / Класс расширения функций каталога товаров
+ * @package Iplogic\Zero
+ */
 class Catalog
 {
+	/**
+	 * Product information block ID / ID инфоблока товаров
+	 * @var int
+	 */
 	public $product_iblock_id;
+	/**
+	 * Offer information block ID / ID инфоблока предложений
+	 * @var int
+	 */
 	public $offer_iblock_id;
+	/**
+	 * Brand information block ID / ID инфоблока брендов
+	 * @var int
+	 */
 	public $brand_iblock_id;
+	/**
+	 * Currency code / Код валюты
+	 * @var string
+	 */
 	public $currency;
+	/**
+	 * Class object / Объект класса
+	 * @var \CIBlockElement
+	 */
 	protected $obIblockElement;
+	/**
+	 * Array of stock by stores / Массив остатков по складам
+	 * @var array
+	 */
 	public $arStoreStocks = [];
 
-	function __construct($config = [])
+
+	/**
+	 * Class constructor / Конструктор класса
+	 */
+	function __construct()
 	{
 		self::modulesCheck();
 		$this->obIblockElement = new \CIBlockElement;
+		return;
 	}
 
+
+	/**
+	 * Checks for the necessary modules / Проверяет наличие необходимых модулей
+	 * @return bool
+	 */
 	public static function modulesCheck()
 	{
 		if( !Loader::includeModule("catalog") ) {
@@ -31,13 +70,34 @@ class Catalog
 		return true;
 	}
 
-	public function getAllIdsByProp($field, $activeOnly = false, $aditionFields = false)
+
+	/**
+	 * Getting the array "field value" => "Element ID" for products AND offers /
+	 * Получение массива "значение поля" => "ID элемента" для товаров И предложений
+	 *
+	 * @param string $field - field (element keys) / поле (ключи элементов)
+	 * @param bool $activeOnly - only active entities / только активные записи
+	 * @param bool $additionFields - additional fields to include in the array / дополнительные поля для включения в массив
+	 * @return array
+	 */
+	public function getAllIdsByProp($field, $activeOnly = false, $additionFields = false)
 	{
-		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly, $aditionFields) +
-			$this->getIdsByProp($this->offer_iblock_id, $field, $aditionFields);
+		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly, $additionFields) +
+			$this->getIdsByProp($this->offer_iblock_id, $field, $additionFields);
 	}
 
-	public function getIdsByProp($iblock, $field, $activeOnly = false, $aditionFields = false)
+
+	/**
+	 * Getting the array "field value" => "Element ID" for products OR offers /
+	 * Получение массива "значение поля" => "ID элемента" для товаров ИЛИ предложений
+	 *
+	 * @param int $iblock - product or offer iblock ID / ID инфоблока товаров или предложений
+	 * @param string $field - field (element keys) / поле (ключи элементов)
+	 * @param bool $activeOnly - only active entities / только активные записи
+	 * @param bool $additionFields - additional fields to include in the array / дополнительные поля для включения в массив
+	 * @return array
+	 */
+	public function getIdsByProp($iblock, $field, $activeOnly = false, $additionFields = false)
 	{
 		$arIds = [];
 		$notField = "!" . $field;
@@ -46,8 +106,8 @@ class Catalog
 			$arFilter["=ACTIVE"] = "Y";
 		}
 		$arSelect = ['ID', 'IBLOCK_ID', $field];
-		if($aditionFields) {
-			$arSelect = array_merge($arSelect, $aditionFields);
+		if($additionFields) {
+			$arSelect = array_merge($arSelect, $additionFields);
 		}
 		$_prd = \CIBlockElement::GetList([], $arFilter, false, false, $arSelect);
 		$key = $field;
@@ -65,12 +125,33 @@ class Catalog
 		return $arIds;
 	}
 
-	public function getPropByAllIds($field, $activeOnly = false, $aditionFields = false)
+
+	/**
+	 * Getting the array "Element ID" => "field value" for products AND offers /
+	 * Получение массива "ID элемента" => "значение поля" для товаров И предложений
+	 *
+	 * @param string $field - field (element value) / поле (значения элементов)
+	 * @param bool $activeOnly - only active entities / только активные записи
+	 * @param bool $additionFields - additional fields to include in the array / дополнительные поля для включения в массив
+	 * @return array
+	 */
+	public function getPropByAllIds($field, $activeOnly = false, $additionFields = false)
 	{
-		return $this->getPropByIds($this->product_iblock_id, $field, $activeOnly, $aditionFields) +
-			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly, $aditionFields);
+		return $this->getPropByIds($this->product_iblock_id, $field, $activeOnly, $additionFields) +
+			$this->getPropByIds($this->offer_iblock_id, $field, $activeOnly, $additionFields);
 	}
 
+
+	/**
+	 * Getting the array "Element ID" => "field value" for products OR offers /
+	 * Получение массива "ID элемента" => "значение поля" для товаров ИЛИ предложений
+	 *
+	 * @param int $iblock - product or offer iblock ID / ID инфоблока товаров или предложений
+	 * @param string $field - field (element value) / поле (значения элементов)
+	 * @param bool $activeOnly - only active entities / только активные записи
+	 * @param bool $additionFields - additional fields to include in the array / дополнительные поля для включения в массив
+	 * @return array
+	 */
 	public function getPropByIds($iblock, $field, $activeOnly = false, $additionFields = false)
 	{
 		$arIds = [];
@@ -99,32 +180,43 @@ class Catalog
 		return $arIds;
 	}
 
+
+	/**
+	 * Sets product stock / Устанавливает остаток товара
+	 *
+	 * If the $store parameter is not specified or false, the total quantity for the product is set /
+	 * Если параметр $store не указан или false устанавливается общее количество для товара
+	 *
+	 * @param int $ID - product ID / ID товара
+	 * @param int $stock - product stock / остаток товара
+	 * @param mixed $store - store ID / ID склада
+	 */
 	public function setStock($ID, $stock = 0, $store = false)
 	{
 		if( !is_array($ID) ) {
 			$ID = [$ID];
 		}
-		foreach( $ID as $priductID ) {
+		foreach( $ID as $productID ) {
 			if( $store ) {
 				$arFields = [
-					"PRODUCT_ID" => $priductID,
+					"PRODUCT_ID" => $productID,
 					"STORE_ID"   => $store,
 					"AMOUNT"     => $stock,
 				];
 				$this->getStoreStocks($store);
-				if( isset($this->arStoreStocks[$store][$priductID]) ) {
-					if( $this->arStoreStocks[$store][$priductID]["AMOUNT"] != $stock ) {
+				if( isset($this->arStoreStocks[$store][$productID]) ) {
+					if( $this->arStoreStocks[$store][$productID]["AMOUNT"] != $stock ) {
 						\Bitrix\Catalog\StoreProductTable::update(
-							$this->arStoreStocks[$store][$priductID]["ID"],
+							$this->arStoreStocks[$store][$productID]["ID"],
 							$arFields
 						);
-						$this->arStoreStocks[$store][$priductID]["AMOUNT"] = $stock;
+						$this->arStoreStocks[$store][$productID]["AMOUNT"] = $stock;
 					}
 				}
 				else {
 					$result = \Bitrix\Catalog\StoreProductTable::add($arFields);
 					if($result->isSuccess()) {
-						$this->arStoreStocks[$store][$priductID] = [
+						$this->arStoreStocks[$store][$productID] = [
 							"ID" => $result->getId(),
 							"AMOUNT" => $stock
 						];
@@ -132,11 +224,18 @@ class Catalog
 				}
 			}
 			else {
-				\Bitrix\Catalog\ProductTable::update($priductID, ['QUANTITY' => $stock]);
+				\Bitrix\Catalog\ProductTable::update($productID, ['QUANTITY' => $stock]);
 			}
 		}
 	}
 
+
+	/**
+	 * Get all stocks by store / Получить все остатки по складу
+	 *
+	 * @param int $ID - store ID / ID склада
+	 * @return array
+	 */
 	public function getStoreStocks($ID)
 	{
 		if( isset($this->arStoreStocks[$ID]) ) {
@@ -155,23 +254,38 @@ class Catalog
 		return $this->arStoreStocks[$ID];
 	}
 
-	public function setPrice($priductID, $price, $groupID)
+
+	/**
+	 * Sets product price / Устанавливает цену товара
+	 *
+	 * @param int $productID - product ID / ID товара
+	 * @param int $price - price / цена
+	 * @param int $groupID - price type ID / ID типа цены
+	 * @return mixed
+	 */
+	public function setPrice($productID, $price, $groupID)
 	{
 		$arFields = [
-			"PRODUCT_ID"       => $priductID,
+			"PRODUCT_ID"       => $productID,
 			"CATALOG_GROUP_ID" => $groupID,
 			"PRICE"            => (int)$price,
 			"CURRENCY"         => $this->currency,
 		];
-		$res = \CPrice::GetList([], ["PRODUCT_ID" => $priductID, "CATALOG_GROUP_ID" => $groupID]);
+		$res = \CPrice::GetList([], ["PRODUCT_ID" => $productID, "CATALOG_GROUP_ID" => $groupID]);
 		if( $arr = $res->Fetch() ) {
-			\CPrice::Update($arr["ID"], $arFields);
+			return \CPrice::Update($arr["ID"], $arFields);
 		}
 		else {
-			\CPrice::Add($arFields);
+			return \CPrice::Add($arFields);
 		}
 	}
 
+
+	/**
+	 * Getting brands array by ID / Получение массива брендов по ID
+	 * @param array $fields - array of fields to include in the array / массив полей для включения в массив
+	 * @return array
+	 */
 	public function getBrands($fields = [])
 	{
 		$arBrands = [];
@@ -192,6 +306,10 @@ class Catalog
 		return $arBrands;
 	}
 
+
+	/**
+	 * Product availability reindex / Переиндексация доступности товаров
+	 */
 	public function productAvailabilityReindex()
 	{
 		if ( Option::get("catalog", "show_catalog_tab_with_offers", "N") == "Y" ) {
@@ -250,6 +368,7 @@ class Catalog
 				\Bitrix\Catalog\ProductTable::update($ID, ['AVAILABLE' => "N", "QUANTITY" => 0]);
 			}
 		}
+		return;
 	}
 
 }

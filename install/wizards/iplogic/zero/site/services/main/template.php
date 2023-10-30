@@ -13,7 +13,7 @@ if( !is_dir($bitrixTemplateDir) ) {
 
 CopyDirFiles(
 	$_SERVER["DOCUMENT_ROOT"] . WizardServices::GetTemplatesPath(WIZARD_RELATIVE_PATH . "/site") . "/" .
-		$wizard->GetVar("wizTemplateID"),
+	$wizard->GetVar("wizTemplateID"),
 	$bitrixTemplateDir,
 	$rewrite = true,
 	$recursive = true,

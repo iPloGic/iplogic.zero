@@ -1,8 +1,10 @@
 <?
-if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) die();
+if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) {
+	die();
+}
 
-use Bitrix\Main\Config\Option,
-	Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Config\Option;
+use Bitrix\Main\Localization\Loc;
 
 $s_count = 0;
 $sites = \CSite::GetList($by = "sort", $order = "desc");
@@ -51,12 +53,18 @@ if( $s_count < 2 ) {
 		Option::set('main', 'CAPTCHA_presets', '2');
 	}
 
-	Option::set("fileman", "propstypes", serialize([
-		"description"    => Loc::getMessage("MAIN_OPT_DESCRIPTION"),
-		"keywords"       => Loc::getMessage("MAIN_OPT_KEYWORDS"),
-		"title"          => Loc::getMessage("MAIN_OPT_TITLE"),
-		"keywords_inner" => Loc::getMessage("MAIN_OPT_KEYWORDS_INNER"),
-	]));
+	Option::set(
+		"fileman",
+		"propstypes",
+		serialize(
+			[
+				"description"    => Loc::getMessage("MAIN_OPT_DESCRIPTION"),
+				"keywords"       => Loc::getMessage("MAIN_OPT_KEYWORDS"),
+				"title"          => Loc::getMessage("MAIN_OPT_TITLE"),
+				"keywords_inner" => Loc::getMessage("MAIN_OPT_KEYWORDS_INNER"),
+			]
+		)
+	);
 
 	Option::set("search", "suggest_save_days", 250);
 	Option::set("search", "use_tf_cache", "Y");
@@ -84,8 +92,18 @@ if( $s_count < 2 ) {
 	}
 	Option::set('socialnetwork', 'allow_tooltip', 'N', WIZARD_SITE_ID);
 
-}
+	if(!defined("LOG_FILENAME")) {
+		$line = 'define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"] . "/_logs/" . date("Y-m-d") . ".log");';
+		$file = $_SERVER["DOCUMENT_ROOT"] . "/bitrix/php_interface/dbconn.php";
+		@file_put_contents($file, $line, FILE_APPEND);
+		define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"] . "/_logs/" . date("Y-m-d") . ".log");
+	}
 
+	@$settings = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/bitrix/.settings.php");
+	$settings = str_replace("'debug' => false,", "'debug' => true,", $settings);
+	@file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/bitrix/.settings.php", $settings);
+
+}
 
 
 ?>

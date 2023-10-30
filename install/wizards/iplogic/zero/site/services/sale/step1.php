@@ -14,8 +14,9 @@ use Bitrix\Sale\BusinessValue,
 	Bitrix\Main\Loader;
 
 
-function ZCreateBizvalFile($tmpFile, $del = false) {
-	if(strlen($tmpFile) > 0 && IntVal($tmpFile) > 0) {
+function ZCreateBizvalFile($tmpFile, $del = false)
+{
+	if( strlen($tmpFile) > 0 && IntVal($tmpFile) > 0 ) {
 		$ff = \CFile::GetByID($tmpFile);
 		if( $arTmpFile = $ff->Fetch() ) {
 			$sOldFile = str_replace(
@@ -38,8 +39,6 @@ function ZCreateBizvalFile($tmpFile, $del = false) {
 	}
 	return false;
 }
-
-
 
 
 if( !Loader::includeModule('sale') ) {
@@ -182,7 +181,7 @@ if( $bRus ) {
 	Option::set("iplogic.zero", "shopKS", $shopKS, WIZARD_SITE_ID);
 
 	$siteLogo = $wizard->GetVar("siteLogo");
-	if($file = ZCreateBizvalFile($siteLogo, true)) {
+	if( $file = ZCreateBizvalFile($siteLogo, true) ) {
 		$siteLogo = $file;
 		COption::SetOptionString("iplogic.zero", "siteLogo", $siteLogo, false, WIZARD_SITE_ID);
 	}
@@ -191,7 +190,7 @@ if( $bRus ) {
 	}
 
 	$siteStamp = $wizard->GetVar("siteStamp");
-	if($file = ZCreateBizvalFile($siteStamp, true)) {
+	if( $file = ZCreateBizvalFile($siteStamp, true) ) {
 		$siteStamp = $file;
 		COption::SetOptionString("iplogic.zero", "siteStamp", $siteStamp, false, WIZARD_SITE_ID);
 	}
@@ -200,7 +199,7 @@ if( $bRus ) {
 	}
 
 	$siteDirSign = $wizard->GetVar("siteDirSign");
-	if($file = ZCreateBizvalFile($siteDirSign, true)) {
+	if( $file = ZCreateBizvalFile($siteDirSign, true) ) {
 		$siteDirSign = $file;
 		COption::SetOptionString("iplogic.zero", "siteDirSign", $siteDirSign, false, WIZARD_SITE_ID);
 	}
@@ -209,7 +208,7 @@ if( $bRus ) {
 	}
 
 	$siteAccSign = $wizard->GetVar("siteAccSign");
-	if($file = ZCreateBizvalFile($siteAccSign, true)) {
+	if( $file = ZCreateBizvalFile($siteAccSign, true) ) {
 		$siteAccSign = $file;
 		COption::SetOptionString("iplogic.zero", "siteAccSign", $siteAccSign, false, WIZARD_SITE_ID);
 	}
@@ -1315,16 +1314,6 @@ foreach( $arProps as $prop ) {
 	next($businessValueCodes);
 }
 
-/*
-	$propReplace = "";
-	foreach($arGeneralInfo["properies"] as $key => $val)
-	{
-		if(IntVal($val["LOCATION"]["ID"]) > 0)
-			$propReplace .= '"PROP_'.$key.'" => Array(0 => "'.$val["LOCATION"]["ID"].'"), ';
-	}
-	WizardServices::ReplaceMacrosRecursive(WIZARD_SITE_PATH."personal/order/", Array("PROPS" => $propReplace));
-*/
-
 
 //1C export
 if( $personType["fiz"] == "Y" && !$fizExist ) {
@@ -1612,11 +1601,9 @@ if( $personType["fiz"] == "Y" ) {
 }
 
 // bill
-if( $paysystem["bill"] == "Y" ) {
+if( $personType["ur"] == "Y" && $paysystem["bill"] == "Y" ) {
 	$logo = $_SERVER["DOCUMENT_ROOT"] . WIZARD_SERVICE_RELATIVE_PATH . "/images/bill.png";
 	$arPicture = CFile::MakeFileArray($logo) + ['MODULE_ID' => 'sale'];
-}
-if( $personType["ur"] == "Y" && $paysystem["bill"] == "Y" ) {
 	$arPaySystems[] = [
 		'PAYSYSTEM'   => [
 			"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_BILL"),
@@ -1671,117 +1658,75 @@ foreach( $arPaySystems as $arPaySystem ) {
 		unset($val['LOGOTIP']);
 	}
 
-	$dbRes =
-		\Bitrix\Sale\PaySystem\Manager::getList(['select' => ["ID", "NAME"], 'filter' => ["NAME" => $val["NAME"]]]);
-	$tmpPaySystem = $dbRes->fetch();
-	if( !$tmpPaySystem ) {
-		$resultAdd = \Bitrix\Sale\Internals\PaySystemActionTable::add($val);
-		if( $resultAdd->isSuccess() ) {
-			$id = $resultAdd->getId();
+	$resultAdd = \Bitrix\Sale\Internals\PaySystemActionTable::add($val);
+	if( $resultAdd->isSuccess() ) {
+		$id = $resultAdd->getId();
 
-			if( array_key_exists('BIZVAL', $arPaySystem) && $arPaySystem['BIZVAL'] ) {
-				$arGeneralInfo["paySystem"][$arPaySystem["ACTION_FILE"]] = $id;
-				foreach( $arPaySystem['BIZVAL'] as $personType => $codes ) {
-					foreach( $codes as $code => $map ) {
-						\Bitrix\Sale\BusinessValue::setMapping(
-							$code,
-							'PAYSYSTEM_' . $id,
-							$personType,
-							['PROVIDER_KEY' => $map['TYPE'] ?: 'VALUE', 'PROVIDER_VALUE' => $map['VALUE']],
-							true
-						);
-					}
+		if( array_key_exists('BIZVAL', $arPaySystem) && $arPaySystem['BIZVAL'] ) {
+			$arGeneralInfo["paySystem"][$arPaySystem["ACTION_FILE"]] = $id;
+			foreach( $arPaySystem['BIZVAL'] as $personType => $codes ) {
+				foreach( $codes as $code => $map ) {
+					\Bitrix\Sale\BusinessValue::setMapping(
+						$code,
+						'PAYSYSTEM_' . $id,
+						$personType,
+						['PROVIDER_KEY' => $map['TYPE'] ?: 'VALUE', 'PROVIDER_VALUE' => $map['VALUE']],
+						true
+					);
 				}
 			}
+		}
 
-			if( $arPaySystem['PERSON_TYPE'] ) {
-				$params = [
-					'filter' => [
-						"SERVICE_ID"   => $id,
-						"SERVICE_TYPE" => Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-						"=CLASS_NAME"  => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
-					],
-				];
-
-				$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList($params);
-				if( !$dbRes->fetch() ) {
-					$fields = [
-						"SERVICE_ID"   => $id,
-						"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-						"SORT"         => 100,
-						"PARAMS"       => [
-							'PERSON_TYPE_ID' => $arPaySystem['PERSON_TYPE'],
-						],
-					];
-					\Bitrix\Sale\Services\PaySystem\Restrictions\PersonType::save($fields);
-				}
-			}
-
-			$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add(
-				[
+		if( $arPaySystem['PERSON_TYPE'] ) {
+			$params = [
+				'filter' => [
 					"SERVICE_ID"   => $id,
-					"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-					"CLASS_NAME"   => '\Bitrix\Sale\Services\PaySystem\Restrictions\Site',
-					"PARAMS"       => [
-						"SITE_ID" => [WIZARD_SITE_ID],
-					],
-				]
-			);
-
-			$updateFields['PARAMS'] = serialize(['BX_PAY_SYSTEM_ID' => $id]);
-			$updateFields['PAY_SYSTEM_ID'] = $id;
-
-			$image = '/bitrix/modules/sale/install/images/sale_payments/' . $val['ACTION_FILE'] . '.png';
-			if(
-				(!array_key_exists('LOGOTIP', $updateFields) || !is_array($updateFields['LOGOTIP'])) &&
-				\Bitrix\Main\IO\File::isFileExists($_SERVER['DOCUMENT_ROOT'] . $image)
-			) {
-				$updateFields['LOGOTIP'] = CFile::MakeFileArray($image);
-				$updateFields['LOGOTIP']['MODULE_ID'] = "sale";
-			}
-
-			CFile::SaveForDB($updateFields, 'LOGOTIP', 'sale/paysystem/logotip');
-			\Bitrix\Sale\Internals\PaySystemActionTable::update($id, $updateFields);
-		}
-	}
-	else {
-		$flag = false;
-
-		$params = [
-			'filter' => [
-				"SERVICE_ID"   => $tmpPaySystem['ID'],
-				"SERVICE_TYPE" => Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-				"=CLASS_NAME"  => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
-			],
-		];
-
-		$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList($params);
-		$restriction = $dbRes->fetch();
-
-		if( $restriction ) {
-			foreach( $restriction['PARAMS']['PERSON_TYPE_ID'] as $personTypeId ) {
-				if( array_search($personTypeId, $arPaySystem['PERSON_TYPE']) === false ) {
-					$arPaySystem['PERSON_TYPE'][] = $personTypeId;
-					$flag = true;
-				}
-			}
-
-			$restrictionId = $restriction['ID'];
-		}
-
-		if( $flag ) {
-			$fields = [
-				"SERVICE_ID"   => $restrictionId,
-				"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
-				"SORT"         => 100,
-				"PARAMS"       => [
-					'PERSON_TYPE_ID' => $arPaySystem['PERSON_TYPE'],
+					"SERVICE_TYPE" => Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
+					"=CLASS_NAME"  => '\\' . Sale\Services\PaySystem\Restrictions\PersonType::class,
 				],
 			];
 
-			\Bitrix\Sale\Services\PaySystem\Restrictions\PersonType::save($fields, $restrictionId);
+			$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList($params);
+			if( !$dbRes->fetch() ) {
+				$fields = [
+					"SERVICE_ID"   => $id,
+					"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
+					"SORT"         => 100,
+					"PARAMS"       => [
+						'PERSON_TYPE_ID' => $arPaySystem['PERSON_TYPE'],
+					],
+				];
+				\Bitrix\Sale\Services\PaySystem\Restrictions\PersonType::save($fields);
+			}
 		}
+
+		$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add(
+			[
+				"SERVICE_ID"   => $id,
+				"SERVICE_TYPE" => \Bitrix\Sale\Services\PaySystem\Restrictions\Manager::SERVICE_TYPE_PAYMENT,
+				"CLASS_NAME"   => '\Bitrix\Sale\Services\PaySystem\Restrictions\Site',
+				"PARAMS"       => [
+					"SITE_ID" => [WIZARD_SITE_ID],
+				],
+			]
+		);
+
+		$updateFields['PARAMS'] = serialize(['BX_PAY_SYSTEM_ID' => $id]);
+		$updateFields['PAY_SYSTEM_ID'] = $id;
+
+		$image = '/bitrix/modules/sale/install/images/sale_payments/' . $val['ACTION_FILE'] . '.png';
+		if(
+			(!array_key_exists('LOGOTIP', $updateFields) || !is_array($updateFields['LOGOTIP'])) &&
+			\Bitrix\Main\IO\File::isFileExists($_SERVER['DOCUMENT_ROOT'] . $image)
+		) {
+			$updateFields['LOGOTIP'] = CFile::MakeFileArray($image);
+			$updateFields['LOGOTIP']['MODULE_ID'] = "sale";
+		}
+
+		CFile::SaveForDB($updateFields, 'LOGOTIP', 'sale/paysystem/logotip');
+		\Bitrix\Sale\Internals\PaySystemActionTable::update($id, $updateFields);
 	}
+
 }
 
 

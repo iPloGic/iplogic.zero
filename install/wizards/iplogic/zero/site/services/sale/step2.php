@@ -85,9 +85,9 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 
 			$locationGroupID = CSaleLocationGroup::Add(
 				[
-					"SORT" => 150,
+					"SORT"        => 150,
 					"LOCATION_ID" => $arLocationArr,
-					"LANG" => $groupLang,
+					"LANG"        => $groupLang,
 				]
 			);
 		}
@@ -100,12 +100,14 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 	$arIds = [];
 	$existConfDlv = [];
 
-	$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList([
-		'filter' => [
-			'=CLASS_NAME' => '\Bitrix\Sale\Delivery\Restrictions\BySite',
-			'=SERVICE_TYPE' => \Bitrix\Sale\Delivery\Restrictions\Manager::SERVICE_TYPE_SHIPMENT,
-		],
-	]);
+	$dbRes = \Bitrix\Sale\Internals\ServiceRestrictionTable::getList(
+		[
+			'filter' => [
+				'=CLASS_NAME'   => '\Bitrix\Sale\Delivery\Restrictions\BySite',
+				'=SERVICE_TYPE' => \Bitrix\Sale\Delivery\Restrictions\Manager::SERVICE_TYPE_SHIPMENT,
+			],
+		]
+	);
 
 	while( $rstr = $dbRes->fetch() ) {
 		$lids = $rstr["PARAMS"]["SITE_ID"];
@@ -123,15 +125,17 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 	}
 
 	if( count($arIds) ) {
-		$dbRes = \Bitrix\Sale\Delivery\Services\Table::getList([
-			'filter' => [
-				'=CLASS_NAME' => [
-					'\Bitrix\Sale\Delivery\Services\Configurable',
+		$dbRes = \Bitrix\Sale\Delivery\Services\Table::getList(
+			[
+				'filter' => [
+					'=CLASS_NAME' => [
+						'\Bitrix\Sale\Delivery\Services\Configurable',
+					],
+					'=ID'         => $arIds,
 				],
-				'=ID' => $arIds,
-			],
-			'select' => ['ID', 'NAME'],
-		]);
+				'select' => ['ID', 'NAME'],
+			]
+		);
 
 		while( $dlv = $dbRes->fetch() ) {
 			$existConfDlv[] = $dlv['NAME'];
@@ -140,20 +144,20 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 
 	if( !in_array(Loc::getMessage("SALE_WIZARD_COUR"), $existConfDlv) && !empty($delivery["courier"]) ) {
 		$deliveryItems[] = [
-			"NAME" => Loc::getMessage("SALE_WIZARD_COUR"),
+			"NAME"        => Loc::getMessage("SALE_WIZARD_COUR"),
 			"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_COUR_DESCR"),
-			"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Configurable',
-			"CURRENCY" => $defCurrency,
-			"SORT" => 100,
-			"ACTIVE" => $delivery["courier"] == "Y" ? "Y" : "N",
-			"LOGOTIP" => WIZARD_SERVICE_RELATIVE_PATH . "/images/delivery.png",
-			"CONFIG" => [
+			"CLASS_NAME"  => '\Bitrix\Sale\Delivery\Services\Configurable',
+			"CURRENCY"    => $defCurrency,
+			"SORT"        => 100,
+			"ACTIVE"      => $delivery["courier"] == "Y" ? "Y" : "N",
+			"LOGOTIP"     => WIZARD_SERVICE_RELATIVE_PATH . "/images/delivery.png",
+			"CONFIG"      => [
 				"MAIN" => [
-					"PRICE" => ($bRus ? "500" : "30"),
+					"PRICE"    => ($bRus ? "500" : "30"),
 					"CURRENCY" => $defCurrency,
-					"PERIOD" => [
+					"PERIOD"   => [
 						"FROM" => 0,
-						"TO" => 0,
+						"TO"   => 0,
 						"TYPE" => "D",
 					],
 				],
@@ -163,20 +167,20 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 
 	if( !in_array(Loc::getMessage("SALE_WIZARD_PICK"), $existConfDlv) && !empty($delivery["pickup"]) ) {
 		$deliveryItems[] = [
-			"NAME" => Loc::getMessage("SALE_WIZARD_PICK"),
+			"NAME"        => Loc::getMessage("SALE_WIZARD_PICK"),
 			"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_PICK_DESCR"),
-			"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Configurable',
-			"CURRENCY" => $defCurrency,
-			"SORT" => 200,
-			"ACTIVE" => $delivery["pickup"] == "Y" ? "Y" : "N",
-			"LOGOTIP" => WIZARD_SERVICE_RELATIVE_PATH . "/images/picup.png",
-			"CONFIG" => [
+			"CLASS_NAME"  => '\Bitrix\Sale\Delivery\Services\Configurable',
+			"CURRENCY"    => $defCurrency,
+			"SORT"        => 200,
+			"ACTIVE"      => $delivery["pickup"] == "Y" ? "Y" : "N",
+			"LOGOTIP"     => WIZARD_SERVICE_RELATIVE_PATH . "/images/picup.png",
+			"CONFIG"      => [
 				"MAIN" => [
-					"PRICE" => 0,
+					"PRICE"    => 0,
 					"CURRENCY" => $defCurrency,
-					"PERIOD" => [
+					"PERIOD"   => [
 						"FROM" => 0,
-						"TO" => 0,
+						"TO"   => 0,
 						"TYPE" => "D",
 					],
 				],
@@ -185,52 +189,28 @@ if( !empty($delivery["pickup"]) || !empty($delivery["courier"]) ) {
 	}
 }
 
-$dbRes = \Bitrix\Sale\Delivery\Services\Table::getList([
-	'filter' => [
-		'=CLASS_NAME' => [
-			'\Bitrix\Sale\Delivery\Services\Automatic',
-			'\Sale\Handlers\Delivery\AdditionalHandler',
-		],
-	],
-	'select' => ['ID', 'CODE', 'ACTIVE', 'CLASS_NAME'],
-]);
 
-$existAutoDlv = [];
-
-while( $dlv = $dbRes->fetch() ) {
-	if(
-		$dlv['CLASS_NAME'] == '\Sale\Handlers\Delivery\AdditionalHandler' &&
-		$dlv['CONFIG']['MAIN']['SERVICE_TYPE'] == 'RUSPOST'
-	) {
-		$existAutoDlv['ruspost'] = $dlv;
-	}
-	elseif( !empty($dlv['CODE']) ) {
-		$existAutoDlv[$dlv['CODE']] = $dlv;
-	}
-}
-
-
-if(empty($existAutoDlv["spsr"])) {
+if( empty($existAutoDlv["spsr"]) ) {
 	$deliveryItems["spsr"] = [
-		"NAME" => Loc::getMessage("SALE_WIZARD_SPSR"),
-		"CODE" => "spsr",
+		"NAME"        => Loc::getMessage("SALE_WIZARD_SPSR"),
+		"CODE"        => "spsr",
 		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_SPSR_DESCR"),
-		"CLASS_NAME" => '\Sale\Handlers\Delivery\SpsrHandler',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 300,
-		"LOGOTIP" => "/bitrix/modules/sale/handlers/delivery/spsr/logo.png",
-		"ACTIVE" => $delivery["spsr"] == "Y" ? "Y" : "N",
-		"CONFIG" => [
+		"CLASS_NAME"  => '\Sale\Handlers\Delivery\SpsrHandler',
+		"CURRENCY"    => $defCurrency,
+		"SORT"        => 300,
+		"LOGOTIP"     => "/bitrix/modules/sale/handlers/delivery/spsr/logo.png",
+		"ACTIVE"      => $delivery["spsr"] == "Y" ? "Y" : "N",
+		"CONFIG"      => [
 			"MAIN" => [
 				"CALCULATE_IMMEDIATELY" => "Y",
-				"DEFAULT_WEIGHT" => 1000,
-				"AMOUNT_CHECK" => 1,
-				"NATURE" => 1,
-				"LOGIN" => "",
-				"PASS" => "",
-				"ICN" => ""
-			]
-		]
+				"DEFAULT_WEIGHT"        => 1000,
+				"AMOUNT_CHECK"          => 1,
+				"NATURE"                => 1,
+				"LOGIN"                 => "",
+				"PASS"                  => "",
+				"ICN"                   => "",
+			],
+		],
 	];
 }
 
@@ -238,18 +218,18 @@ if(empty($existAutoDlv["spsr"])) {
 //new russian post
 if( !empty($delivery["rus_post"]) ) {
 	$deliveryItems["rus_post"] = [
-		"NAME" => Loc::getMessage("SALE_WIZARD_MAIL2"),
+		"NAME"        => Loc::getMessage("SALE_WIZARD_MAIL2"),
 		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_MAIL_DESC2"),
-		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 400,
-		"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/rus_post_logo.png",
-		"ACTIVE" => $delivery["rus_post"] == "Y" ? "Y" : "N",
-		"CONFIG" => [
+		"CLASS_NAME"  => '\Bitrix\Sale\Delivery\Services\Automatic',
+		"CURRENCY"    => $defCurrency,
+		"SORT"        => 400,
+		"LOGOTIP"     => "/bitrix/modules/sale/ru/delivery/rus_post_logo.png",
+		"ACTIVE"      => $delivery["rus_post"] == "Y" ? "Y" : "N",
+		"CONFIG"      => [
 			"MAIN" => [
-				"SID" => "rus_post",
+				"SID"          => "rus_post",
 				"MARGIN_VALUE" => 0,
-				"MARGIN_TYPE" => "%",
+				"MARGIN_TYPE"  => "%",
 			],
 		],
 	];
@@ -258,37 +238,38 @@ if( !empty($delivery["rus_post"]) ) {
 
 if( !empty($delivery["kaz_post"]) ) {
 	$deliveryItems["kaz_post"] = [
-		"NAME" => Loc::getMessage("SALE_WIZARD_KAZ_POST"),
+		"NAME"        => Loc::getMessage("SALE_WIZARD_KAZ_POST"),
 		"DESCRIPTION" => "",
-		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 400,
-		"ACTIVE" => $delivery["kaz_post"] == "Y" ? "Y" : "N",
-		"LOGOTIP" => "/bitrix/modules/sale/ru/delivery/kaz_post_logo.png",
-		"CONFIG" => [
+		"CLASS_NAME"  => '\Bitrix\Sale\Delivery\Services\Automatic',
+		"CURRENCY"    => $defCurrency,
+		"SORT"        => 400,
+		"ACTIVE"      => $delivery["kaz_post"] == "Y" ? "Y" : "N",
+		"LOGOTIP"     => "/bitrix/modules/sale/ru/delivery/kaz_post_logo.png",
+		"CONFIG"      => [
 			"MAIN" => [
-				"SID" => "kaz_post",
+				"SID"          => "kaz_post",
 				"MARGIN_VALUE" => 0,
-				"MARGIN_TYPE" => "%",
+				"MARGIN_TYPE"  => "%",
 			],
-		]];
+		],
+	];
 }
 
 
 if( !empty($delivery["ups"]) ) {
 	$deliveryItems["ups"] = [
-		"NAME" => "UPS",
+		"NAME"        => "UPS",
 		"DESCRIPTION" => Loc::getMessage("SALE_WIZARD_UPS"),
-		"CLASS_NAME" => '\Bitrix\Sale\Delivery\Services\Automatic',
-		"CURRENCY" => $defCurrency,
-		"SORT" => 500,
-		"ACTIVE" => $delivery["ups"] == "Y" ? "Y" : "N",
-		"LOGOTIP" => "/bitrix/modules/sale/delivery/ups_logo.gif",
-		"CONFIG" => [
+		"CLASS_NAME"  => '\Bitrix\Sale\Delivery\Services\Automatic',
+		"CURRENCY"    => $defCurrency,
+		"SORT"        => 500,
+		"ACTIVE"      => $delivery["ups"] == "Y" ? "Y" : "N",
+		"LOGOTIP"     => "/bitrix/modules/sale/delivery/ups_logo.gif",
+		"CONFIG"      => [
 			"MAIN" => [
-				"SID" => "ups",
+				"SID"          => "ups",
 				"MARGIN_VALUE" => 0,
-				"MARGIN_TYPE" => "%",
+				"MARGIN_TYPE"  => "%",
 				"OLD_SETTINGS" => "/bitrix/modules/sale/delivery/ups/ru_csv_zones.csv;/bitrix/modules/sale/delivery/ups/ru_csv_export.csv",
 			],
 		],
@@ -296,86 +277,57 @@ if( !empty($delivery["ups"]) ) {
 }
 
 
-
 foreach( $deliveryItems as $code => $fields ) {
-	if(
-		$fields['CLASS_NAME'] == '\Bitrix\Sale\Delivery\Services\Automatic' && !empty($existAutoDlv[$code]) &&
-		$fields["ACTIVE"] == "Y"
-	) {
-		/*
-		//If service already exist just set activity
-		\Bitrix\Sale\Delivery\Services\Manager::update(
-			$existAutoDlv[$code]["ID"],
-			["ACTIVE" => "Y"]
-		);
-		*/
+
+	if( !empty($fields["LOGOTIP"]) ) {
+		if( file_exists($_SERVER["DOCUMENT_ROOT"] . $fields["LOGOTIP"]) ) {
+			$fields["LOGOTIP"] = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . $fields["LOGOTIP"]);
+			$fields["LOGOTIP"]["MODULE_ID"] = "sale";
+			CFile::SaveForDB($fields, "LOGOTIP", "sale/delivery/logotip");
+		}
+	}
+
+	try {
+		if( $service = \Bitrix\Sale\Delivery\Services\Manager::createObject($fields) ) {
+			$fields = $service->prepareFieldsForSaving($fields);
+		}
+	} catch( \Bitrix\Main\SystemException $e ) {
 		continue;
 	}
-	//not exist
-	else {
-		if( !empty($fields["LOGOTIP"]) ) {
-			if( file_exists($_SERVER["DOCUMENT_ROOT"] . $fields["LOGOTIP"]) ) {
-				$fields["LOGOTIP"] = CFile::MakeFileArray($_SERVER["DOCUMENT_ROOT"] . $fields["LOGOTIP"]);
-				$fields["LOGOTIP"]["MODULE_ID"] = "sale";
-				CFile::SaveForDB($fields, "LOGOTIP", "sale/delivery/logotip");
-			}
+
+	$res = \Bitrix\Sale\Delivery\Services\Manager::add($fields);
+
+	if( $res->isSuccess() ) {
+		if( !$fields["CLASS_NAME"]::isInstalled() ) {
+			$fields["CLASS_NAME"]::install();
 		}
 
-		try {
-			if( $service = \Bitrix\Sale\Delivery\Services\Manager::createObject($fields) ) {
-				$fields = $service->prepareFieldsForSaving($fields);
-			}
-		} catch( \Bitrix\Main\SystemException $e ) {
-			continue;
-		}
+		$newId = $res->getId();
 
-		$res = \Bitrix\Sale\Delivery\Services\Manager::add($fields);
+		$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add(
+			[
+				"SERVICE_ID"   => $newId,
+				"SERVICE_TYPE" => \Bitrix\Sale\Services\Base\RestrictionManager::SERVICE_TYPE_SHIPMENT,
+				"CLASS_NAME"   => '\Bitrix\Sale\Delivery\Restrictions\BySite',
+				"PARAMS"       => [
+					"SITE_ID" => [WIZARD_SITE_ID],
+				],
+			]
+		);
 
-		if( $res->isSuccess() ) {
-			if( !$fields["CLASS_NAME"]::isInstalled() ) {
-				$fields["CLASS_NAME"]::install();
-			}
-
-			if( $fields["CLASS_NAME"] == '\Bitrix\Sale\Delivery\Services\Configurable' ) {
-				$newId = $res->getId();
-
-				$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add([
-					"SERVICE_ID" => $newId,
-					"SERVICE_TYPE" => \Bitrix\Sale\Services\Base\RestrictionManager::SERVICE_TYPE_SHIPMENT,
-					"CLASS_NAME" => '\Bitrix\Sale\Delivery\Restrictions\BySite',
-					"PARAMS" => [
-						"SITE_ID" => [WIZARD_SITE_ID],
-					],
-				]);
-
-				/*\Bitrix\Sale\Location\Admin\LocationHelper::resetLocationsForEntity(
+		//Link delivery "pickup" to store
+		if( $fields["NAME"] == Loc::getMessage("SALE_WIZARD_PICK") ) {
+			\Bitrix\Main\Loader::includeModule('catalog');
+			$dbStores = CCatalogStore::GetList([], ["ACTIVE" => 'Y'], false, false, ["ID"]);
+			if( $store = $dbStores->Fetch() ) {
+				\Bitrix\Sale\Delivery\ExtraServices\Manager::saveStores(
 					$newId,
-					$arLocation4Delivery,
-					\Bitrix\Sale\Delivery\Services\Manager::getLocationConnectorEntityName(),
-					false // is locations codes?
+					[$store['ID']]
 				);
-
-				$res = \Bitrix\Sale\Internals\ServiceRestrictionTable::add([
-					"SERVICE_ID" => $newId,
-					"SERVICE_TYPE" => \Bitrix\Sale\Services\Base\RestrictionManager::SERVICE_TYPE_SHIPMENT,
-					"CLASS_NAME" => '\Bitrix\Sale\Delivery\Restrictions\ByLocation',
-				]);*/
-
-				//Link delivery "pickup" to store
-				if( $fields["NAME"] == Loc::getMessage("SALE_WIZARD_PICK") ) {
-					\Bitrix\Main\Loader::includeModule('catalog');
-					$dbStores = CCatalogStore::GetList([], ["ACTIVE" => 'Y'], false, false, ["ID"]);
-
-					if( $store = $dbStores->Fetch() ) {
-						\Bitrix\Sale\Delivery\ExtraServices\Manager::saveStores(
-							$newId,
-							[$store['ID']]
-						);
-					}
-				}
 			}
 		}
 	}
+
 }
 
 

@@ -5,6 +5,7 @@ $MESS["SELECT_TEMPLATE_TITLE"] = "Выбор шаблона";
 $MESS["wiz_company_name"] = "Название сайта:";
 $MESS["wiz_email_from"] = "E-Mail адрес по умолчанию:";
 $MESS["wiz_name"] = "Новый интернет-магазин";
+$MESS["wiz_name_site"] = "Новый сайт";
 $MESS["wiz_site_folder"] = "Папка сайта:";
 $MESS["wiz_server_name"] = "URL сервера (без http://):";
 $MESS["wiz_domains"] = "Доменное имя:<br>(список доменных имен, каждое в новой строке)";

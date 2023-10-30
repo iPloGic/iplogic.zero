@@ -2,8 +2,8 @@
 	die();
 }
 
-use Bitrix\Main\Config\Option,
-	Bitrix\Main\Loader;
+use Bitrix\Main\Config\Option;
+use Bitrix\Main\Loader;
 
 if( !Loader::includeModule("iblock") ) {
 	return;
@@ -13,7 +13,14 @@ if( $wizard->GetVar("iblockCatalog") != "Y" ) {
 	return;
 }
 
-$iblockXMLFile = WIZARD_SERVICE_RELATIVE_PATH . "/xml/" . LANGUAGE_ID . "/catalog.xml";
+if( Loader::includeModule("catalog") && Loader::includeModule("sale") ) {
+	$xml = "/catalog.xml";
+}
+else {
+	$xml = "/catalog_s.xml";
+}
+
+$iblockXMLFile = WIZARD_SERVICE_RELATIVE_PATH . "/xml/" . LANGUAGE_ID . $xml;
 $iblockCode = "catalog_" . WIZARD_SITE_ID;
 $iblockType = "catalog";
 $iblockID = false;
@@ -84,59 +91,59 @@ CWizardUtil::ReplaceMacros(
 CWizardUtil::ReplaceMacros(WIZARD_SITE_PATH . "/.catalog.menu_ext.php", ["CATALOG_IBLOCK_ID" => $iblockID]);
 
 $arFields = [
-	"CODE" => [
-		"IS_REQUIRED" => "Y",
+	"CODE"                     => [
+		"IS_REQUIRED"   => "Y",
 		"DEFAULT_VALUE" => [
-			"UNIQUE" => "Y",
+			"UNIQUE"          => "Y",
 			"TRANSLITERATION" => "Y",
-			"TRANS_LEN" => 100,
-			"TRANS_CASE" => "L",
-			"TRANS_SPACE" => "-",
-			"TRANS_OTHER" => "-",
-			"TRANS_EAT" => "Y",
-			"USE_GOOGLE" => "N"
-		]
+			"TRANS_LEN"       => 100,
+			"TRANS_CASE"      => "L",
+			"TRANS_SPACE"     => "-",
+			"TRANS_OTHER"     => "-",
+			"TRANS_EAT"       => "Y",
+			"USE_GOOGLE"      => "N",
+		],
 	],
-	"PREVIEW_PICTURE" => [
-		"IS_REQUIRED" => "N",
+	"PREVIEW_PICTURE"          => [
+		"IS_REQUIRED"   => "N",
 		"DEFAULT_VALUE" => [
-			"FROM_DETAIL" => "Y",
-			"SCALE" => "N",
-			"WIDTH" => "",
-			"HEIGHT" => "",
-			"IGNORE_ERRORS" => "N",
-			"METHOD" => "resample",
-			"COMPRESSION" => 95,
+			"FROM_DETAIL"        => "Y",
+			"SCALE"              => "N",
+			"WIDTH"              => "",
+			"HEIGHT"             => "",
+			"IGNORE_ERRORS"      => "N",
+			"METHOD"             => "resample",
+			"COMPRESSION"        => 95,
 			"DELETE_WITH_DETAIL" => "N",
 			"UPDATE_WITH_DETAIL" => "N",
-		]
+		],
 	],
-	"DETAIL_TEXT_TYPE" => [
-		"IS_REQUIRED" => "Y",
-		"DEFAULT_VALUE" => "html"
+	"DETAIL_TEXT_TYPE"         => [
+		"IS_REQUIRED"   => "Y",
+		"DEFAULT_VALUE" => "html",
 	],
-	"IBLOCK_SECTION" => [
-		"IS_REQUIRED" => "N",
+	"IBLOCK_SECTION"           => [
+		"IS_REQUIRED"   => "N",
 		"DEFAULT_VALUE" => [
-			"KEEP_IBLOCK_SECTION_ID" => "Y"
-		]
+			"KEEP_IBLOCK_SECTION_ID" => "Y",
+		],
 	],
-	"SECTION_CODE" => [
-		"IS_REQUIRED" => "Y",
+	"SECTION_CODE"             => [
+		"IS_REQUIRED"   => "Y",
 		"DEFAULT_VALUE" => [
-			"UNIQUE" => "N",
+			"UNIQUE"          => "N",
 			"TRANSLITERATION" => "Y",
-			"TRANS_LEN" => 100,
-			"TRANS_CASE" => "L",
-			"TRANS_SPACE" => "-",
-			"TRANS_OTHER" => "-",
-			"TRANS_EAT" => "Y",
-			"USE_GOOGLE" => "N"
-		]
+			"TRANS_LEN"       => 100,
+			"TRANS_CASE"      => "L",
+			"TRANS_SPACE"     => "-",
+			"TRANS_OTHER"     => "-",
+			"TRANS_EAT"       => "Y",
+			"USE_GOOGLE"      => "N",
+		],
 	],
 	"SECTION_DETAIL_TEXT_TYPE" => [
-		"IS_REQUIRED" => "Y",
-		"DEFAULT_VALUE" => "html"
+		"IS_REQUIRED"   => "Y",
+		"DEFAULT_VALUE" => "html",
 	],
 ];
 \CIBlock::setFields($iblockID, $arFields);

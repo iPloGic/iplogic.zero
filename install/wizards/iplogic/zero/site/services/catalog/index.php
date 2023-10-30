@@ -1,5 +1,7 @@
 <?
-if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) die();
+if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) {
+	die();
+}
 
 use Bitrix\Main\Config\Option,
 	Bitrix\Main\Localization\Loc,
@@ -13,9 +15,9 @@ if( !Loader::includeModule("catalog") ) {
 $dbStores = CCatalogStore::GetList([], ["ACTIVE" => 'Y']);
 if( !$dbStores->Fetch() ) {
 	$arStoreFields = [
-		"TITLE" => Loc::getMessage("CAT_STORE_NAME"),
-		"ACTIVE" => "Y",
-		"ADDRESS" => Loc::getMessage("STORE_ADR_1"),
+		"TITLE"       => Loc::getMessage("CAT_STORE_NAME"),
+		"ACTIVE"      => "Y",
+		"ADDRESS"     => Loc::getMessage("STORE_ADR_1"),
 		"DESCRIPTION" => Loc::getMessage("STORE_DESCR_1"),
 	];
 	$newStoreId = CCatalogStore::Add($arStoreFields);
@@ -29,7 +31,7 @@ $dbResultList = CCatalogGroup::GetList([], ["BASE" => "Y"]);
 if( !$arRes = $dbResultList->Fetch() ) {
 
 	$arLanguages = [];
-	$rsLanguage = CLanguage::GetList($by, $order, []);
+	$rsLanguage = CLanguage::GetList($by = "lid", $order = "desc");
 	while( $arLanguage = $rsLanguage->Fetch() )
 		$arLanguages[] = $arLanguage["LID"];
 
@@ -47,12 +49,12 @@ if( !$arRes = $dbResultList->Fetch() ) {
 	$wizGroupId[] = 2;
 
 	$arFields = [
-		"BASE" => "Y",
-		"NAME" => "retail",
-		"SORT" => 100,
-		"USER_GROUP" => $wizGroupId,
+		"BASE"           => "Y",
+		"NAME"           => "retail",
+		"SORT"           => 100,
+		"USER_GROUP"     => $wizGroupId,
 		"USER_GROUP_BUY" => $wizGroupId,
-		"USER_LANG" => $arUserLang,
+		"USER_LANG"      => $arUserLang,
 	];
 	CCatalogGroup::Add($arFields);
 }
@@ -102,7 +104,7 @@ if( $s_count < 2 ) {
 	/* OPTIONS */
 	Option::set("catalog", "allow_negative_amount", "Y");
 	Option::set("catalog", "default_quantity_trace", "Y");
-	Option::set("catalog", "default_can_buy_zero", "N");
+	Option::set("catalog", "default_can_buy_zero", "Y");
 	Option::set("catalog", "show_catalog_tab_with_offers", "N");
 	Option::set("catalog", "save_product_without_price", "N");
 	Option::set("catalog", "default_subscribe", "Y");

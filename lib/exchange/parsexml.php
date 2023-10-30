@@ -1,8 +1,18 @@
 <?php
+
 namespace Iplogic\Zero\Exchange;
 
+
+/**
+ * Class for XML file parsing / Класс для парсинга XML файлов
+ * @package Iplogic\Zero\Exchange
+ */
 class ParseXML extends Base
 {
+	/**
+	 * Class constructor / Конструктор класса
+	 * @param array $config - configuration array / массив конфигурации
+	 */
 	function __construct($config = [])
 	{
 		$configKeys = [
@@ -10,69 +20,90 @@ class ParseXML extends Base
 			"LIST_NODE",
 			"COMPARISON",
 		];
-		foreach($configKeys as $key) {
-			if (isset( $config[$key]))
+		foreach( $configKeys as $key ) {
+			if( isset($config[$key]) ) {
 				$this->config[$key] = $config[$key];
-			else
+			}
+			else {
 				$this->config[$key] = false;
+			}
 		}
 		parent::__construct($config);
 	}
 
+
+	/**
+	 * Copying a local file / Копирование локального файла
+	 *
+	 * @param array $substitutes - array of replacement values / массив замены значений
+	 * @return bool
+	 */
 	public function copyLocalFile($substitutes = [])
 	{
-		if($this->config["SOURCE"] == "local") {
-			if(!is_array($substitutes) || !count($substitutes)) {
-				copy($this->config["REMOTE_FILE"], self::processingFilePath($this->config["LOCAL_FILE"]));
+		if( $this->config["SOURCE"] == "local" ) {
+			if( !is_array($substitutes) || !count($substitutes) ) {
+				return copy($this->config["REMOTE_FILE"], self::processingFilePath($this->config["LOCAL_FILE"]));
 			}
 			else {
 				$fileText = file_get_contents($this->config["REMOTE_FILE"]);
-				foreach($substitutes as $old => $new) {
-					$fileText = str_replace(["<".$old, "</".$old], ["<".$new, "</".$new], $fileText);
+				foreach( $substitutes as $old => $new ) {
+					$fileText = str_replace(["<" . $old, "</" . $old], ["<" . $new, "</" . $new], $fileText);
 				}
-				file_put_contents($this->config["LOCAL_FILE"], $fileText);
+				if( file_put_contents($this->config["LOCAL_FILE"], $fileText) > 0 ) {
+					return true;
+				}
 			}
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
+
+	/**
+	 * Getting array of elements objects / Получение массива объектов элементов
+	 * @return array|false
+	 */
 	public function getElementsList()
 	{
-		if ($this->config["SOURCE"] == "ftp") {
-			if(!$this->getFTP()) {
-				if (ZERO_EXCHANGE_DEBUG) {
+		if( $this->config["SOURCE"] == "ftp" ) {
+			if( !$this->getFTP() ) {
+				if( ZERO_EXCHANGE_DEBUG ) {
 					echo "Cant load file from FTP<br><br>";
 				}
 				return false;
 			}
 		}
-		if (!$xml = self::getXML( $this->config["LOCAL_FILE"] )) {
+		if( !$xml = self::getXML($this->config["LOCAL_FILE"]) ) {
 			return false;
 		}
-		if (!$this->config["LIST_NODE"] || $this->config["LIST_NODE"] == "/") {
+		if( !$this->config["LIST_NODE"] || $this->config["LIST_NODE"] == "/" ) {
 			return $xml->children();
 		}
-		if ($node = $this->getNodeByPath($xml, $this->config["LIST_NODE"])) {
+		if( $node = $this->getNodeByPath($xml, $this->config["LIST_NODE"]) ) {
 			return $node->children();
 		}
-		if (ZERO_EXCHANGE_DEBUG) {
-			echo "Cant get node ".$this->config["LIST_NODE"]."<br><br>";
+		if( ZERO_EXCHANGE_DEBUG ) {
+			echo "Cant get node " . $this->config["LIST_NODE"] . "<br><br>";
 		}
 		return false;
 	}
 
-	public function getNodeByPath(&$xml, $path) {
+
+	/**
+	 * @param object $xml
+	 * @param string $path
+	 * @return object|false
+	 */
+	public function getNodeByPath(&$xml, $path)
+	{
 		$arPath = explode("/", $path);
 		$node = $xml;
-		if (count($arPath) == 2 && $node->getName() == $arPath[1]) {
+		if( count($arPath) == 2 && $node->getName() == $arPath[1] ) {
 			return $xml;
 		}
-		foreach($arPath as $key => $child) {
-			if($key > 1) {
+		foreach( $arPath as $key => $child ) {
+			if( $key > 1 ) {
 				$node = $node->$child;
-				if ($key == (count($arPath)-1)) {
+				if( $key == (count($arPath) - 1) ) {
 					return $node;
 				}
 			}
@@ -80,11 +111,15 @@ class ParseXML extends Base
 		return false;
 	}
 
+	/**
+	 * Getting array of elements / Получение массива элементов
+	 * @return array|false
+	 */
 	public function getElementsListArray()
 	{
 		$arList = [];
-		if ($children = $this->getElementsList()) {
-			foreach($children as $item) {
+		if( $children = $this->getElementsList() ) {
+			foreach( $children as $item ) {
 				$arList[] = \Iplogic\Zero\Helper::objToArray($item);
 			}
 			return $arList;
@@ -92,28 +127,35 @@ class ParseXML extends Base
 		return false;
 	}
 
-	public function getClearElementsListArray() {
-		if(!is_array($this->config["COMPARISON"])) {
-			if (ZERO_EXCHANGE_DEBUG) {
+
+	/**
+	 * Getting an array of elements by the mask specified in the "COMPARISON" element of the $config array /
+	 * Получение массива элементов по маске заданной в элементе "COMPARISON" массива $config
+	 * @return array|false
+	 */
+	public function getClearElementsListArray()
+	{
+		if( !is_array($this->config["COMPARISON"]) ) {
+			if( ZERO_EXCHANGE_DEBUG ) {
 				echo "\$config['COMPARISON'] is not an array<br><br>";
 			}
 			return false;
 		}
-		if(!$list = $this->getElementsList()) {
+		if( !$list = $this->getElementsList() ) {
 			return false;
 		}
 		$clearArray = [];
-		foreach($list as $item) {
+		foreach( $list as $item ) {
 			$val = [];
-			foreach ($this->config["COMPARISON"] as $field => $source) {
+			foreach( $this->config["COMPARISON"] as $field => $source ) {
 				$name = $source["NAME"];
-				if ($source["TYPE"] == "NODE") {
+				if( $source["TYPE"] == "NODE" ) {
 					$val[$field] = $item->$name;
 				}
-				if ($source["TYPE"] == "ATTR") {
+				if( $source["TYPE"] == "ATTR" ) {
 					$val[$field] = $item->attributes()->$name->__toString();
 				}
-				if ($source["TYPE"] == "SUBNODE_TEXT") {
+				if( $source["TYPE"] == "SUBNODE_TEXT" ) {
 					$val[$field] = $item->$name->__toString();
 				}
 			}

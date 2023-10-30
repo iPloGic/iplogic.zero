@@ -10,7 +10,6 @@ $arServices = [
 		"STAGES" => [
 			"files.php",
 			"template.php",
-			//"theme.php",
 			"site_settings.php",
 			"menu.php",
 			"settings.php",

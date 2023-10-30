@@ -24,7 +24,6 @@ class ShopSettingsStep extends CWizardStep
 		$siteAccSign = "";
 
 		$siteID = getSite($wizard)["ID"];
-		//$siteLang = getSite($wizard)["LANG"];
 
 		$wizard->SetDefaultVars(
 			[
@@ -70,10 +69,10 @@ class ShopSettingsStep extends CWizardStep
 					$siteID
 				),
 				"shopKS"           => Option::get("iplogic.zero", "shopKS", "30101 810 4 0000 0000225", $siteID),
-				"siteLogo" => Option::get("iplogic.zero", "siteLogo", $siteLogo, $siteID),
-				"siteStamp" => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
-				"siteDirSign" => Option::get("iplogic.zero", "siteDirSign", $siteDirSign, $siteID),
-				"siteAccSign" => Option::get("iplogic.zero", "siteAccSign", $siteAccSign, $siteID),
+				"siteLogo"         => Option::get("iplogic.zero", "siteLogo", $siteLogo, $siteID),
+				"siteStamp"        => Option::get("iplogic.zero", "siteStamp", $siteStamp, $siteID),
+				"siteDirSign"      => Option::get("iplogic.zero", "siteDirSign", $siteDirSign, $siteID),
+				"siteAccSign"      => Option::get("iplogic.zero", "siteAccSign", $siteAccSign, $siteID),
 
 			]
 		);
@@ -117,8 +116,7 @@ class ShopSettingsStep extends CWizardStep
 				$currentLocalization = $wizard->GetDefaultVar("shopLocalization");
 			}
 
-			$this->content .= //'<div class="wizard-catalog-title">'.Loc::getMessage("WIZ_STEP_SS").'</div>
-				'<div class="wizard-input-form">';
+			$this->content .= '<div class="wizard-input-form">';
 
 			$this->content .= '
 				<div class="wizard-input-form-block">
@@ -255,10 +253,22 @@ class ShopSettingsStep extends CWizardStep
 	function OnPostForm()
 	{
 		$wizard =& $this->GetWizard();
-		$res = $this->SaveFile("siteLogo", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
-		$res = $this->SaveFile("siteStamp", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
-		$res = $this->SaveFile("siteDirSign", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
-		$res = $this->SaveFile("siteAccSign", Array("extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"));
+		$res = $this->SaveFile(
+			"siteLogo",
+			["extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"]
+		);
+		$res = $this->SaveFile(
+			"siteStamp",
+			["extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"]
+		);
+		$res = $this->SaveFile(
+			"siteDirSign",
+			["extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"]
+		);
+		$res = $this->SaveFile(
+			"siteAccSign",
+			["extensions" => "gif,jpg,jpeg,png", "max_height" => 150, "max_width" => 150, "make_preview" => "Y"]
+		);
 	}
 
 }

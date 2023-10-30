@@ -6,11 +6,29 @@ use \Bitrix\Main\Application;
 use \Bitrix\Main\Web\HttpClient;
 use \Bitrix\Main\Web\Json;
 
+
+/**
+ * Base exchange class / Базовый класс обмена
+ * @package Iplogic\Zero\Exchange
+ */
 class Base
 {
+	/**
+	 * Configuration array / Массив конфигурации
+	 * @var array
+	 */
 	protected $config;
+	/**
+	 * FTP connection object / Объект FTP соединения
+	 * @var object
+	 */
 	protected $ftp;
 
+
+	/**
+	 * Class constructor / Конструктор класса
+	 * @param array $config - configuration array / массив конфигурации
+	 */
 	function __construct($config = [])
 	{
 		$configKeys = [
@@ -31,14 +49,21 @@ class Base
 		}
 	}
 
-	public static function getXML($file, $clean_ns = true)
+
+	/**
+	 * Getting SimpleXMLElement object from XML file / Получает SimpleXMLElement объект из XML файла
+	 *
+	 * @param string $file - name of file / имя файла
+	 * @return false|object
+	 */
+	public static function getXML($file)
 	{
 		$name = self::processingFilePath($file);
 		if( !$objXML = simplexml_load_file($name) ) {
 			if( ZERO_EXCHANGE_DEBUG ) {
 				echo "Cant create XML object tree from file:<br>" . $name . "<br><br>";
 				$errors = libxml_get_errors();
-				foreach ($errors as $error) {
+				foreach( $errors as $error ) {
 					echo display_xml_error($error, $objXML);
 				}
 			}
@@ -47,11 +72,28 @@ class Base
 		return $objXML;
 	}
 
+
+	/**
+	 * Getting array from XML file / Получает массив из XML файла
+	 *
+	 * @param string $file - name of file / имя файла
+	 * @return mixed
+	 */
 	public static function getXMLasArray($file)
 	{
 		return self::getXML($file)->GetArray();
 	}
 
+
+	/**
+	 * Sending an HTTP request using Bitrix / Отправка HTTP запроса средствами Битрикс
+	 *
+	 * @param string $url - send URL / URL отправки
+	 * @param string $type - request type / тип запроса [GET/POST/PUT]
+	 * @param array $headers - request headers / заголовки запроса
+	 * @param mixed $params - request parameters / параметры запроса
+	 * @return array
+	 */
 	public static function sendHttpQuery($url, $type = 'POST', $headers = [], $params = null)
 	{
 		$type = strtoupper($type);
@@ -61,7 +103,6 @@ class Base
 			$cl->setHeader($key, $val);
 		}
 		$cl->query($type, $url, $params);
-		$body = "";
 		if( self::isJson($cl->getResult()) ) {
 			$body = Json::decode($cl->getResult());
 		}
@@ -76,6 +117,16 @@ class Base
 		];
 	}
 
+
+	/**
+	 * Sending an HTTP request using CURL / Отправка HTTP запроса средствами CURL
+	 *
+	 * @param string $url - send URL / URL отправки
+	 * @param string $type - request type / тип запроса [GET/POST/PUT]
+	 * @param array $header - request headers / заголовки запроса
+	 * @param array $params - request parameters / параметры запроса
+	 * @return array
+	 */
 	public static function sendHttpQueryCurl($url, $type = 'GET', $header = [], $params = [])
 	{
 		$ch = curl_init();
@@ -93,8 +144,11 @@ class Base
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 600);
 			//curl_setopt($ch, CURLOPT_HEADEROPT, CURLHEADER_UNIFIED);
-			curl_setopt($ch, CURLOPT_USERAGENT,
-				'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0');
+			curl_setopt(
+				$ch,
+				CURLOPT_USERAGENT,
+				'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:53.0) Gecko/20100101 Firefox/53.0'
+			);
 		}
 		if( $type == 'POST' ) {
 			curl_setopt($ch, CURLOPT_POST, 1);
@@ -110,10 +164,16 @@ class Base
 		return [
 			"status" => $code,
 			"result" => $result,
-			//"headers" =>
 		];
 	}
 
+
+	/**
+	 * Replacing special characters in text for use in XML / Замена специальных символов в тексте для использования в XML
+	 *
+	 * @param string $str - text line / текстовая строка
+	 * @return string
+	 */
 	public static function prepareXmlText($str)
 	{
 		$bad = ["<", ">", "'", '"', "&"];
@@ -122,12 +182,26 @@ class Base
 		return $str;
 	}
 
+
+	/**
+	 * Encoding text line from UTF-8 to windows-1251 / Перекодирование текстовой строки из UTF-8 в windows-1251
+	 *
+	 * @param string $str - text line / текстовая строка
+	 * @return string
+	 */
 	public static function win1251Encode($str)
 	{
 		$str = iconv("UTF-8", "windows-1251", $str);
 		return $str;
 	}
 
+
+	/**
+	 * Recursive encoding of array from UTF-8 to windows-1251 / Рекурсивное перекодирование массива из UTF-8 в windows-1251
+	 *
+	 * @param array $array - array for encoding / массив для перекодирования
+	 * @return array
+	 */
 	public static function win1251EncodeRecursive($array)
 	{
 		foreach( $array as $key => $value ) {
@@ -141,12 +215,26 @@ class Base
 		return $array;
 	}
 
+
+	/**
+	 * Encoding text line from windows-1251 to UTF-8 / Перекодирование текстовой строки из windows-1251 в UTF-8
+	 *
+	 * @param string $str - text line / текстовая строка
+	 * @return string
+	 */
 	public static function utfEncode($str)
 	{
 		$str = iconv("windows-1251", "UTF-8", $str);
 		return $str;
 	}
 
+
+	/**
+	 * Recursive encoding of array from windows-1251 to UTF-8 / Рекурсивное перекодирование массива из windows-1251 в UTF-8
+	 *
+	 * @param array $array - array for encoding / массив для перекодирования
+	 * @return array
+	 */
 	public static function utfEncodeRecursive($array)
 	{
 		foreach( $array as $key => $value ) {
@@ -160,12 +248,25 @@ class Base
 		return $array;
 	}
 
+
+	/**
+	 * JSON validation / Валидация JSON
+	 *
+	 * @param string $string - text line / текстовая строка
+	 * @return bool
+	 */
 	public static function isJson($string)
 	{
 		json_decode($string);
 		return (json_last_error() == JSON_ERROR_NONE);
 	}
 
+
+	/**
+	 * Creating an FTP connection object / Создание объекта FTP соединения
+	 *
+	 * @return false|object
+	 */
 	public function connectFTP()
 	{
 		$this->ftp = ftp_connect($this->config['FTP_HOST']);
@@ -176,6 +277,14 @@ class Base
 		return $this->ftp;
 	}
 
+
+	/**
+	 * Sending a file via FTP / Отправка файла через FTP
+	 *
+	 * @param mixed $remote - remote file name / имя удаленного файла
+	 * @param mixed $local - local file name / имя локального файла
+	 * @return bool
+	 */
 	public function sendFTP($remote = false, $local = false)
 	{
 		if( !$remote ) {
@@ -207,6 +316,14 @@ class Base
 		}
 	}
 
+
+	/**
+	 * Uploading a file via FTP / Загрузка файла через FTP
+	 *
+	 * @param mixed $remote - remote file name / имя удаленного файла
+	 * @param mixed $local - local file name / имя локального файла
+	 * @return bool
+	 */
 	public function getFTP($local = false, $remote = false)
 	{
 		if( !$remote ) {
@@ -238,12 +355,33 @@ class Base
 		}
 	}
 
+
+	/**
+	 * Getting a numeric value from a string key / Получение числового значения из строкового ключа
+	 *
+	 * For example, for the PRICE_5 key, 5 will be returned / Например, для ключа PRICE_5 будет возвращено 5
+	 *
+	 * @param string $key - string key / строковый ключ [xxxx_num]
+	 * @return int
+	 */
 	protected static function getNumberFromKey($key)
 	{
 		$ar = explode("_", $key);
-		return $ar[count($ar) - 1];
+		if( is_int($ar[count($ar) - 1]) ) {
+			return $ar[count($ar) - 1];
+		}
+		return 0;
 	}
 
+
+	/**
+	 * File Name Processing / Обработка имен файлов
+	 *
+	 * More about names / Подробно об именах https://iplogic.ru/doc/course/3/page/29/?LESSON_PATH=27.29
+	 *
+	 * @param string $file - file name / имя файла
+	 * @return string
+	 */
 	protected static function processingFilePath($file)
 	{
 		if(
