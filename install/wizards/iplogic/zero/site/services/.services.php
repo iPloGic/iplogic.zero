@@ -8,9 +8,9 @@ $arServices = [
 	"main" => [
 		"NAME" => Loc::getMessage("SERVICE_MAIN_SETTINGS"),
 		"STAGES" => [
-			"files.php",
 			"template.php",
 			"site_settings.php",
+			"files.php",
 			"menu.php",
 			"settings.php",
 			"agents.php",
@@ -29,7 +29,7 @@ $arServices = [
 	"iblock" => [
 		"NAME" => Loc::getMessage("SERVICE_IBLOCK"),
 		"STAGES" => [
-			"types.php", //IBlock types
+			"types.php",
 			"brands.php",
 			"catalog.php",
 			"offers.php",

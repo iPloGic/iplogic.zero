@@ -140,67 +140,75 @@ if( $wizard->GetVar("menuCatalog") == "Y" ) {
 	);
 }
 
-$dir = $_SERVER["DOCUMENT_ROOT"] . "/local";
-if( !is_dir($dir) ) {
-	mkdir($dir, 0755, true);
-}
-
 if( $wizard->GetVar("phpInterface") == "Y" ) {
-	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/php_interface";
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local";
 	if( !is_dir($dir) ) {
 		mkdir($dir, 0755, true);
 	}
-	if( !file_exists($dir . "/cron_events.php") ) {
-		copy(
-			WIZARD_ABSOLUTE_PATH . "/site/local/cron_events.php",
-			$dir . "/cron_events.php"
-		);
-	}
-	if( $s_count <= 1 ) {
-		CopyDirFiles(
-			WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
-			$dir,
-			$rewrite = true,
-			$recursive = true,
-			$delete_after_copy = false
-		);
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/php_interface";
+	if( !is_dir($dir) ) {
+		mkdir($dir, 0755, true);
 	}
 	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/php_interface/" . $siteID;
 	if( !is_dir($dir) ) {
 		mkdir($dir, 0755, true);
 	}
+	if( !file_exists($dir . "/init.php") ) {
+		copy(
+			WIZARD_ABSOLUTE_PATH . "/site/local/php_interface/init.php",
+			$dir . "/init.php"
+		);
+	}
+	if( !file_exists($dir . "/functions.php") ) {
+		copy(
+			WIZARD_ABSOLUTE_PATH . "/site/local/php_interface/functions.php",
+			$dir . "/functions.php"
+		);
+	}
+	if( !file_exists($dir . "/events.php") ) {
+		copy(
+			WIZARD_ABSOLUTE_PATH . "/site/local/php_interface/events.php",
+			$dir . "/events.php"
+		);
+	}
+}
+
+if( $wizard->GetVar("phpInterface") == "Y" && $s_count <= 1 ) {
+
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/php_interface";
+
 	CopyDirFiles(
 		WIZARD_ABSOLUTE_PATH . "/site/local/php_interface",
+		$dir,
+		$rewrite = false,
+		$recursive = true,
+		$delete_after_copy = false
+	);
+
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/components";
+	if( !is_dir($dir) ) {
+		mkdir($dir, 0755, true);
+	}
+	/*$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components/iplogic";
+	if(!is_dir($dir)) {
+		mkdir($dir, 0755, true);
+	}
+	CopyDirFiles(
+		WIZARD_ABSOLUTE_PATH . "/site/local/components/iplogic",
 		$dir,
 		$rewrite = true,
 		$recursive = true,
 		$delete_after_copy = false
-	);
-}
+	);*/
 
-$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/components";
-if( !is_dir($dir) ) {
-	mkdir($dir, 0755, true);
-}
-/*$dir = $_SERVER["DOCUMENT_ROOT"]."/local/components/iplogic";
-if(!is_dir($dir)) {
-	mkdir($dir, 0755, true);
-}
-CopyDirFiles(
-	WIZARD_ABSOLUTE_PATH . "/site/local/components/iplogic",
-	$dir,
-	$rewrite = true,
-	$recursive = true,
-	$delete_after_copy = false
-);*/
-
-$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/ajax";
-if( !is_dir($dir) ) {
-	mkdir($dir, 0755, true);
-}
-$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/cli";
-if( !is_dir($dir) ) {
-	mkdir($dir, 0755, true);
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/ajax";
+	if( !is_dir($dir) ) {
+		mkdir($dir, 0755, true);
+	}
+	$dir = $_SERVER["DOCUMENT_ROOT"] . "/local/cli";
+	if( !is_dir($dir) ) {
+		mkdir($dir, 0755, true);
+	}
 }
 
 

@@ -23,7 +23,7 @@ function ZCreateBizvalFile($tmpFile, $del = false)
 				"//",
 				"/",
 				WIZARD_SITE_ROOT_PATH . "/" .
-				(COption::GetOptionString("main", "upload_dir", "upload")) . "/" .
+				(Option::get("main", "upload_dir", "upload")) . "/" .
 				$arTmpFile["SUBDIR"] . "/" . $arTmpFile["FILE_NAME"]
 			);
 			$arTmpFile = \CFile::MakeFileArray($sOldFile);
@@ -183,7 +183,7 @@ if( $bRus ) {
 	$siteLogo = $wizard->GetVar("siteLogo");
 	if( $file = ZCreateBizvalFile($siteLogo, true) ) {
 		$siteLogo = $file;
-		COption::SetOptionString("iplogic.zero", "siteLogo", $siteLogo, false, WIZARD_SITE_ID);
+		Option::set("iplogic.zero", "siteLogo", $siteLogo, false, WIZARD_SITE_ID);
 	}
 	else {
 		$siteLogo = Option::get("iplogic.zero", "siteLogo", "", WIZARD_SITE_ID);
@@ -192,7 +192,7 @@ if( $bRus ) {
 	$siteStamp = $wizard->GetVar("siteStamp");
 	if( $file = ZCreateBizvalFile($siteStamp, true) ) {
 		$siteStamp = $file;
-		COption::SetOptionString("iplogic.zero", "siteStamp", $siteStamp, false, WIZARD_SITE_ID);
+		Option::set("iplogic.zero", "siteStamp", $siteStamp, false, WIZARD_SITE_ID);
 	}
 	else {
 		$siteStamp = Option::get("iplogic.zero", "siteStamp", "", WIZARD_SITE_ID);
@@ -201,7 +201,7 @@ if( $bRus ) {
 	$siteDirSign = $wizard->GetVar("siteDirSign");
 	if( $file = ZCreateBizvalFile($siteDirSign, true) ) {
 		$siteDirSign = $file;
-		COption::SetOptionString("iplogic.zero", "siteDirSign", $siteDirSign, false, WIZARD_SITE_ID);
+		Option::set("iplogic.zero", "siteDirSign", $siteDirSign, false, WIZARD_SITE_ID);
 	}
 	else {
 		$siteDirSign = Option::get("iplogic.zero", "siteDirSign", "", WIZARD_SITE_ID);
@@ -210,7 +210,7 @@ if( $bRus ) {
 	$siteAccSign = $wizard->GetVar("siteAccSign");
 	if( $file = ZCreateBizvalFile($siteAccSign, true) ) {
 		$siteAccSign = $file;
-		COption::SetOptionString("iplogic.zero", "siteAccSign", $siteAccSign, false, WIZARD_SITE_ID);
+		Option::set("iplogic.zero", "siteAccSign", $siteAccSign, false, WIZARD_SITE_ID);
 	}
 	else {
 		$siteAccSign = Option::get("iplogic.zero", "siteAccSign", "", WIZARD_SITE_ID);
@@ -1608,7 +1608,7 @@ if( $personType["ur"] == "Y" && $paysystem["bill"] == "Y" ) {
 		'PAYSYSTEM'   => [
 			"NAME"                 => Loc::getMessage("SALE_WIZARD_PS_BILL"),
 			"SORT"                 => 100,
-			"DESCRIPTION"          => "",
+			"DESCRIPTION"          => Loc::getMessage("SALE_WIZARD_PS_BILL_DESCR"),
 			"PSA_NAME"             => Loc::getMessage("SALE_WIZARD_PS_BILL"),
 			"ACTION_FILE"          => "bill",
 			"RESULT_FILE"          => "",

@@ -55,7 +55,8 @@ $MESS["SALE_WIZARD_PS_COLLECT_DESCR"] = "Payment at the time of delivery.";
 $MESS["SALE_WIZARD_PS_OS"] = "Oschadbank";
 $MESS["SALE_WIZARD_PS_SB"] = "Sberbank";
 $MESS["SALE_WIZARD_PS_SB_DESCR"] = "You can pay for your order at any branch of Sberbank. For the money transfer service you will be charged from 3 to 7% of the order value, depending on the region. Money transfer will take up to 10 days.";
-$MESS["SALE_WIZARD_PS_BILL"] = " ";
+$MESS["SALE_WIZARD_PS_BILL"] = "Bank transfer";
+$MESS["SALE_WIZARD_PS_BILL_DESCR"] = "The transfer of funds is carried out from your bank account to the store's bank account.";
 $MESS["SALE_WIZARD_PS_BILL_RUB"] = "rub.";
 
 $MESS["WIZ_SALE_STATUS_N"] = "Accepted";

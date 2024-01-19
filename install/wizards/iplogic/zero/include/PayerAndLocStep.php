@@ -21,29 +21,24 @@ class PayerAndLocStep extends CWizardStep
 		$shopLocalization = $wizard->GetVar("shopLocalization", true);
 		$siteID = getSite($wizard)["ID"];
 
-		if( $shopLocalization == "ua" ) {
-			$wizard->SetDefaultVars(
-				[
-					"personType" => [
-						"fiz"    => "Y",
-						"fiz_ua" => "Y",
-						"ur"     => "Y",
-					],
-				]
-			);
-		}
-		else {
-			$wizard->SetDefaultVars(
-				[
-					"personType" => [
-						"fiz" => Option::get("zero", "personTypeFiz", "Y", $siteID),
-						"ur"  => Option::get("zero", "personTypeUr", "Y", $siteID),
-					],
-				]
-			);
-		}
-
+		$wizard->SetDefaultVars(
+			[
+				"personType" => [
+					"fiz" => Option::get("iplogic.zero", "personTypeFiz", "Y", $siteID),
+					"ur"  => Option::get("iplogic.zero", "personTypeUr", "Y", $siteID),
+				],
+				"delivery" => [
+					"pickup" => Option::get("iplogic.zero", "deliveryPickup", "Y", $siteID),
+					"courier" => Option::get("iplogic.zero", "deliveryCourier", "Y", $siteID),
+				],
+				"paysystem" => [
+					"cash" => Option::get("iplogic.zero", "paysystemCash", "Y", $siteID),
+					"bill" => Option::get("iplogic.zero", "paysystemBill", "Y", $siteID),
+				],
+			]
+		);
 	}
+
 
 	function ShowStep()
 	{

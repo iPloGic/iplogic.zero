@@ -112,3 +112,5 @@ if( $s_count < 2 ) {
 	Option::set("catalog", "enable_reservation", "N");
 	Option::set("catalog", "enable_processing_deprecated_events", "Y");
 }
+
+unset($_SESSION["LOC_IMPORT_DESC"]);

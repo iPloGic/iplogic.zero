@@ -32,7 +32,7 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 			"PRODUCT_IBLOCK_ID",
 			"OFFER_IBLOCK_ID",
 			"KEY_FIELD",
-			"COMPARISON",
+			"ITEM_ATTR",
 			"FILTER",
 			"SKU_LINK",
 			"CURRENCY",
@@ -90,7 +90,7 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 	{
 		$arFilter = $this->config["FILTER"];
 		$arSelect = ["ID"];
-		foreach( $this->config["COMPARISON"] as $c ) {
+		foreach( $this->config["ITEM_ATTR"] as $c ) {
 			if( $c["TYPE"] == "FIELD" ) {
 				$arSelect[] = $c["VALUE"];
 			}
@@ -162,7 +162,7 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 				"NAME"     => "item",
 				"CHILDREN" => [],
 			];
-			foreach( $this->config["COMPARISON"] as $key => $c ) {
+			foreach( $this->config["ITEM_ATTR"] as $key => $c ) {
 				if( $c["TYPE"] == "CONST" ) {
 					$item["CHILDREN"][] = [
 						"NAME" => "g:g:" . $key,
@@ -203,7 +203,7 @@ class GoogleMerchant extends \Iplogic\Zero\Exchange\ExportXML
 	{
 		$arProduct = [];
 		$parent = $this->arProducts[$prd["PROPERTY_" . $this->config["SKU_LINK"] . "_VALUE"]];
-		foreach( $this->config["COMPARISON"] as $key => $c ) {
+		foreach( $this->config["ITEM_ATTR"] as $key => $c ) {
 			if( $parent && $c["USE_PARENT"] == "H" ) {
 				$arProduct[$key] = $parent[$key];
 				continue;

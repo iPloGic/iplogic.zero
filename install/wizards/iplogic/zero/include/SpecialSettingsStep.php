@@ -68,7 +68,7 @@ class SpecialSettingsStep extends CWizardStep
 				<div class="wizard-input-form-field wizard-input-form-field-checkbox">
 					<div class="wizard-catalog-form-item">
 						' . $this->ShowCheckboxField('phpInterface', 'Y', (["id" => "phpInterface"])) .
-			' <label for="phpInterface">' . Loc::getMessage("WIZ_PHP_INTERFACE") . '</label><br />
+				' <label for="phpInterface">' . Loc::getMessage("WIZ_PHP_INTERFACE") . '</label><br />
 					</div>
 				</div>
 			</div>

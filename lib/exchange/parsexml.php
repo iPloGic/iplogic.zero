@@ -89,8 +89,10 @@ class ParseXML extends Base
 
 
 	/**
-	 * @param object $xml
-	 * @param string $path
+	 * Getting node object by string path / Получение объекта узла по строчному пути
+	 *
+	 * @param object $xml - XML object / объект XML
+	 * @param string $path - string containing the path to the node / строка, содержащая путь до узла
 	 * @return object|false
 	 */
 	public function getNodeByPath(&$xml, $path)
@@ -161,6 +163,7 @@ class ParseXML extends Base
 			}
 			$clearArray[] = $val;
 		}
+		unset($list);
 		return $clearArray;
 	}
 

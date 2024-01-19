@@ -3,9 +3,168 @@ if( !defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true ) {
 	die();
 }
 
+use Bitrix\Main;
+use \Bitrix\Sale\Location;
+use \Bitrix\Sale\Location\Import\ImportProcess;
+use \Bitrix\Sale\Location\Util\CSVReader;
+
+
 if( !CModule::IncludeModule('sale') ) {
 	return;
 }
+
+function checkLocationCodeExists($code)
+{
+		if ($code == '')
+			return false;
+
+		$dbConnection = Main\HttpApplication::getConnection();
+
+		$code = $dbConnection->getSqlHelper()->forSql($code);
+		$res = $dbConnection->query("select ID from ".Location\LocationTable::getTableName()." where CODE = '".$code."'")->fetch();
+
+		return $res['ID'] ?? false;
+	}
+
+function importFile(&$descriptior)
+{
+	$timeLimit = ini_get('max_execution_time');
+	if ($timeLimit < $descriptior['TIME_LIMIT']) set_time_limit($descriptior['TIME_LIMIT'] + 5);
+
+	$endTime = time() + $descriptior['TIME_LIMIT'];
+
+	if($descriptior['STEP'] == 'rebalance')
+	{
+		Location\LocationTable::resort();
+		Location\LocationTable::resetLegacyPath();
+		$descriptior['STEP'] = 'done';
+	}
+
+	if($descriptior['STEP'] == 'import')
+	{
+		if(!isset($descriptior['DO_SYNC']))
+		{
+			$res = Location\LocationTable::getList(array('select' => array('CNT')))->fetch();
+			$descriptior['DO_SYNC'] = intval($res['CNT'] > 0);
+		}
+
+		if(!isset($descriptior['TYPES']))
+		{
+			$descriptior['TYPE_MAP'] = ImportProcess::getTypeMap($descriptior['TYPE_FILE']);
+			$descriptior['TYPES'] = ImportProcess::createTypes($descriptior['TYPE_MAP']);
+
+			$descriptior['SERVICE_MAP'] = ImportProcess::getServiceMap($descriptior['SERVICE_FILE']);
+			$descriptior['SERVICES'] = ImportProcess::getExistedServices();
+		}
+
+		$csvReader = new CSVReader();
+		$csvReader->LoadFile($descriptior['FILE']);
+
+		while(time() < $endTime)
+		{
+			$block = $csvReader->ReadBlockLowLevel($descriptior['POS']/*changed inside*/, 10);
+
+			if(!count($block))
+				break;
+
+			foreach($block as $item)
+			{
+				if($descriptior['DO_SYNC'])
+				{
+					$id = checkLocationCodeExists($item['CODE']);
+					if($id)
+					{
+						$descriptior['CODES'][$item['CODE']] = $id;
+						continue;
+					}
+				}
+
+				// type
+				$item['TYPE_ID'] = $descriptior['TYPES'][$item['TYPE_CODE']];
+				unset($item['TYPE_CODE']);
+
+				// parent id
+				if($item['PARENT_CODE'] <> '')
+				{
+					if(!isset($descriptior['CODES'][$item['PARENT_CODE']]))
+					{
+						$descriptior['CODES'][$item['PARENT_CODE']] = checkLocationCodeExists($item['PARENT_CODE']);
+					}
+
+					$item['PARENT_ID'] = $descriptior['CODES'][$item['PARENT_CODE']];
+				}
+				unset($item['PARENT_CODE']);
+
+				// ext
+				if(is_array($item['EXT']))
+				{
+					foreach($item['EXT'] as $code => $values)
+					{
+						if(!empty($values))
+						{
+							if(!isset($descriptior['SERVICES'][$code]))
+							{
+								$descriptior['SERVICES'][$code] = ImportProcess::createService(['CODE' => $code]);
+							}
+
+							if($code == 'ZIP_LOWER')
+							{
+								if($values[0] == '')
+									continue;
+
+								$values = explode(',', $values[0]);
+
+								if(!is_array($values))
+									continue;
+
+								$values = array_unique($values);
+							}
+
+							if(is_array($values))
+							{
+								foreach($values as $value)
+								{
+									if($value == '')
+										continue;
+
+									$item['EXTERNAL'][] = array(
+										'SERVICE_ID' => $descriptior['SERVICES'][$code],
+										'XML_ID' => $value
+									);
+								}
+							}
+						}
+					}
+				}
+				unset($item['EXT'], $item['ZIP_LOWER']);
+
+				$res = Location\LocationTable::addExtended(
+					$item,
+					array(
+						'RESET_LEGACY' => false,
+						'REBALANCE' => false
+					)
+				);
+
+				if(!$res->isSuccess())
+					throw new Main\SystemException('Cannot create location');
+
+				$descriptior['CODES'][$item['CODE']] = $res->getId();
+			}
+		}
+
+		if(!count($block))
+		{
+			unset($descriptior['CODES']);
+			$descriptior['STEP'] = 'rebalance';
+		}
+	}
+
+	return $descriptior['STEP'] == 'done';
+}
+
+
+
 
 $dbSite = CSite::GetByID(WIZARD_SITE_ID);
 if( $arSite = $dbSite->Fetch() ) {
@@ -57,7 +216,7 @@ if( $loc_file <> '' ) {
 				];
 			}
 
-			$done = \Bitrix\Sale\Location\Import\ImportProcess::importFile($_SESSION["LOC_IMPORT_DESC"]);
+			$done = importFile($_SESSION["LOC_IMPORT_DESC"]);
 
 			if( $done ) {
 				unset($_SESSION["LOC_IMPORT_DESC"]); // go farther to other steps

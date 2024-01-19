@@ -274,6 +274,7 @@ class Base
 		if( !$login ) {
 			return false;
 		}
+		ftp_pasv($this->ftp, true);
 		return $this->ftp;
 	}
 

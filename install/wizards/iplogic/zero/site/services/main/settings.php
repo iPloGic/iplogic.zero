@@ -97,6 +97,10 @@ if( $s_count < 2 ) {
 		$file = $_SERVER["DOCUMENT_ROOT"] . "/bitrix/php_interface/dbconn.php";
 		@file_put_contents($file, $line, FILE_APPEND);
 		define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"] . "/_logs/" . date("Y-m-d") . ".log");
+		$dir = $_SERVER["DOCUMENT_ROOT"] . "/_logs/";
+		if( !is_dir($dir) ) {
+			mkdir($dir, 0755, true);
+		}
 	}
 
 	@$settings = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/bitrix/.settings.php");
