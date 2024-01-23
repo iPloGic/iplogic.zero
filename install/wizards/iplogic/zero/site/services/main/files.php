@@ -93,13 +93,10 @@ copy(
 	WIZARD_ABSOLUTE_PATH . "/site/public/favicon.ico",
 	WIZARD_SITE_PATH . "/favicon.ico"
 );
-
-if( $wizard->GetVar("pubIndex") == "Y" ) {
-	copy(
-		WIZARD_ABSOLUTE_PATH . "/site/public/" . LANGUAGE_ID . "/_index.php",
-		WIZARD_SITE_PATH . "/_index.php"
-	);
-}
+copy(
+	WIZARD_ABSOLUTE_PATH . "/site/public/" . LANGUAGE_ID . "/_index.php",
+	WIZARD_SITE_PATH . "/_index.php"
+);
 
 if( $wizard->GetVar("pub404") == "Y" ) {
 	copy(

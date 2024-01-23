@@ -36,7 +36,7 @@ class SpecialSettingsStep extends CWizardStep
 				"pubNews"       => "Y",
 				"pubCatalog"    => "Y",
 				"pubCart"       => "Y",
-				"pubIndex"      => "Y",
+				//"pubIndex"      => "Y",
 				"pub404"        => "Y",
 				"menuTop"       => "Y",
 				"menuSide"      => "Y",
@@ -102,10 +102,10 @@ class SpecialSettingsStep extends CWizardStep
 				' <label for="pubCart">' . Loc::getMessage("WIZ_PUB_CART") . '</label><br />
 					</div>';
 		}
-		$this->content .= '			<div class="wizard-catalog-form-item">
+		/*$this->content .= '			<div class="wizard-catalog-form-item">
 						' . $this->ShowCheckboxField('pubIndex', 'Y', (["id" => "pubIndex"])) .
 			' <label for="pubIndex">' . Loc::getMessage("WIZ_PUB_INDEX") . '</label><br />
-					</div>';
+					</div>';*/
 		$this->content .= '			<div class="wizard-catalog-form-item">
 						' . $this->ShowCheckboxField('pub404', 'Y', (["id" => "pub404"])) .
 			' <label for="pub404">' . Loc::getMessage("WIZ_PUB_404") . '</label><br />
