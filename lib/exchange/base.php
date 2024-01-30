@@ -368,8 +368,8 @@ class Base
 	protected static function getNumberFromKey($key)
 	{
 		$ar = explode("_", $key);
-		if( is_int($ar[count($ar) - 1]) ) {
-			return $ar[count($ar) - 1];
+		if( intval($ar[count($ar) - 1]) > 0 ) {
+			return intval($ar[count($ar) - 1]);
 		}
 		return 0;
 	}
