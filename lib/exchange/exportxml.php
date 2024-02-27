@@ -66,12 +66,7 @@ class ExportXML extends Base
 	 */
 	protected function startXML()
 	{
-		if(
-			is_array($this->config["NODES"]["CHILDREN"][0]["CHILDREN"]) && 
-			count($this->config["NODES"]["CHILDREN"][0]["CHILDREN"]) > 0
-		) {
-			$this->main_node = $this->putChildren($this->main_node, $this->config["NODES"]["CHILDREN"]);
-		}
+		$this->main_node = $this->putChildren($this->main_node, $this->config["NODES"]["CHILDREN"]);
 	}
 
 

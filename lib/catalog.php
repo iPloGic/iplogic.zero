@@ -83,7 +83,7 @@ class Catalog
 	public function getAllIdsByProp($field, $activeOnly = false, $additionFields = false)
 	{
 		return $this->getIdsByProp($this->product_iblock_id, $field, $activeOnly, $additionFields) +
-			$this->getIdsByProp($this->offer_iblock_id, $field, $additionFields);
+			$this->getIdsByProp($this->offer_iblock_id, $field, $activeOnly, $additionFields);
 	}
 
 
