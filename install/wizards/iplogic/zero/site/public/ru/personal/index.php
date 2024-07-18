@@ -54,7 +54,7 @@ if(!$USER->IsAuthorized()){
 		"PATH_TO_BASKET" => "/cart/",
 		"PATH_TO_CATALOG" => "/catalog/",
 		"PATH_TO_CONTACT" => "/about/contacts/",
-		"PATH_TO_PAYMENT" => "/personal/order/payment/",
+		"PATH_TO_PAYMENT" => "/cart/order/payment/",
 		"PROFILES_PER_PAGE" => "20",
 		"SAVE_IN_SESSION" => "Y",
 		"SEF_MODE" => "Y",

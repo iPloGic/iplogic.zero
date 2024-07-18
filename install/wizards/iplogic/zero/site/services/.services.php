@@ -15,7 +15,7 @@ $arServices = [
 			"settings.php",
 			"agents.php",
 			"groups.php",
-			//"mail.php",
+			"mail.php",
 		],
 	],
 

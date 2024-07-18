@@ -69,7 +69,7 @@ $arFields = [
 	"MESSAGE"    => Loc::getMessage("NEW_USER_CONFIRM_TEXT"),
 	"BODY_TYPE"  => "text",
 ];
-exMessage("NEW_USER_CONFIRM", $arFields);
+//exMessage("NEW_USER_CONFIRM", $arFields);
 
 /* USER_PASS_REQUEST */
 $arFields = [
@@ -82,7 +82,7 @@ $arFields = [
 	"MESSAGE"    => Loc::getMessage("USER_PASS_REQUEST_TEXT"),
 	"BODY_TYPE"  => "text",
 ];
-exMessage("USER_PASS_REQUEST", $arFields);
+//exMessage("USER_PASS_REQUEST", $arFields);
 
 /* USER_INFO */
 $arFields = [
@@ -95,7 +95,7 @@ $arFields = [
 	"MESSAGE"    => Loc::getMessage("USER_INFO_TEXT"),
 	"BODY_TYPE"  => "text",
 ];
-exMessage("USER_INFO", $arFields);
+//exMessage("USER_INFO", $arFields);
 
 /* USER_INVITE */
 $arFields = [
@@ -108,6 +108,17 @@ $arFields = [
 	"MESSAGE"    => Loc::getMessage("USER_INVITE_TEXT"),
 	"BODY_TYPE"  => "text",
 ];
-exMessage("USER_INVITE", $arFields);
+//exMessage("USER_INVITE", $arFields);
+
+/* SALE_STATUS_CHANGED_N deactivate */
+$eventMessageID = 0;
+$by = "id";
+$order = "asc";
+$db_res = CEventMessage::GetList($by, $order, ["TYPE_ID" => "SALE_STATUS_CHANGED_N", "SITE_ID" => [WIZARD_SITE_ID]]);
+if( $res = $db_res->GetNext() ) {
+	$oEventMessage = new CEventMessage();
+	$oEventMessage->Update($res["ID"], ["ACTIVE" => "N"]);
+}
+
 
 ?>
