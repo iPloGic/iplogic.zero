@@ -1,42 +1,42 @@
 <?
 $aMenuLinks = Array(
 	Array(
-		"Ð›Ð¸Ñ‡Ð½Ñ‹Ð¹ ÐºÐ°Ð±Ð¸Ð½ÐµÑ‚", 
+		"Ëè÷íûé êàáèíåò", 
 		"/personal/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
-		"ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ", 
+		"Ïðîôèëü ïîëüçîâàòåëÿ", 
 		"/personal/private/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
-		"Ð¢ÐµÐºÑƒÑ‰Ð¸Ðµ Ð·Ð°ÐºÐ°Ð·Ñ‹", 
+		"Òåêóùèå çàêàçû", 
 		"/personal/orders/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
-		"Ð˜ÑÑ‚Ð¾Ñ€Ð¸Ñ Ð·Ð°ÐºÐ°Ð·Ð¾Ð²", 
+		"Èñòîðèÿ çàêàçîâ", 
 		"/personal/orders/?filter_history=Y", 
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
-		"ÐšÐ¾Ñ€Ð·Ð¸Ð½Ð°", 
+		"Êîðçèíà", 
 		"/cart/", 
 		Array(), 
 		Array(), 
 		"" 
 	),
 	Array(
-		"ÐŸÐ¾Ð´Ð¿Ð¸ÑÐºÐ¸", 
+		"Ïîäïèñêè", 
 		"/personal/subscribe/", 
 		Array(), 
 		Array(), 
